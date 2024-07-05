@@ -1,0 +1,45 @@
+#
+# app/settings.py
+#
+
+import os
+from datetime import datetime, timedelta
+
+class Settings():
+    def __init__(self):
+        self.env = os.environ.get('ENV') or 'dev'          
+
+        if self.env == 'dev':
+            import secrets
+
+            self.web_config = {'scheme': 'http', 'host': '127.0.0.1', 'port': '5000'}
+            self.api_config = {'scheme': 'http', 'host': '127.0.0.1', 'port': '5000'}  
+            self.domain = None
+            self.cookie_secure = False
+            self.html_minify = False        
+            self.secret_key = secrets.token_hex(32)
+        else:
+            self.web_config = {'scheme': 'https', 'host': 'www.ocipizza.dev.br', 'port': '443'}
+            self.api_config = {'scheme': 'https', 'host': 'api.ocipizza.dev.br', 'port': '443'}         
+            self.domain = self.web_config['host']
+            self.cookie_secure = True
+            self.html_minify = True        
+            
+        self.oci_config_file = os.environ.get('OCI_CONFIG_FILE') or '~/.oci/config'
+        self.nosql_pizza_table_name = os.environ.get('NOSQL_PIZZA_TABLE_NAME') or 'pizza'
+        self.nosql_user_table_name = os.environ.get('NOSQL_USER_TABLE_NAME') or 'user'
+        self.nosql_order_table_name = os.environ.get('NOSQL_ORDER_TABLE_NAME') or 'user.order'
+        self.nosql_compartment_ocid = os.environ.get('NOSQL_COMPARTMENT_OCID')   
+
+        self.user_min_password_length = 8    
+        self.user_max_password_length = 16
+
+        datetime_now = datetime.now()
+        expire_timedelta = datetime_now + timedelta(hours=2)
+        expire_ts = int(expire_timedelta.strftime('%s'))
+
+        self.jwt_cookie_name = 'ocipzjwt'
+        self.jwt_cookie_expire_ts = expire_ts
+
+        self.session_cookie_name = 'ocipzsess'
+        self.session_cookie_expire_ts = expire_ts
