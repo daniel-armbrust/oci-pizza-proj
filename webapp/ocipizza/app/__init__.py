@@ -2,8 +2,6 @@
 # ocipizza/app/__init__.py
 #
 
-from datetime import timedelta
-
 from flask import Flask
 from flask_login import LoginManager, login_manager
 from flask_wtf.csrf import CSRFProtect

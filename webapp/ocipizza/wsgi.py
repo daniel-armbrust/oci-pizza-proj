@@ -1,5 +1,5 @@
 #
-# run.py
+# wsgi.py
 #
 
 from app import create_app
