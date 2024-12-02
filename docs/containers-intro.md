@@ -1,4 +1,4 @@
-# 2. Entendendo os Contêineres
+# 1. Entendendo os Contêineres
 
 ## Contêineres
 
@@ -72,7 +72,7 @@ root
 
 ### Dockerfile
 
-Um Dockerfile é um arquivo de texto que contém todas as instruções necessárias para criar uma imagem de contêiner. O Dockerfile da aplicação __OCI Pizza__ apresenta o seguinte conteúdo:
+O Dockerfile é um arquivo de texto que contém todas as instruções necessárias para construir uma imagem de contêiner. O Dockerfile da aplicação _OCI Pizza_ inclui o seguinte conteúdo:
 
 ```
 $ cat webapp/Dockerfile
@@ -114,6 +114,22 @@ EXPOSE 5000
 ENTRYPOINT ["./docker-entrypoint.sh"]
 ```
 
+Abaixo, a explicação de alguns dos comandos existentes neste _Dockerfile_:
+
+- [FROM](https://docs.docker.com/engine/reference/builder/#from) : Especifica a imagem base que será utilizada para criar uma nova imagem a partir dela. 
+
+- [WORKDIR](https://docs.docker.com/engine/reference/builder/#workdir) : Durante o processo de construção da imagem, muda-se para o diretório especificado, estabelecendo-o como o novo diretório raiz de trabalho para a execução dos demais comandos.
+
+- [COPY](https://docs.docker.com/engine/reference/builder/#copy) : Copia arquivos ou diretórios do sistema de arquivos externo para dentro da imagem em construção.
+
+- [RUN](https://docs.docker.com/engine/reference/builder/#run) : Executa um comando como parte do processo de construção da imagem de contêiner.
+
+- [EXPOSE](https://docs.docker.com/engine/reference/builder/#expose) : Especifica a porta de rede que a aplicação irá expor. É importante ressaltar que esta instrução "não abre" efetivamente nenhuma porta; ela serve apenas como uma forma de documentar qual porta será exposta pelo contêiner.
+
+- [ENTRYPOINT](https://docs.docker.com/engine/reference/builder/#entrypoint) : Define o comando que será executado quando o contêiner for criado e iniciado. No caso deste exemplo, trata-se de um shell script que iniciará a aplicação web.
+
+>_**__NOTA:__** Consulte [Dockerfile reference](https://docs.docker.com/engine/reference/builder/) para um descrição de todos os comandos suportados._
+
 Para criar a imagem da aplicação, navegue até diretório que contém o arquivo Dockerfile:
 
 ```
@@ -126,10 +142,105 @@ Em seguida, execute o comando abaixo e aguarde sua conclusão:
 $ docker build -t ocipizza:1.0 .
 ```
 
-Agora você pode confirmar que a imagem da aplicação foi criada com sucesso utilizando o comando abaixo:
+>_**__NOTA:__** Lembre-se de estar dentro do diretório onde encontra-se o arquivo [Dockerfile](https://docs.docker.com/engine/reference/builder/) para poder executar o comando docker build._
+
+O parâmetro **-t** (ou --tag) do comando _docker build_, é utilizado para atribuir uma **tag** a uma imagem Docker. Essa tag serve como um identificador, permitindo nomear e versionar a imagem. Isto também facilita o gerenciamento de diferentes versões.
+
+Por fim, é possível verificar que a imagem da aplicação foi criada com sucesso:
 
 ```
 $ docker images
-REPOSITORY   TAG       IMAGE ID       CREATED          SIZE
-ocipizza     1.0       532272158f55   13 minutes ago   665MB
+REPOSITORY                                     TAG       IMAGE ID       CREATED         SIZE
+ocipizza                                       1.0       5f3324071ab8   4 seconds ago   665MB
+container-registry.oracle.com/os/oraclelinux   8-slim    95e2d27d5c61   2 weeks ago     115MB
 ```
+
+### Oracle Cloud Infrastructure Registry (OCIR)
+
+Já sabemos que o Container Registry é um repositório utilizado para armazenar imagens de contêineres. No contexto do OCI, temos o [Oracle Cloud Infrastructure Registry (OCIR)](https://docs.oracle.com/en-us/iaas/Content/Registry/home.htm), que é um serviço gerenciado especificamente para o armazenamento e gerenciamento de imagens de contêineres.
+
+O ideal é que todas as imagens de contêiner que serão implantadas e executadas por serviços no OCI, como o [OKE](https://docs.oracle.com/en-us/iaas/Content/ContEng/Concepts/contengoverview.htm) ou [Container Instances](https://docs.oracle.com/en-us/iaas/Content/container-instances/home.htm), sejam previamente armazenadas no [OCIR]((https://docs.oracle.com/en-us/iaas/Content/Registry/home.htm)).
+
+Existem duas operações fundamentais relacionadas ao Container Registry:
+
+1. **Push (Enviar)**: Esta operação envolve o envio de uma imagem de contêiner ao Container Registry (upload).
+
+2. **Pull (Puxar)**: Esta operação refere-se à recuperação de uma imagem de contêiner do Container Registry para implantação e uso (download).
+
+![alt_text](./imgs/oracle-container-registry-3.png "Oracle Container Registry")
+
+Antes de enviar a imagem por meio da operação _Push_, é necessário criar um _repositório_. O repositório servirá para armazenar diferentes versões de uma mesma imagem e pode ser configurado como _público_ ou _privado_. Um _repositório privado_ permite acesso apenas a partir dos recursos de uma VCN (Virtual Cloud Network), restringindo o acesso pela Internet.
+
+Para criar um repositório privado, utilize o comando abaixo:
+
+```
+$ oci artifacts container repository create \
+    --compartment-id "ocid1.compartment.oc1..aaaaaaaaaaaaaaaabbbbbbbbccc" \
+    --display-name "ocipizza" \
+    --wait-for-state "AVAILABLE"
+```
+
+Uma vez criado o repositório, é necessário nomear ou taguear (docker tag), seguindo o padrão estabelecido pelo OCI, que deve obedecer ao seguinte formato:
+
+![alt_text](./imgs/oracle-container-registry-4.png "Oracle Container Registry")
+
+1. **registry-domain**: É o hostname que identifica o serviço OCIR dentro de uma região.
+
+2. **tenancy-namespace**: É uma string que identifica unicamente um tenancy no OCI.
+
+3. **repo-name**: Nome exclusivo de um repositório de imagens no OCIR usado para armazenar diferentes versões de uma aplicação.
+
+4. **version**: Identificador de versão de uma imagem.
+
+Para obter o valor do **tenancy-namespace**, utilize o comando abaixo:
+
+```
+$ oci os ns get
+{
+  "data": "grxmw2a9myyj"
+}
+```
+
+No caso da aplicação _OCI Pizza_, ela será implantada na região **Brazil East (São Paulo)**, que possui o identificador **sa-saopaulo-1**. Diante disso, a nova _tag_ da aplicação é:
+
+![alt_text](./imgs/oracle-container-registry-5.png "Oracle Container Registry")
+
+Para aplicar a nova _tag_ à imagem existente _ocipizza:1.0_, utilize o seguinte comando:
+
+```
+$ docker tag ocipizza:1.0 ocir.sa-saopaulo-1.oci.oraclecloud.com/grxmw2a9myyj/ocipizza:1.0
+```
+
+Antes de executar o _push_, é necessário fazer o login no serviço OCIR da região onde as imagens da aplicação serão enviadas (sa-saopaulo-1):
+
+```
+$ docker login ocir.sa-saopaulo-1.oci.oraclecloud.com
+Username: grxmw2a9myyj/darmbrust@gmail.com
+Password:
+WARNING! Your password will be stored unencrypted in /home/darmbrust/.docker/config.json.
+Configure a credential helper to remove this warning. See
+https://docs.docker.com/engine/reference/commandline/login/#credentials-store
+
+Login Succeeded
+```
+
+>_**__NOTA:__** Para efetuar o login no OCIR, é necessário possuir um nome de usuário válido, com as permissões adequadas, além de um [Auth Token](https://docs.oracle.com/en-us/iaas/Content/Registry/Tasks/registrygettingauthtoken.htm) que funcionará como a senha desse usuário no serviço OCIR. Para obter informações detalhadas sobre como gerar um Auth Token, consulte o [link](https://docs.oracle.com/en-us/iaas/Content/Registry/Tasks/registrygettingauthtoken.htm)._
+
+Por último, executamos o _push_ para enviar a imagem ao OCIR:
+
+```
+$ docker push ocir.sa-saopaulo-1.oci.oraclecloud.com/grxmw2a9myyj/ocipizza:1.0
+```
+
+Para exibir todas as imagens do repositório _ocipizza_, execute o comando abaixo:
+
+```
+$ oci artifacts container image list \
+    --compartment-id "ocid1.compartment.oc1..aaaaaaaaaaaaaaaabbbbbbbbccc" \
+    --all \
+    --repository-name "ocipizza"
+```
+
+## Conclusão
+
+Neste capítulo, abordamos a importância dos contêineres, o processo de construção de uma imagem de contêiner e como enviá-la para o serviço OCIR. Com isso, será possível implantar a aplicação em uma infraestrutura que suporte a execução de contêineres, tema que será explorado nos próximos capítulos.

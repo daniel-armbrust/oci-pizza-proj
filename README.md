@@ -21,8 +21,7 @@ Bora entender...
 ## Sumário
 
 0. Pré-requisitos
-1. Entendendo os Contêineres
-2. OCI Image Registry (OCIR)
-3. Container Instances
-4. Persistência com o Oracle NoSQL
-5. DNS Público ou Global
+1. [Entendendo os Contêineres](./docs/containers.md)
+2. Container Instances
+3. Persistência com o Oracle NoSQL
+4. DNS Público ou Global
