@@ -226,7 +226,7 @@ Login Succeeded
 
 >_**__NOTA:__** Para efetuar o login no OCIR, é necessário possuir um nome de usuário válido, com as permissões adequadas, além de um [Auth Token](https://docs.oracle.com/en-us/iaas/Content/Registry/Tasks/registrygettingauthtoken.htm) que funcionará como a senha desse usuário no serviço OCIR. Para obter informações detalhadas sobre como gerar um Auth Token, consulte o [link](https://docs.oracle.com/en-us/iaas/Content/Registry/Tasks/registrygettingauthtoken.htm)._
 
-Por último, executamos o _push_ para enviar a imagem ao OCIR:
+Por último, executamos o _push_ para enviar a imagem da aplicação ao OCIR:
 
 ```
 $ docker push ocir.sa-saopaulo-1.oci.oraclecloud.com/grxmw2a9myyj/ocipizza:1.0
