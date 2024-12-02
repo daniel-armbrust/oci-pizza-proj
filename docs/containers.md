@@ -48,7 +48,7 @@ Na aplicação _OCI Pizza_, foi utilizada como _imagem base_ o [Oracle Linux 8](
 
 ![alt_text](./imgs/oracle-container-registry-2.png "Oracle Linux 8 Slim")
 
->_**__NOTA:__** Uma Docker Base Image (imagem base do Docker) é uma imagem de contêiner que serve como ponto de partida para a criação de outras imagens. Ela contém o sistema operacional e a sua aplicação._
+>_**__NOTA:__** Uma Docker Base Image (imagem base do Docker) é uma imagem de contêiner que serve como ponto de partida para a criação de outras imagens._
 
 Para baixar a imagem [Oracle Linux 8 Slim](https://container-registry.oracle.com/ords/ocr/ba/os/oraclelinux) localmente em sua máquina, basta executar o comando abaixo:
 
