@@ -20,7 +20,9 @@ Bora entender...
 ## Sumário
 
 0. Pré-requisitos
-1. [Entendendo os Contêineres](./docs/containers.md)
-2. [Container Instances](./docs/container-instances.md)
-3. Persistência com o Oracle NoSQL
-4. DNS Público ou Global
+1. [A Rede da aplicação OCI Pizza](./docs/network.md)
+2. [Entendendo os Contêineres](./docs/containers.md)
+3. [Container Instances](./docs/container-instances.md)
+4. [Expondo a aplicação por meio do Load Balancer](./docs/lb.md)
+5. [DNS Público](./docs/dns.md)
+6. Persistência com o Oracle NoSQL

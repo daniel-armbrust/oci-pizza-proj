@@ -1,0 +1,1 @@
+# 4. Expondo a aplicação por meio do Load Balancer
