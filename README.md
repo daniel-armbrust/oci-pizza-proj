@@ -1,5 +1,4 @@
-# HOWTO - OCI Pizza
-===================
+# OCI Pizza
 
 ## Introdução
 
@@ -22,6 +21,6 @@ Bora entender...
 
 0. Pré-requisitos
 1. [Entendendo os Contêineres](./docs/containers.md)
-2. Container Instances
+2. [Container Instances](./docs/container-instances.md)
 3. Persistência com o Oracle NoSQL
 4. DNS Público ou Global
