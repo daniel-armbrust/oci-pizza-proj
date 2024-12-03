@@ -6,7 +6,9 @@ Container Instances é um serviço de computação serverless que permite a exec
 
 O serviço é ideal para executar workloads mais simples que não requerem plataformas de orquestração de contêineres mais complexas, como o [Kubernetes](https://docs.oracle.com/en-us/iaas/Content/ContEng/home.htm).
 
-Container Instances é flexível, permitindo a execução de um ou mais contêineres simultaneamente, configurar variáveis de ambiente, definir políticas de _restart_, ajustes de opções de inicialização, entre outras configurações.
+O Container Instances oferece flexibilidade ao permitir a execução de um ou mais contêineres simultaneamente. Além disso, possibilita a configuração de variáveis de ambiente, a definição de políticas de _restart_, ajustes nas opções de inicialização e diversas outras configurações.
+
+Para a aplicação OCI Pizza, serão implementados dois Container Instances. O primeiro será o contêiner primário, responsável por receber os acessos provenientes da Internet, enquanto o segundo funcionará como um Container Instance de backup, assegurando a continuidade do serviço em caso de falha no primário. Essa estratégia oferece maior resiliência e disponibilidade, garantindo que a aplicação permaneça operante mesmo diante de imprevistos.
 
 ![alt_text](./imgs/ci-1.png "Oracle Container Instace")
 
