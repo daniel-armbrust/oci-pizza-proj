@@ -19,6 +19,7 @@ class Settings():
             self.html_minify = False        
             self.secret_key = secrets.token_hex(32)
         else:
+            self.secret_key = os.environ.get('SECRET_KEY')
             self.web_config = {'scheme': 'https', 'host': 'www.ocipizza.dev.br', 'port': '443'}
             self.api_config = {'scheme': 'https', 'host': 'api.ocipizza.dev.br', 'port': '443'}         
             self.domain = self.web_config['host']

@@ -2,6 +2,9 @@
 terraform.tfvars
 keys/
 
+# Test environment
+scripts/test/
+
 # Local .terraform directories
 **/.terraform/*
 
