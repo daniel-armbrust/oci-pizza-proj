@@ -1,4 +1,4 @@
-# DNS
+# DNS Público
 
 ## Configurando o Serviço de DNS Global
 

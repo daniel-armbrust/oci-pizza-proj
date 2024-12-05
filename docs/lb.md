@@ -66,4 +66,90 @@ Antes de avançar com a criação do Load Balancer que será utilizado pela apli
 
 ## Load Balancer da aplicação OCI Pizza
 
+A arquitetura do Load Balancer utilizado pela aplicação OCI Pizza é ilustrada no desenho abaixo:
+
 ![alt_text](./imgs/lb-1.png "OCI Pizza Load Balancer")
+
+O Load Balancer terá um _Listener HTTP_ na porta 80/TCP e outro _HTTPS_ na porta 443/TCP. A política de balanceamento selecionada será a _Weighted Round Robin_, e o monitoramento _Health Check_ será realizado na porta 5000/TCP. Além disso, um dos _Container Instances_ será configurado como _Backup_ no _Backend Set_. Caso o Health Check falhe, o Container Instance Backup assumirá automaticamente a função de _Primário_, garantindo assim a continuidade da disponibilidade da aplicação.
+
+## Reserva do IP Público para o Load Balancer
+
+As configurações iniciam-se com a [reserva de um endereço IP público](https://docs.oracle.com/en-us/iaas/Content/Network/Tasks/managingpublicIPs.htm#overview) para o Load Balancer. Essa é uma prática recomendada, pois assegura que o endereço IP permaneça fixo, facilitando as configurações de DNS e garantindo que o IP esteja reservado exclusivamente para o seu ambiente. Caso o Load Balancer seja acidentalmente excluído, você poderá criar um novo e atribuir o endereço IP previamente reservado, evitando assim a necessidade de reconfigurar o DNS público da aplicação.
+
+Para reservar o endereço IP, utilize o seguinte comando:
+
+```
+$ oci network public-ip create \
+    --compartment-id "ocid1.compartment.oc1..aaaaaaaaaaaaaaaabbbbbbbbccc" \
+    --lifetime "RESERVED" \
+    --display-name "pubip-lb-saopaulo" \
+    --wait-for-state "AVAILABLE"
+```
+
+Para verificar qual foi o endereço IP que o OCI reservou, utilize o seguinte comando:
+
+```
+$ oci network public-ip list \
+    --compartment-id "ocid1.compartment.oc1..aaaaaaaaaaaaaaaabbbbbbbbccc" \
+    --lifetime "RESERVED" \
+    --scope "REGION" \
+    --query data[].\"ip-address\" \
+    --all
+[
+  "137.131.197.197"
+]
+```
+
+>_**__NOTA:__** Se mais de um endereço IP tiver sido reservado, o comando acima retornará mais de um._
+
+## Criando o Load Balancer
+
+### Load Balancer
+
+Antes de criar o Load Balancer, é necessário obter o OCID do Endereço IP Público que foi reservado. Essa informação pode ser obtida por meio do seguinte comando:
+
+```
+$ oci network public-ip list \
+    --compartment-id "ocid1.compartment.oc1..aaaaaaaaaaaaaaaabbbbbbbbccc" \
+    --lifetime "RESERVED" \
+    --scope "REGION" \
+    --all \
+    --query 'data[?name=="pubip-lb-saopaulo"].id'
+[
+  "ocid1.publicip.oc1.sa-saopaulo-1.aaaaaaaaaaaaaaaabbbbbbbbccc"
+]
+```
+
+Também é necessário obter o OCID da sub-rede pública onde o Load Balancer será criado:
+
+```
+$ oci network subnet list \
+    --compartment-id "ocid1.compartment.oc1..aaaaaaaaaaaaaaaabbbbbbbbccc" \
+    --display-name "subnpub" \
+    --lifecycle-state "AVAILABLE" \
+    --query 'data[].id'
+[
+  "ocid1.subnet.oc1.sa-saopaulo-1.aaaaaaaaaaaaaaaabbbbbbbbccc"
+]
+```
+
+Com essas informações, será criado um Load Balancer com uma largura de banda máxima de 10 Mbps:
+
+```
+$ oci lb load-balancer create \
+    --compartment-id "ocid1.compartment.oc1..aaaaaaaaaaaaaaaabbbbbbbbccc" \
+    --display-name "lb-saopaulo" \
+    --shape-name "flexible" \
+    --shape-details "{\"minimumBandwidthInMbps\": 10, \"maximumBandwidthInMbps\": 10}" \
+    --subnet-ids "[\"ocid1.subnet.oc1.sa-saopaulo-1.aaaaaaaaaaaaaaaabbbbbbbbccc\"]" \
+    --is-private "false" \
+    --reserved-ips "[{\"id\": \"ocid1.publicip.oc1.sa-saopaulo-1.aaaaaaaaaaaaaaaabbbbbbbbccc\"}]" \
+    --wait-for-state "SUCCEEDED"
+```
+
+### Backend
+
+### Backend Set
+
+```
+```

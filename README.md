@@ -19,8 +19,8 @@ Bora entender...
 
 ## Sumário
 
-0. Pré-requisitos
-1. [A Rede da aplicação OCI Pizza](./docs/network.md)
+0. [Bem-vindo ao OCI](./docs/welcome.md)
+1. [O Serviço de Redes do OCI](./docs/network.md)
 2. [Entendendo os Contêineres](./docs/containers.md)
 3. [Container Instances](./docs/container-instances.md)
 4. [Expondo a aplicação por meio do Load Balancer](./docs/lb.md)

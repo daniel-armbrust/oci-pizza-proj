@@ -3,7 +3,7 @@
 #
 # OCI CONTAINER INSTANCE CLI Documentation:
 # -----------------------------------------
-#    hhttps://docs.oracle.com/en-us/iaas/tools/oci-cli/3.50.2/oci_cli_docs/cmdref/container-instances/container-instance/create.html
+#    https://docs.oracle.com/en-us/iaas/tools/oci-cli/3.50.2/oci_cli_docs/cmdref/container-instances/container-instance/create.html
 #
 # How to execute (example):
 # -------------------------

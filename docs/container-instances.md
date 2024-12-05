@@ -48,13 +48,13 @@ $ oci container-instances container-instance list-shapes \
 
 Para a aplicação OCI Pizza, será usado o shape CI.Standard.E4.Flex com 4 GB de memória RAM e 2 OCPUs.
 
-## Criação do Container Instance
+## Container Instance da aplicação OCI Pizza
 
 Para criar um Container Instance, é necessário especificar a URL da imagem do contêiner armazenada no [OCIR](https://docs.oracle.com/en-us/iaas/Content/Registry/home.htm), além de fornecer detalhes sobre o shape, como a quantidade de OCPUs e memória. Também é possível definir variáveis de ambiente, o a[availability domain](https://docs.oracle.com/en-us/iaas/Content/General/Concepts/regions.htm) e o OCID da sub-rede a ser utilizada. Esses elementos são fundamentais para garantir que o contêiner seja configurado de acordo com as necessidades da aplicação.
 
 Os comandos para a criação dos dois Container Instances na região _Brazil East (São Paulo)_ podem ser consultados neste [script](../scripts/ci-saopaulo.sh).
 
-Abaixo o comando de exemplo para se criar o Container Instance primário:
+Abaixo o comando de exemplo para se criar o Container Instance primário (ci-ocipizza-primary):
 
 ```
 $ oci container-instances container-instance create \
