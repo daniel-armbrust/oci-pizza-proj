@@ -26,3 +26,6 @@ Bora entender...
 4. [Expondo a aplicação por meio do Load Balancer](./docs/lb.md)
 5. [DNS Público](./docs/dns.md)
 6. Persistência com o Oracle NoSQL
+
+0. Bonus
+    - Roteamento entre VCNs passando por um Firewall

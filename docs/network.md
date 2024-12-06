@@ -18,7 +18,7 @@ A seguir, serão descritos os componentes de rede utilizados pela aplicação OC
   - Trata-se de uma rede virtual privada criada dentro de uma região.
   - Após a criação e configuração da VCN, é possível criar sub-redes, máquinas virtuais, bancos de dados e outros recursos.
 
-- **Sub-rede**
+- **Subnet**
   - É a divisão de uma VCN em partes menores, conhecidas como sub-redes.
   - Cada sub-rede consiste em um intervalo contíguo de endereços IP que não se sobrepõe aos intervalos de outras sub-redes da VCN.
   - Uma sub-rede pode ser _pública_ ou _privada_. Uma sub-rede pública permite expor um recurso à internet por meio de um IP público, enquanto uma sub-rede privada acessa a internet apenas por meio da técnica de NAT (Network Address Translation).
@@ -27,11 +27,11 @@ A seguir, serão descritos os componentes de rede utilizados pela aplicação OC
     - Endereço de Broadcast 
     - Endereço do Default Gateway (roteador da sub-rede)
 
-- **[Tabelas de Roteamento (Route Table)](https://docs.oracle.com/en-us/iaas/Content/Network/Tasks/managingroutetables.htm)**
+- **[Route Table](https://docs.oracle.com/en-us/iaas/Content/Network/Tasks/managingroutetables.htm)**
   - Contém as regras de roteamento para direcionar o tráfego de rede ao próximo salto (next-hop).
   - Sub-redes dentro da mesma VCN podem se comunicar sem a necessidade de regras de roteamento. No entanto, é possível definir esse tipo de regra, caso desejado.
 
-- **[Security Lists](https://docs.oracle.com/en-us/iaas/Content/Network/Concepts/securitylists.htm)**
+- **[Security List](https://docs.oracle.com/en-us/iaas/Content/Network/Concepts/securitylists.htm)**
   - É o firewall virtual que protege a sub-rede.
   - Todo o tráfego que entra e sai da sub-rede é verificado pela sua Security List.
   - Por padrão, toda a comunicação é bloqueada pela Security List. No entanto, é possível permitir o tráfego de rede com base em protocolos e portas, tanto para IPv4 quanto para IPv6.
@@ -59,7 +59,11 @@ A seguir, serão descritos os componentes de rede utilizados pela aplicação OC
     - É um roteador virtual.
     - Permite conectividade entre as suas VCNs, tanto dentro de uma mesma região quanto entre regiões diferentes, além de permitir a conexão com o ambiente on-premises por meio de [VPN](https://docs.oracle.com/en-us/iaas/Content/Network/Tasks/managingIPsec.htm) ou [FastConnect](https://docs.oracle.com/en-us/iaas/Content/Network/Concepts/fastconnect.htm).
 
-## Criação das VCNs
+A seguir, será criada toda a rede da região _Brazil East (São Paulo)_. Para a rede da região _Brazil Southeast (Vinhedo)_, os comandos permanecem os mesmos, com a modificação apenas de alguns valores correspondentes à região, como endereços IP e nomes dos recursos. Por essa razão, não serão apresentados aqui. 
+
+>_**__NOTA:__** Todos os comandos utilizados para a criação da VCN e dos demais recursos de rede na região Brazil East (São Paulo) estão no script [scripts/network-saopaulo.sh](../scripts/network-saopaulo.sh). Para a região Brazil Southeast (Vinhedo), os todos comandos podem ser encontrados no script [scripts/network-vinhedo.sh](../scripts/network-vinhedo.sh)._
+
+## VCN (vcn-saopaulo)
 
 Iniciaremos com a criação das VCNs de ambas as regiões.
 
@@ -76,21 +80,6 @@ $ oci --region sa-saopaulo-1 network vcn create \
 > --wait-for-state AVAILABLE
 ```
 
-- **Vinhedo, Brazil (sa-vinhedo-1):**
-  - Nome: vcn-vinhedo
-  - Block CIDR: 192.168.0.0/16
-
-```
-$ oci --region sa-vinhedo-1 network vcn create \
-> --compartment-id "ocid1.compartment.oc1..aaaaaaaaaaaaaaaabbbbbbbbccc" \
-> --cidr-blocks '["192.168.0.0/16"]' \
-> --display-name "vcn-vinhedo" \
-> --dns-label "vcnvinhedo" \
-> --wait-for-state AVAILABLE
-```
-
-Para as VCNs que foram criadas, é importante anotar o OCID de ambas, pois ele será solicitado nos próximos comandos.
-
 O comando abaixo retorna o OCID da VCN "vcn-saopaulo" que foi criada:
 
 ```
@@ -104,3 +93,16 @@ $ oci --region sa-saopaulo-1 network vcn list \
 ]
 ```
 
+## Internet Gateway (igw)
+
+## NAT Gateway (ngw)
+
+## Service Gateway (sgw)
+
+## DHCP Options (dhcp-options)
+
+## Route Table (rtb_subnpub e rtb_subnprv)
+
+## Security List (seclist_subnpub e seclist_subnprv)
+
+## Subnet (subnpub e subnprv)
