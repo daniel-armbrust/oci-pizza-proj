@@ -84,20 +84,6 @@ oci --region "$region" network service-gateway create \
 
 sgw_ocid="$(get_sgw_ocid "$region" "$vcn_ocid")"
 
-#--------------#
-# DHCP OPTIONS #
-#--------------#
-
-oci --region "$region" network dhcp-options create \
-    --compartment-id "$COMPARTMENT_OCID" \
-    --options '[{"type": "DomainNameServer", "serverType": "VcnLocalPlusInternet"}]' \
-    --vcn-id "$vcn_ocid" \
-    --display-name "dhcp-options" \
-    --domain-name-type "VCN_DOMAIN" \
-    --wait-for-state "AVAILABLE"
-
-dhcp_options_ocid="$(get_dhcpoptions_ocid "$region" "dhcp-options" "$vcn_ocid")"
-
 #-------------#
 # ROUTE TABLE #
 #-------------#
@@ -203,6 +189,20 @@ oci --region "$region" network security-list create \
     --wait-for-state "AVAILABLE"
 
 seclist_subnprv_ocid="$(get_seclist_ocid "$region" "seclist_subnprv" "$vcn_ocid")"
+
+#--------------#
+# DHCP OPTIONS #
+#--------------#
+
+oci --region "$region" network dhcp-options create \
+    --compartment-id "$COMPARTMENT_OCID" \
+    --options '[{"type": "DomainNameServer", "serverType": "VcnLocalPlusInternet"}]' \
+    --vcn-id "$vcn_ocid" \
+    --display-name "dhcp-options" \
+    --domain-name-type "VCN_DOMAIN" \
+    --wait-for-state "AVAILABLE"
+
+dhcp_options_ocid="$(get_dhcpoptions_ocid "$region" "dhcp-options" "$vcn_ocid")"
 
 #--------#
 # SUBNET #
