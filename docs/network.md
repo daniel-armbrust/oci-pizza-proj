@@ -33,7 +33,7 @@ Abaixo, apresentamos a descrição dos componentes de rede que serão utilizados
   - Contém as regras de roteamento para direcionar o tráfego de rede ao próximo salto (next-hop).
   - Sub-redes dentro da mesma VCN podem se comunicar sem a necessidade de regras de roteamento. No entanto, é possível definir esse tipo de regra, caso desejado.
 
-- **[Security List](https://docs.oracle.com/en-us/iaas/Content/Network/Concepts/securitylists.htm)**
+- **[Security Lists](https://docs.oracle.com/en-us/iaas/Content/Network/Concepts/securitylists.htm)**
   - É o firewall virtual que protege a sub-rede.
   - Todo o tráfego que entra e sai da sub-rede é verificado pela sua Security List.
   - Por padrão, toda a comunicação é bloqueada pela Security List. No entanto, é possível permitir o tráfego de rede com base em protocolos e portas, tanto para IPv4 quanto para IPv6.
@@ -225,6 +225,8 @@ Em resumo, a Route Table contém um conjunto de regras que definem como os dados
 
  >_**__NOTA:__** A Route Table utilizada por uma subnet é diferente da Route Table utilizada pelo DRG. Aqui, será criada e configurada uma Route Table para a subnet._
 
+### Route Table da sub-rede pública (rtb_subnpub)
+
 A Route Table da sub-rede pública _(rtb\_subnpub)_ incluirá uma Route Rule que utilizará o [Internet Gateway (IGW)](https://docs.oracle.com/en-us/iaas/Content/Network/Tasks/managingIGs.htm#Internet_Gateway), permitindo que os recursos dessa sub-rede recebam tráfego proveniente da Internet.
 
 ```
@@ -241,6 +243,8 @@ $ oci --region "sa-saopaulo-1" network route-table create \
 > ]" \
 > --wait-for-state "AVAILABLE"
 ```
+
+### Route Table da sub-rede privada (rtb_subnprv)
 
 A Route Table da sub-rede privada _(rtb\_subnprv)_ incluirá uma Route Rule que utilizará o [NAT Gateway (NGW)](https://docs.oracle.com/en-us/iaas/Content/Network/Tasks/NATgateway.htm) para permitir que os recursos acessem a Internet sem receber tráfego direto. Além disso, haverá uma Route Rule que utilizará o [Service Gateway (SGW)](https://docs.oracle.com/en-us/iaas/Content/Network/Tasks/servicegateway.htm#overview).
 
@@ -264,9 +268,80 @@ $ oci --region "sa-saopaulo-1" network route-table create \
 > --wait-for-state "AVAILABLE"
 ```
 
-## Security List (seclist_subnpub e seclist_subnprv)
+## Security Lists (seclist_subnpub e seclist_subnprv)
 
+As [Security Lists](https://docs.oracle.com/en-us/iaas/Content/Network/Concepts/securitylists.htm) atuam como um firewall para a sub-rede. Todo o tráfego de rede que entra (ingress) e sai (egress) da sub-rede é inspecionado pelas respectivas Security Rules da Security List, com o objetivo de permitir (accept) ou bloquear (drop) o tráfego.
 
+Uma sub-rede sempre possui uma ou mais Security Lists associadas, com um [limite máximo de cinco](https://docs.oracle.com/en-us/iaas/Content/Network/Concepts/securityrules.htm#comparison). Ao ser criada, uma Security List bloqueia todo o tráfego de rede por padrão, sendo necessário criar regras específicas para permitir o tráfego desejado.
+
+De forma simplificada, o tráfego de rede que "entra" em uma sub-rede (ingress) é inspecionado pelas respectivas Security Lists, uma a uma, de cima para baixo, conforme a ordem de criação. Esse tráfego busca encontrar uma regra que permita sua passagem; caso contrário, será bloqueado por padrão.
+
+Para a saída do tráfego (egress), o processo é semelhante, mas agora a origem é um recurso existente na sub-rede que busca alcançar outro recurso fora dela.
+
+Ao criar uma Security Rule, é necessário especificar a origem ou destino do tráfego _(source ou destination)_, o protocolo _(protocol)_ e se a regra é do tipo _stateful_ ou _stateless_.
+
+>_**__NOTA:__** Se sua sub-rede apresentar um alto volume de tráfego, a Oracle recomenda o uso de regras do tipo stateless. Para entender melhor as diferenças entre regras stateful e stateless, consulte a documentação ["Stateful Versus Stateless Rules"](https://docs.oracle.com/en-us/iaas/Content/Network/Concepts/securityrules.htm#stateful)._
+
+A Security List suporta diferentes protocolos, mas apenas os listados abaixo permitem a especificação de opções adicionais e são os mais comumente utilizados. De acordo com a [documentação da API](https://docs.oracle.com/en-us/iaas/api/#/en/iaas/20160918/datatypes/IngressSecurityRule) da Security List, é possível utilizar a string _"all"_ ou um dos valores a seguir ao definir uma Security Rule:
+
+  - all (todos os protocolos)  
+  - 1 (ICMP)
+  - 6 (TCP)
+  - 17 (UDP)
+  - 58 (ICMPv6)
+
+Para a aplicação OCI Pizza, serão criadas duas [Security Lists](https://docs.oracle.com/en-us/iaas/Content/Network/Concepts/securitylists.htm). Uma delas funcionará como o firewall da sub-rede pública _(seclist\_subnpub)_, enquanto a outra será destinada à sub-rede privada _(seclist\_subnprv)_.
+
+>_**__NOTA:__** É uma boa prática de segurança definir as Security Rules da forma mais restritiva possível, permitindo apenas o tráfego que é realmente necessário. As Security Rules utilizadas para a aplicação OCI Pizza têm fins didáticos e servem apenas para demonstrar o processo de criação._
+
+### Security Lists da sub-rede pública (seclist_subnpub) 
+
+A Security List da sub-rede pública permitirá tráfego de entrada (ingress) apenas para as portas 80/TCP e 443/TCP, provenientes de qualquer origem na Internet. Em relação ao tráfego de saída (egress), não haverá restrições, permitindo a passagem de todo o tráfego.
+
+```
+$ oci --region "sa-saopaulo-1" network route-table create \
+> --compartment-id "ocid1.compartment.oc1..aaaaaaaaaaaaaaaabbbbbbbbccc" \
+> --vcn-id "ocid1.vcn.oc1.sa-saopaulo-1.aaaaaaaaaaaaaaaabbbbbbbbccc" \
+> --display-name "seclist_subnpub" \
+> --ingress-security-rules "[
+>       {
+>          \"source\": \"0.0.0.0/0\", 
+>          \"protocol\": \"6\", 
+>          \"isStateless\": false, 
+>          \"tcpOptions\": {
+>               \"destinationPortRange\": {
+>                       \"min\": 80, \"max\": 80
+>               }, 
+>               \"sourcePortRange\": {
+>                       \"min\": 1024, \"max\": 65535
+>               }
+>          }          
+>       },
+>       {
+>          \"source\": \"0.0.0.0/0\", 
+>          \"protocol\": \"6\", 
+>          \"isStateless\": false,
+>          \"tcpOptions\": {
+>               \"destinationPortRange\": {
+>                       \"min\": 443, \"max\": 443
+>               }, 
+>               \"sourcePortRange\": {
+>                       \"min\": 1024, \"max\": 65535
+>               }
+>          }              
+>       }
+>   ]" \
+> --egress-security-rules "[
+>       {
+>          \"destination\": \"0.0.0.0/0\",
+>          \"protocol\": \"all\", 
+>          \"isStateless\": false
+>       }
+>   ]" \
+>   --wait-for-state "AVAILABLE"
+```
+
+### Security Lists da sub-rede privada (seclist_subnprv) 
 
 ## DHCP Options (dhcp-options)
 
