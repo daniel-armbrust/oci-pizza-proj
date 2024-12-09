@@ -33,7 +33,7 @@ Bora entender...
     [3.3 - Conectividade entre Regiões](./docs/regions-connectivity.md)
     [3.4 - DNS Público](./docs/dns.md)
     [3.2 - Testes através do Network path analyzer]()
-
+    
 - Capítulo 4: Desenvolvimento Moderno
     [4.1 - Entendendo os Contêineres](./docs/containers.md)
     [4.2 - Container Instances](./docs/container-instances.md)
