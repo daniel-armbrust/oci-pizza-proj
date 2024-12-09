@@ -20,9 +20,9 @@ Bora entender...
 - [Sobre o Autor](./docs/daniel-armbrust-about.md)
 - [Introdução](./docs/intro.md)
 
-[Capítulo 1: Conceitos e introdução a Computação em Nuvem no OCI](./docs/chapter-1.md)
-[1.1 - O que a Computação em Nuvem?](./docs/cloud-computing.md)
-[1.1 - Bem-vindo ao OCI](./docs/oci-welcome.md)
+- [Capítulo 1: Conceitos e introdução a Computação em Nuvem no OCI](./docs/chapter-1.md)
+	- [1.1 - O que a Computação em Nuvem?](./docs/cloud-computing.md)
+	- [1.1 - Bem-vindo ao OCI](./docs/oci-welcome.md)
 
 - [Capítulo 2: Visão geral da Aplicação OCI Pizza](./docs/chapter-2.md)
     [2.1 - Persistência dos dados com o Oracle NoSQL](./docs/nosql.md)
