@@ -27,14 +27,14 @@ Bora entender...
 - [Capítulo 2: Visão geral da Aplicação OCI Pizza](./docs/chapter-2.md)
 	- [2.1 - Persistência dos dados com o Oracle NoSQL](./docs/nosql.md)
 
-- Capítulo 3: Conectividade e Redes
+- [Capítulo 3: Conectividade e Redes](./docs/chapter-3.md)
 	- [3.1 - O Serviço de Redes do OCI](./docs/network.md)
 	- [3.2 - Reserva de Endereço IP Público]()
 	- [3.3 - Conectividade entre Regiões](./docs/regions-connectivity.md)
 	- [3.4 - DNS Público](./docs/dns.md)
 	- [3.2 - Testes através do Network path analyzer]()
     
-- Capítulo 4: Desenvolvimento Moderno
+- [Capítulo 4: Desenvolvimento Moderno](./docs/chapter-4.md)
 	- [4.1 - Entendendo os Contêineres](./docs/containers.md)
 	- [4.2 - Container Instances](./docs/container-instances.md)
 	- [4.3 - Expondo a aplicação por meio do Load Balancer](./docs/lb.md)
