@@ -16,6 +16,10 @@ Bora entender...
 
 ## Sumário
 
+- [Prefácio](./docs/preface.md)
+- [Sobre o Autor](./docs/daniel-armbrust-about.md)
+- [Introdução](./docs/intro.md)
+
 - [Capítulo 1: Conceitos e introdução a Computação em Nuvem no OCI](./docs/chapter-1.md)
     [1.1 - O que a Computação em Nuvem?](./docs/cloud-computing.md)
     [1.1 - Bem-vindo ao OCI](./docs/oci-welcome.md)
@@ -40,5 +44,9 @@ Bora entender...
 - [Capítulo 5: OKE - Oracle Kubernetes Engine](./docs/chapter-5.md)
     [5.1 - Introdução ao OKE](./docs/oke-intro.md)
 
+- [Capítulo 6: DevOps](./docs/chapter-6.md)
+    [6.1 - Do GitHub para o OCI DevOps]()
+
 - Capítulo X: Tópicos Avançados
+    [X.X - pfSense no OCI](./docs/pfsense.md)
     [X.X - Roteamento entre VCNs passando por um Firewall]()
