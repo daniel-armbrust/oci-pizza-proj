@@ -14,18 +14,31 @@ Nesta documentação, você encontrará informações detalhadas sobre como util
 
 Bora entender...
 
-## Visão geral da Aplicação
-
-
 ## Sumário
 
-0. [Bem-vindo ao OCI](./docs/welcome.md)
-1. [O Serviço de Redes do OCI](./docs/network.md)
-2. [Entendendo os Contêineres](./docs/containers.md)
-3. [Container Instances](./docs/container-instances.md)
-4. [Expondo a aplicação por meio do Load Balancer](./docs/lb.md)
-5. [DNS Público](./docs/dns.md)
-6. Persistência com o Oracle NoSQL
+- [Capítulo 1: Conceitos e introdução a Computação em Nuvem no OCI](./docs/chapter-1.md)
+    [1.1 - O que a Computação em Nuvem?](./docs/cloud-computing.md)
+    [1.1 - Bem-vindo ao OCI](./docs/oci-welcome.md)
 
-0. Bonus
-    - Roteamento entre VCNs passando por um Firewall
+- [Capítulo 2: Visão geral da Aplicação OCI Pizza](./docs/chapter-2.md)
+    [2.1 - Persistência dos dados com o Oracle NoSQL](./docs/nosql.md)
+
+- Capítulo 3: Conectividade e Redes
+    [3.1 - O Serviço de Redes do OCI](./docs/network.md)
+    [3.2 - Reserva de Endereço IP Público]()
+    [3.3 - Conectividade entre Regiões](./docs/regions-connectivity.md)
+    [3.4 - DNS Público](./docs/dns.md)
+    [3.2 - Testes através do Network path analyzer]()
+
+- Capítulo 4: Desenvolvimento Moderno
+    [4.1 - Entendendo os Contêineres](./docs/containers.md)
+    [4.2 - Container Instances](./docs/container-instances.md)
+    [4.3 - Expondo a aplicação por meio do Load Balancer](./docs/lb.md)
+    [4.4 - Certificado SSL/TLS através do Let's Encrypt](./docs/lets-encrypt.md)
+    [4.5 - Introdução ao GraalVM](./docs/graalvm.md)
+
+- [Capítulo 5: OKE - Oracle Kubernetes Engine](./docs/chapter-5.md)
+    [5.1 - Introdução ao OKE](./docs/oke-intro.md)
+
+- Capítulo X: Tópicos Avançados
+    [X.X - Roteamento entre VCNs passando por um Firewall]()

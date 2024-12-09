@@ -6,9 +6,9 @@ Antes de iniciar a criação de qualquer recurso no OCI, é necessário configur
 
 O [Serviço de Redes](https://docs.oracle.com/en-us/iaas/Content/Network/Concepts/landing.htm) do OCI disponibiliza versões virtuais para a maioria dos componentes de redes tradicionais que conhecemos. A configuração da rede é um pré-requisito essencial para o funcionamento de qualquer aplicação na nuvem.
 
-Toda documentação do serviço de redes para o OCI CLI, pode ser consultada neste link: [Networking Service CLI](https://docs.oracle.com/en-us/iaas/tools/oci-cli/3.50.2/oci_cli_docs/cmdref/network.html).
+Toda a documentação do serviço de redes do OCI CLI pode ser consultada no link [Networking Service CLI](https://docs.oracle.com/en-us/iaas/tools/oci-cli/3.50.2/oci_cli_docs/cmdref/network.html). Além disso, todos os comandos utilizados neste capítulo estão disponíveis nos scripts [scripts/network-saopaulo.sh](../scripts/network-saopaulo.sh) e [scripts/network-vinhedo.sh](../scripts/network-vinhedo.sh), conforme a sua região.
 
-A topologia de rede a seguir será adotada para a aplicação OCI Pizza:
+A topologia da rede utilizada para a aplicação OCI Pizza pode ser visualizada no desenho abaixo:
 
 ![alt_text](./imgs/network-topology-1.png "Network Topology 1")
 
@@ -33,7 +33,7 @@ Abaixo, apresentamos a descrição dos componentes de rede que serão utilizados
   - Contém as regras de roteamento para direcionar o tráfego de rede ao próximo salto (next-hop).
   - Sub-redes dentro da mesma VCN podem se comunicar sem a necessidade de regras de roteamento. No entanto, é possível definir esse tipo de regra, caso desejado.
 
-- **[Security Lists](https://docs.oracle.com/en-us/iaas/Content/Network/Concepts/securitylists.htm)**
+- **[Security List](https://docs.oracle.com/en-us/iaas/Content/Network/Concepts/securitylists.htm)**
   - É o firewall virtual que protege a sub-rede.
   - Todo o tráfego que entra e sai da sub-rede é verificado pela sua Security List.
   - Por padrão, toda a comunicação é bloqueada pela Security List. No entanto, é possível permitir o tráfego de rede com base em protocolos e portas, tanto para IPv4 quanto para IPv6.
@@ -62,8 +62,6 @@ Abaixo, apresentamos a descrição dos componentes de rede que serão utilizados
     - Permite conectividade entre as suas VCNs, tanto dentro de uma mesma região quanto entre regiões diferentes, além de permitir a conexão com o ambiente on-premises por meio de [VPN](https://docs.oracle.com/en-us/iaas/Content/Network/Tasks/managingIPsec.htm) ou [FastConnect](https://docs.oracle.com/en-us/iaas/Content/Network/Concepts/fastconnect.htm).
 
 A seguir, será criada toda a rede da região _Brazil East (São Paulo)_. Para a rede da região _Brazil Southeast (Vinhedo)_, os comandos permanecem os mesmos, com a modificação apenas de alguns valores correspondentes à região, como endereços IP e nomes dos recursos. Por essa razão, não serão apresentados aqui. 
-
->_**__NOTA:__** Todos os comandos utilizados para a criação da VCN e dos demais recursos de rede na região Brazil East (São Paulo) estão no script [scripts/network-saopaulo.sh](../scripts/network-saopaulo.sh). Para a região Brazil Southeast (Vinhedo), os comandos podem ser encontrados no script [scripts/network-vinhedo.sh](../scripts/network-vinhedo.sh)._
 
 ## VCN (vcn-saopaulo)
 
@@ -268,19 +266,19 @@ $ oci --region "sa-saopaulo-1" network route-table create \
 > --wait-for-state "AVAILABLE"
 ```
 
-## Security Lists (seclist_subnpub e seclist_subnprv)
+## Security List (seclist_subnpub e seclist_subnprv)
 
-As [Security Lists](https://docs.oracle.com/en-us/iaas/Content/Network/Concepts/securitylists.htm) atuam como um firewall para a sub-rede. Todo o tráfego de rede que entra (ingress) e sai (egress) da sub-rede é inspecionado pelas respectivas Security Rules da Security List, com o objetivo de permitir (accept) ou bloquear (drop) o tráfego.
+A [Security List](https://docs.oracle.com/en-us/iaas/Content/Network/Concepts/securitylists.htm) atua como um firewall para a sub-rede. Todo o tráfego de rede que entra (ingress) e sai (egress) da sub-rede é inspecionado pelas respectivas _Security Rules_ da Security List, com o objetivo de permitir (accept) ou bloquear (drop) o tráfego.
 
-Uma sub-rede sempre possui uma ou mais Security Lists associadas, com um [limite máximo de cinco](https://docs.oracle.com/en-us/iaas/Content/Network/Concepts/securityrules.htm#comparison). Ao ser criada, uma Security List bloqueia todo o tráfego de rede por padrão, sendo necessário criar regras específicas para permitir o tráfego desejado.
+O comportamento padrão da Security List é bloquear todo o tráfego de rede, a menos que exista uma regra que o permita. Não é possível definir regras para bloquear o tráfego, apenas regras que autorizem a passagem do tráfego podem ser configuradas.
 
-De forma simplificada, o tráfego de rede que "entra" em uma sub-rede (ingress) é inspecionado pelas respectivas Security Lists, uma a uma, de cima para baixo, conforme a ordem de criação. Esse tráfego busca encontrar uma regra que permita sua passagem; caso contrário, será bloqueado por padrão.
+Uma sub-rede sempre possui uma ou mais Security Lists associadas, com um [limite máximo de cinco](https://docs.oracle.com/en-us/iaas/Content/Network/Concepts/securityrules.htm#comparison). O tráfego de rede que "entra" em uma sub-rede (ingress) é inspecionado pelas Security Lists, uma a uma, de cima para baixo, de acordo com a ordem de criação. Esse tráfego procura encontrar uma regra que permita sua passagem em alguma das Security Lists definidas; caso contrário, será bloqueado por padrão.
 
 Para a saída do tráfego (egress), o processo é semelhante, mas agora a origem é um recurso existente na sub-rede que busca alcançar outro recurso fora dela.
 
 Ao criar uma Security Rule, é necessário especificar a origem ou destino do tráfego _(source ou destination)_, o protocolo _(protocol)_ e se a regra é do tipo _stateful_ ou _stateless_.
 
->_**__NOTA:__** Se sua sub-rede apresentar um alto volume de tráfego, a Oracle recomenda o uso de regras do tipo stateless. Para entender melhor as diferenças entre regras stateful e stateless, consulte a documentação ["Stateful Versus Stateless Rules"](https://docs.oracle.com/en-us/iaas/Content/Network/Concepts/securityrules.htm#stateful)._
+>_**__NOTA:__** Se sua sub-rede apresentar um alto volume de tráfego, a Oracle recomenda o uso de regras do tipo stateless. Para compreender melhor as diferenças entre regras stateful e stateless, consulte a documentação ["Stateful Versus Stateless Rules"](https://docs.oracle.com/en-us/iaas/Content/Network/Concepts/securityrules.htm#stateful). Para a aplicação OCI Pizza serão utilizadas regras do tipo stateful, pois são mais simples de definir._
 
 A Security List suporta diferentes protocolos, mas apenas os listados abaixo permitem a especificação de opções adicionais e são os mais comumente utilizados. De acordo com a [documentação da API](https://docs.oracle.com/en-us/iaas/api/#/en/iaas/20160918/datatypes/IngressSecurityRule) da Security List, é possível utilizar a string _"all"_ ou um dos valores a seguir ao definir uma Security Rule:
 
@@ -296,10 +294,10 @@ Para a aplicação OCI Pizza, serão criadas duas [Security Lists](https://docs.
 
 ### Security Lists da sub-rede pública (seclist_subnpub) 
 
-A Security List da sub-rede pública permitirá tráfego de entrada (ingress) apenas para as portas 80/TCP e 443/TCP, provenientes de qualquer origem na Internet. Em relação ao tráfego de saída (egress), não haverá restrições, permitindo a passagem de todo o tráfego.
+A Security List da sub-rede pública permitirá tráfego de entrada (ingress) apenas para as portas 80/TCP e 443/TCP, provenientes de qualquer origem na Internet. Em relação ao tráfego de saída (egress), não haverá restrições, permitindo a passagem de todo o tráfego para qualquer destino. 
 
 ```
-$ oci --region "sa-saopaulo-1" network route-table create \
+$ oci --region "sa-saopaulo-1" network security-list create \
 > --compartment-id "ocid1.compartment.oc1..aaaaaaaaaaaaaaaabbbbbbbbccc" \
 > --vcn-id "ocid1.vcn.oc1.sa-saopaulo-1.aaaaaaaaaaaaaaaabbbbbbbbccc" \
 > --display-name "seclist_subnpub" \
@@ -330,7 +328,7 @@ $ oci --region "sa-saopaulo-1" network route-table create \
 >               }
 >          }              
 >       }
->   ]" \
+> ]" \
 > --egress-security-rules "[
 >       {
 >          \"destination\": \"0.0.0.0/0\",
@@ -343,6 +341,94 @@ $ oci --region "sa-saopaulo-1" network route-table create \
 
 ### Security Lists da sub-rede privada (seclist_subnprv) 
 
+A Security List da sub-rede privada permite o tráfego de entrada (ingress) e saída (egress) sem restrições.
+
+```
+$ oci --region "sa-saopaulo-1" network security-list create \
+> --compartment-id "ocid1.compartment.oc1..aaaaaaaaaaaaaaaabbbbbbbbccc" \
+> --vcn-id "ocid1.vcn.oc1.sa-saopaulo-1.aaaaaaaaaaaaaaaabbbbbbbbccc" \
+> --display-name "seclist_subnprv" \
+> --ingress-security-rules "[
+>       {
+>           \"source\": \"0.0.0.0/0\", 
+>           \"protocol\": \"all\", 
+>           \"isStateless\": false             
+>       }
+> ]" \
+> --egress-security-rules "[
+>       {
+>          \"destination\": \"0.0.0.0/0\",
+>          \"protocol\": \"all\", 
+>          \"isStateless\": false
+>       }
+> ]" \
+> --wait-for-state "AVAILABLE"
+```
+
 ## DHCP Options (dhcp-options)
 
+O [DHCP Options](https://docs.oracle.com/en-us/iaas/Content/Network/Tasks/managingDHCP.htm) é utilizado para fornecer informações de configuração de rede aos recursos criados dentro de uma sub-rede. Ele possibilita que os recursos recebam automaticamente configuração essenciais, como o Endereço IP, Máscara de sub-rede, Gatreway Padrão e os servidores DNS a serem utilizados.
+
+>_**__NOTA:__** Existem configurações avançadas que permitem a modificação das opções do DHCP Options, especialmente no que diz respeito às configurações de DNS. Aqui optaremos por manter as configurações padrão do DHCP Options._
+
+Cada sub-rede deve ter um DHCP Options definido, e geralmente, um único DHCP Options é utilizado para todas as sub-redes de uma VCN.
+
+```
+$ oci --region "sa-saopaulo-1" network dhcp-options create \
+> --compartment-id "ocid1.compartment.oc1..aaaaaaaaaaaaaaaabbbbbbbbccc" \
+> --vcn-id "ocid1.vcn.oc1.sa-saopaulo-1.aaaaaaaaaaaaaaaabbbbbbbbccc" \
+> --display-name "dhcp-options" \
+> --domain-name-type "VCN_DOMAIN" \
+> --options '[
+>       {"type": "DomainNameServer", "serverType": "VcnLocalPlusInternet"}
+> ]' \
+> --wait-for-state "AVAILABLE"
+```
+
 ## Subnet (subnpub e subnprv)
+
+Por fim, a criação das sub-redes pública (subnpub) e privada (subnprv). AO objetivo é implementar um Load Balancer na sub-rede pública, que será responsável por receber o tráfego proveniente da Internet. Na sub-rede privada, por sua vez, serão alocados os recursos computacionais necessários para a execução da aplicação.
+
+A sub-rede depende de todos os recursos que foram criados ao longo deste capítulo. Portanto, é necessário fornecer todos os respectivos OCIDs, além de um bloco CIDR único e específico para a sub-rede.
+
+### Sub-rede Pública (subnpub)
+
+```
+$ oci --region "sa-saopaulo-1" network subnet create \
+> --compartment-id "ocid1.compartment.oc1..aaaaaaaaaaaaaaaabbbbbbbbccc" \
+> --vcn-id "ocid1.vcn.oc1.sa-saopaulo-1.aaaaaaaaaaaaaaaabbbbbbbbccc" \
+> --route-table-id "ocid1.routetable.oc1.sa-saopaulo-1.aaaaaaaaaaaaaaaabbbbbbbbccc" \
+> --security-list-ids "[\"ocid1.securitylist.oc1.sa-saopaulo-1.aaaaaaaaaaaaaaaabbbbbbbbccc\"]" \
+> --dhcp-options-id ocid1.dhcpoptions.oc1.sa-saopaulo-1.aaaaaaaaaaaaaaabbbbbbbbccc \
+> --dns-label "subnpub" \
+> --display-name "subnpub" \
+> --prohibit-public-ip-on-vnic "false" \
+> --prohibit-internet-ingress "false" \
+> --cidr-block "172.16.30.0/24" \
+> --wait-for-state "AVAILABLE"
+```
+
+### Sub-rede Privada (subnprv)
+
+```
+$ oci --region "sa-saopaulo-1" network subnet create \
+> --compartment-id "ocid1.compartment.oc1..aaaaaaaaaaaaaaaabbbbbbbbccc" \
+> --vcn-id "ocid1.vcn.oc1.sa-saopaulo-1.aaaaaaaaaaaaaaaabbbbbbbbccc" \
+> --route-table-id "ocid1.routetable.oc1.sa-saopaulo-1.aaaaaaaaaaaaaaaabbbbbbbbccc" \
+> --security-list-ids "[\"ocid1.securitylist.oc1.sa-saopaulo-1.aaaaaaaaaaaaaaaabbbbbbbbccc\"]" \
+> --dhcp-options-id ocid1.dhcpoptions.oc1.sa-saopaulo-1.aaaaaaaaaaaaaaabbbbbbbbccc \
+> --dns-label "subnprv" \
+> --display-name "subnprv" \
+> --prohibit-public-ip-on-vnic "true" \
+> --prohibit-internet-ingress "true" \
+> --cidr-block "172.16.20.0/24" \
+> --wait-for-state "AVAILABLE"
+```
+
+## Conclusão
+
+Neste capítulo, foram apresentados todos os comandos e a sequência lógica necessária para a criação das redes nas regiões de _São Paulo (sa-saopaulo-1)_ e _Vinhedo (sa-vinhedo-1)_. A topologia proposta para a aplicação OCI Pizza é relativamente simples e não há outras redes para homologação e desenvolvimento. No entanto, é importante ressaltar que, embora essa abordagem facilite a criação inicial, a separação dessas redes é considerada uma boa prática para garantir maior segurança e organização dos ambientes.
+
+Lembrando que todos os comandos também estão contidos nos scripts [scripts/network-saopaulo.sh](../scripts/network-saopaulo.sh) e [scripts/network-vinhedo.sh](../scripts/network-vinhedo.sh).
+
+Happy OCI Networking!
