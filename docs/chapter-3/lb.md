@@ -4,7 +4,7 @@
 
 De um modo geral, sua principal função é direcionar o tráfego de rede de um ponto de entrada para vários servidores de aplicação. Isso não apenas otimiza a utilização dos recursos, mas também possibilita o escalonamento da aplicação. Ao utilizar multiplos servidores, o Load Balancer promove a alta disponibilidade e elimina o risco de um ponto único de falha. Sua aplicação então, torna-se tolerante a falhas.
 
-De maneira geral, a principal função do Load Balancer é direcionar o tráfego de rede de um ponto de entrada para diversos servidores de aplicação. Essa abordagem não apenas otimiza a utilização dos recursos, mas também permite o escalonamento eficiente da aplicação. Ao empregar múltiplos servidores, o Load Balancer garante alta disponibilidade e elimina o risco de um ponto único de falha, tornando a aplicação mais resiliente e tolerante a falhas.
+De maneira geral, a principal função do Load Balancer é direcionar o tráfego de rede de um ponto de entrada para um ou mais servidores de aplicação. Essa abordagem não apenas otimiza a utilização dos recursos, mas também permite o escalonamento eficiente da aplicação. Ao empregar múltiplos servidores, o Load Balancer garante alta disponibilidade e elimina o risco de um ponto único de falha, tornando a aplicação mais resiliente e tolerante a falhas.
 
 >_**__NOTA:__** A expressão "escalonamento eficiente da aplicação" refere-se à capacidade de ajustar os recursos alocados a uma aplicação, aumentando ou diminuindo conforme necessário, para atender à demanda dinâmica de acessos. Essa abordagem visa otimizar o uso de recursos, evitando desperdícios e garantindo que o desempenho da aplicação não seja comprometido._
 
@@ -43,21 +43,27 @@ Antes de avançar com a criação do Load Balancer que será utilizado pela apli
 - **Política de Balanceamento**
     - A Política de Balanceamento determina a forma como o tráfego de entrada é distribuído entre os Backend Sets, que agrupam os servidores de aplicação.
     - Atualmente, existem três diferentes Políticas de Balanceamento que podem ser utilizadas no Load Balancer de Camada 7:    
+
         1. [Weighted Round Robin (Revezamento)](https://docs.oracle.com/en-us/iaas/Content/Balance/Reference/lbpolicies.htm#Policies__RoundRobin)
             - É um algoritmo de balanceamento simples que distribui o tráfego de maneira sequencial entre os servidores de aplicação presentes no Backend Set.
             - Esta é uma política que funciona melhor quando todos os servidores de aplicação do Backend Set possuem capacidade computacional igual.
+
         2. [IP hash](https://docs.oracle.com/en-us/iaas/Content/Balance/Reference/lbpolicies.htm#Policies__IPHash)
             - Essa política calcula um hash com base no IP de origem de uma solicitação recebida, visando direcionar o tráfego para o mesmo servidor de aplicação. Isso assegura que as solicitações de um cliente específico sejam sempre encaminhadas para o mesmo servidor no Backend Set.
+
         3. [Least connections (Menos conexões)](https://docs.oracle.com/en-us/iaas/Content/Balance/Reference/lbpolicies.htm#Policies__LeastConnections)
             - Essa política direciona o tráfego para o servidor de aplicação no Backend Set que possui o menor número de conexões ativas.
 
 - **HTTPS e certificados SSL**
     - O Load Balancer permite tratar conexões seguras através da configuração de um Listener que utiliza o protocolo HTTPS. Isso requer a utilização de um certificado digital.
     - Existem diferentes abordagens para gerenciar conexões criptografadas via SSL no Load Balancer, incluindo:
+
         1. [Terminação SSL no Load Balancer](https://docs.oracle.com/en-us/iaas/Content/Balance/Tasks/managingcertificates.htm#configuringSSLhandling__TerminatnigLoadBalancer)
             - Este é o método mais comum, no qual o tráfego é criptografado até o Listener do Load Balancer, enquanto a comunicação com o Backend Set não é criptografada.
+
         2. [SSL Backend](https://docs.oracle.com/en-us/iaas/Content/Balance/Tasks/managingcertificates.htm#configuringSSLhandling__TerminatnigLoadBalancer)
             - O tráfego entre o Load Balancer e os servidores do Backend Set é criptografado.
+
         3. [SSL Ponto-a-Ponto](https://docs.oracle.com/en-us/iaas/Content/Balance/Tasks/managingcertificates.htm#configuringSSLhandling__ImplementEndtoEndSSL)
             - O Load Balancer aceita tráfego criptografado e também criptografa o tráfego que é enviado para o backend.
 
@@ -71,36 +77,6 @@ A arquitetura do Load Balancer utilizado pela aplicação OCI Pizza é ilustrada
 ![alt_text](./imgs/lb-1.png "OCI Pizza Load Balancer")
 
 O Load Balancer terá um _Listener HTTP_ na porta 80/TCP e outro _HTTPS_ na porta 443/TCP. A política de balanceamento selecionada será a _Weighted Round Robin_, e o monitoramento _Health Check_ será realizado na porta 5000/TCP. Além disso, um dos _Container Instances_ será configurado como _Backup_ no _Backend Set_. Caso o Health Check falhe, o Container Instance Backup assumirá automaticamente a função de _Primário_, garantindo assim a continuidade da disponibilidade da aplicação.
-
-## Reserva do IP Público para o Load Balancer
-
-As configurações iniciam-se com a [reserva de um endereço IP público](https://docs.oracle.com/en-us/iaas/Content/Network/Tasks/managingpublicIPs.htm#overview) para o Load Balancer. Essa é uma prática recomendada, pois assegura que o endereço IP permaneça fixo, facilitando as configurações de DNS e garantindo que o IP esteja reservado exclusivamente para o seu ambiente. Caso o Load Balancer seja acidentalmente excluído, você poderá criar um novo e atribuir o endereço IP previamente reservado, evitando assim a necessidade de reconfigurar o DNS público da aplicação.
-
-Para reservar o endereço IP, utilize o seguinte comando:
-
-```
-$ oci network public-ip create \
-    --compartment-id "ocid1.compartment.oc1..aaaaaaaaaaaaaaaabbbbbbbbccc" \
-    --lifetime "RESERVED" \
-    --display-name "pubip-lb-saopaulo" \
-    --wait-for-state "AVAILABLE"
-```
-
-Para verificar qual foi o endereço IP que o OCI reservou, utilize o seguinte comando:
-
-```
-$ oci network public-ip list \
-    --compartment-id "ocid1.compartment.oc1..aaaaaaaaaaaaaaaabbbbbbbbccc" \
-    --lifetime "RESERVED" \
-    --scope "REGION" \
-    --query data[].\"ip-address\" \
-    --all
-[
-  "137.131.197.197"
-]
-```
-
->_**__NOTA:__** Se mais de um endereço IP tiver sido reservado, o comando acima retornará mais de um._
 
 ## Criando o Load Balancer
 

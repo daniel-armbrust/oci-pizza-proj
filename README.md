@@ -24,28 +24,33 @@ Bora entender...
 	- [1.1 - O que a Computação em Nuvem?](./docs/cloud-computing.md)
 	- [1.1 - Bem-vindo ao OCI](./docs/oci-welcome.md)
 
-- [Capítulo 2: Visão geral da Aplicação OCI Pizza](./docs/chapter-2.md)
-	- [2.1 - Persistência dos dados com o Oracle NoSQL](./docs/nosql.md)
+- [Capítulo 2: Visão geral da Aplicação OCI Pizza](./docs/chapter-2/intro.md)
+	- [2.1 - Persistência dos dados com o Oracle NoSQL](./docs/chapter-2/nosql.md)
 
-- [Capítulo 3: Conectividade e Redes](./docs/chapter-3.md)
-	- [3.1 - O Serviço de Redes do OCI](./docs/network.md)
-	- [3.2 - Reserva de Endereço IP Público]()
-	- [3.3 - Conectividade entre Regiões](./docs/regions-connectivity.md)
-	- [3.4 - DNS Público](./docs/dns.md)
-	- [3.2 - Testes através do Network path analyzer]()
+- [Capítulo 3: Conectividade e Redes](./docs/chapter-3/intro.md)
+	- [3.1 - O Serviço de Redes do OCI](./docs/chapter-3/network.md)
+	- [3.2 - Reserva de Endereço IP Público](./docs/chapter-3/reserved-public-ip.md)
+	- [3.3 - Conectividade entre Regiões](./docs/chapter-3/regions-connectivity.md)
+	- [3.4 - DNS Público](./docs/chapter-3/dns.md)
+	- [3.5 - Load Balancer](./docs/lb.md)
+	- [3.6 - Certificado SSL/TLS através do Let's Encrypt](./docs/lets-encrypt.md)
+	- [3.7 - E-mail Delivery](./docs/chapter-3/email-delivery.md)
+	- [3.8 - Testes através do Network path analyzer](./docs/chapter-3/network-path-analyzer.md)
     
 - [Capítulo 4: Desenvolvimento Moderno](./docs/chapter-4.md)
 	- [4.1 - Entendendo os Contêineres](./docs/containers.md)
-	- [4.2 - Container Instances](./docs/container-instances.md)
-	- [4.3 - Expondo a aplicação por meio do Load Balancer](./docs/lb.md)
-	- [4.4 - Certificado SSL/TLS através do Let's Encrypt](./docs/lets-encrypt.md)
-	- [4.5 - Introdução ao GraalVM](./docs/graalvm.md)
+	- [4.2 - Container Instances](./docs/container-instances.md)	
+	- [X.X - Introdução ao GraalVM](./docs/graalvm.md)
 
 - [Capítulo 5: OKE - Oracle Kubernetes Engine](./docs/chapter-5.md)
 	- [5.1 - Introdução ao OKE](./docs/oke-intro.md)
 
 - [Capítulo 6: DevOps](./docs/chapter-6.md)
 	- [6.1 - Do GitHub para o OCI DevOps]()
+
+- [Capítulo 7: Observabilidade](./docs/chapter-7.md)
+
+- [Capítulo X: Ferramental de IA]()
 
 - Capítulo X: Tópicos Avançados
 	- [X.X - pfSense no OCI](./docs/pfsense.md)

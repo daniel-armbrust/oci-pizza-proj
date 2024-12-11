@@ -1,12 +1,8 @@
 # O Serviço de Redes do OCI
 
-Antes de iniciar a criação de qualquer recurso no OCI, é necessário configurar uma rede. Isso se deve ao fato de que a maioria dos serviços disponíveis no OCI, assim como os serviços que serão utilizados pela aplicação OCI Pizza, dependem de uma rede adequadamente configurada e pronta para uso.
-
->_**__NOTA:__** Um recurso, no contexto de computação em nuvem e tecnologia da informação, refere-se a qualquer componente ou serviço que pode ser utilizado para construir, implementar e gerenciar aplicações e sistemas._
-
 O [Serviço de Redes](https://docs.oracle.com/en-us/iaas/Content/Network/Concepts/landing.htm) do OCI disponibiliza versões virtuais para a maioria dos componentes de redes tradicionais que conhecemos. A configuração da rede é um pré-requisito essencial para o funcionamento de qualquer aplicação na nuvem.
 
-Toda a documentação do serviço de redes do OCI CLI pode ser consultada no link [Networking Service CLI](https://docs.oracle.com/en-us/iaas/tools/oci-cli/3.50.2/oci_cli_docs/cmdref/network.html). Além disso, todos os comandos utilizados neste capítulo estão disponíveis nos scripts [scripts/network-saopaulo.sh](../scripts/network-saopaulo.sh) e [scripts/network-vinhedo.sh](../scripts/network-vinhedo.sh), conforme a sua região.
+Todos os comandos utilizados neste capítulo estão disponíveis nos scripts [scripts/network-saopaulo.sh](../scripts/network-saopaulo.sh) e [scripts/network-vinhedo.sh](../scripts/network-vinhedo.sh), conforme a sua região.
 
 A topologia da rede utilizada para a aplicação OCI Pizza pode ser visualizada no desenho abaixo:
 
