@@ -32,7 +32,7 @@ Bora entender...
 	- [3.2 - Conectividade entre Regiões](./docs/chapter-3/regions-connectivity.md)
 	- [3.3 - Reserva de Endereço IP Público](./docs/chapter-3/reserved-public-ip.md)	
 	- [3.4 - DNS Público](./docs/chapter-3/dns.md)
-	- [3.5 - Certificado SSL/TLS através do Let's Encrypt](./docs/lets-encrypt.md)
+	- [3.5 - Let's Encrypt e o Serviço de Certificados do OCI](./docs/lets-encrypt.md)
 	- [3.6 - Load Balancer](./docs/lb.md)	
 	- [3.7 - E-mail Delivery](./docs/chapter-3/email-delivery.md)
 	- [3.8 - Testes através do Network path analyzer](./docs/chapter-3/network-path-analyzer.md)
