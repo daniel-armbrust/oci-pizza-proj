@@ -1,5 +1,5 @@
 #
-# scripts/functions.sh
+# scripts//chapter-3/functions.sh
 #
 # Copyright (C) 2005-2024 by Daniel Armbrust <darmbrust@gmail.com>
 #
@@ -133,4 +133,51 @@ function get_rtb_ocid() {
         --vcn-id "$vcn_ocid" \
         --lifecycle-state "AVAILABLE" \
         --query 'data[].id' | tr -d '[]" \n'
+}
+
+function get_reserved_ip_ocid() {
+    local region="$1"
+    local name="$2"
+
+    oci --region "$region" network public-ip list \
+        --compartment-id "$COMPARTMENT_OCID" \
+        --lifetime "RESERVED" \
+        --scope "REGION" \
+        --all \
+        --query "data[?name==\"$name\"].id" | tr -d '"[]\n '
+}
+
+function get_subnet_ocid() {
+    local region="$1"
+    local name="$2"
+    local vcn_ocid="$3"
+
+    oci --region "$region" network subnet list \
+        --compartment-id "$COMPARTMENT_OCID" \
+        --all \
+        --display-name "$name" \
+        --lifecycle-state "AVAILABLE" \
+        --vcn-id "$vcn_ocid" \
+        --query 'data[].id' | tr -d '"[]\n '
+}
+
+function get_lb_ocid() {
+    local region="$1"
+    local name="$2"
+    
+    oci --region "$region" lb load-balancer list \
+        --compartment-id "$COMPARTMENT_OCID" \
+        --all \
+        --display-name "$name" \
+        --lifecycle-state "ACTIVE"
+}
+
+function get_cert_ocid() {
+    local region="$1"
+    local name="$2"
+    
+    oci --region "$region" certs-mgmt certificate list \
+        --compartment-id "$COMPARTMENT_OCID" \
+        --all \
+        --query 'data.items[].id' | tr -d '"[]\n '    
 }

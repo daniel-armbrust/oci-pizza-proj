@@ -1,4 +1,6 @@
-# 4. Expondo a aplicação por meio do Load Balancer
+# Load Balancer
+
+## Expondo a aplicação por meio do Load Balancer
 
 [Load Balancer](https://docs.oracle.com/en-us/iaas/Content/Balance/home.htm), também conhecido como Balanceador de Carga ou LBaaS, é um serviço disponível no OCI que desempenha um papel crucial na distribuição do tráfego de rede entre múltiplos servidores de aplicação _"saudáveis"_. Essa funcionalidade é essencial para garantir que as aplicações permaneçam disponíveis e operem de maneira eficiente, otimizando o desempenho e a resiliência do sistema.
 
@@ -76,16 +78,22 @@ A arquitetura do Load Balancer utilizado pela aplicação OCI Pizza é ilustrada
 
 ![alt_text](./imgs/lb-1.png "OCI Pizza Load Balancer")
 
-O Load Balancer terá um _Listener HTTP_ na porta 80/TCP e outro _HTTPS_ na porta 443/TCP. A política de balanceamento selecionada será a _Weighted Round Robin_, e o monitoramento _Health Check_ será realizado na porta 5000/TCP. Além disso, um dos _Container Instances_ será configurado como _Backup_ no _Backend Set_. Caso o Health Check falhe, o Container Instance Backup assumirá automaticamente a função de _Primário_, garantindo assim a continuidade da disponibilidade da aplicação.
+O Load Balancer terá um _Listener HTTP_ na porta 80/TCP e outro _HTTPS_ na porta 443/TCP. A política de balanceamento selecionada será a _Weighted Round Robin_, e o monitoramento _Health Check_ será realizado na porta _5000/TCP_. 
+
+>_**__NOTA:__** Neste momento, serão criados apenas os Load Balancers nas respectivas regiões. As configurações serão concluídas posteriormente no capítulo [4.2 - Container Instances](./docs/chapter-4.md/container-instances.md), onde criaremos os Container Instances que servirão como backends para os Load Balancers._
 
 ## Criando o Load Balancer
 
+É necessário configurar dois Load Balancers: um para a região de _São Paulo (sa-saopaulo-1)_ e outro para a região de _Vinhedo (sa-vinhedo-1)_. Para evitar redundâncias, apresentaremos apenas os comandos da região de São Paulo, uma vez que a sintaxe é a mesma para a região de Vinhedo.
+
+>_**__NOTA:__** Todos os comandos utilizados neste capítulo estão disponíveis nos scripts [scripts/chapter-3/lb-saopaulo.sh](../scripts/chapter-3/lb-saopaulo.sh) e [scripts/chapter-3/lb-vinhedo.sh](../scripts/chapter-3/lb-vinhedo.sh)._
+
 ### Load Balancer
 
-Antes de criar o Load Balancer, é necessário obter o OCID do Endereço IP Público que foi reservado. Essa informação pode ser obtida por meio do seguinte comando:
+Antes de criar o Load Balancer, é necessário obter o OCID do Endereço IP Público que foi reservado, conforme descrito no capítulo _[3.3 - Reserva de Endereço IP Público](./docs/chapter-3/reserved-public-ip.md)_. 
 
 ```
-$ oci network public-ip list \
+$ oci --region "sa-saopaulo-1" network public-ip list \
     --compartment-id "ocid1.compartment.oc1..aaaaaaaaaaaaaaaabbbbbbbbccc" \
     --lifetime "RESERVED" \
     --scope "REGION" \
@@ -122,8 +130,6 @@ $ oci lb load-balancer create \
     --reserved-ips "[{\"id\": \"ocid1.publicip.oc1.sa-saopaulo-1.aaaaaaaaaaaaaaaabbbbbbbbccc\"}]" \
     --wait-for-state "SUCCEEDED"
 ```
-
-### Backend
 
 ### Backend Set
 

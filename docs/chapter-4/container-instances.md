@@ -20,10 +20,10 @@ Para listar os shapes disponíveis para uso, utilize o comando abaixo:
 
 ```
 $ oci container-instances container-instance list-shapes \
-    --compartment-id "ocid1.compartment.oc1..aaaaaaaaaaaaaaaabbbbbbbbccc" \
-    --all \
-    --query 'data.items[].{Shape:name}' \
-    --output table
+> --compartment-id "ocid1.compartment.oc1..aaaaaaaaaaaaaaaabbbbbbbbccc" \
+> --all \
+> --query 'data.items[].{Shape:name}' \
+> --output table
 
 +----------------------------+
 | Shape                      |
@@ -40,8 +40,8 @@ $ oci container-instances container-instance list-shapes \
 
 ```
 $ oci container-instances container-instance list-shapes \
-    --compartment-id "ocid1.compartment.oc1..aaaaaaaaaaaaaaaabbbbbbbbccc" \
-    --all
+> --compartment-id "ocid1.compartment.oc1..aaaaaaaaaaaaaaaabbbbbbbbccc" \
+> --all
 ```
 
 >_**__NOTA:__** Para obter mais detalhes sobre os shapes disponíveis para Container Instances, consulte a documentação oficial neste [link](https://docs.oracle.com/en-us/iaas/Content/container-instances/container-instance-shapes.htm#container-instance-shapes)._
@@ -58,30 +58,34 @@ Abaixo o comando de exemplo para se criar o Container Instance primário (ci-oci
 
 ```
 $ oci container-instances container-instance create \
-    --display-name "ci-ocipizza-primary" \
-    --availability-domain "$AVAILABILITY_DOMAIN" \
-    --compartment-id "$COMPARTMENT_OCID" \
-    --containers "[  
-           {     
-              \"displayName\": \"webapp-container-1\",
-	          \"imageUrl\": \"ocir.sa-saopaulo-1.oci.oraclecloud.com/grxmw2a9myyj/ocipizza:1.0\",
-	          \"environmentVariables\": {
-                  \"SECRET_KEY\": \"$SECRET_KEY\",
-                  \"NOSQL_COMPARTMENT_OCID\": \"$NOSQL_COMPARTMENT_OCID\"
-              }
-           }
-        ]" \
-    --container-restart-policy "ON_FAILURE" \
-    --shape "CI.Standard.E4.Flex" \
-    --shape-config "{\"memoryInGBs\": 4, \"ocpus\": 2}" \
-    --vnics "[
-           {
-              \"displayName\": \"vnic-1\",
-              \"isPublicIpAssigned\": false,
-              \"subnetId\": \"$SUBNET_OCID\"
-           }
-        ]" \
-    --wait-for-state "ACCEPTED"
+> --display-name "ci-ocipizza-primary" \
+> --availability-domain "$AVAILABILITY_DOMAIN" \
+> --compartment-id "$COMPARTMENT_OCID" \
+> --containers "[  
+>          {     
+>             \"displayName\": \"webapp-container-1\",
+>             \"imageUrl\": \"ocir.sa-saopaulo-1.oci.oraclecloud.com/grxmw2a9myyj/ocipizza:1.0\",
+>	          \"environmentVariables\": {
+>                 \"SECRET_KEY\": \"$SECRET_KEY\",
+>                 \"NOSQL_COMPARTMENT_OCID\": \"$NOSQL_COMPARTMENT_OCID\"
+>             }
+>          }
+>       ]" \
+> --container-restart-policy "ON_FAILURE" \
+> --shape "CI.Standard.E4.Flex" \
+> --shape-config "{\"memoryInGBs\": 4, \"ocpus\": 2}" \
+> --vnics "[
+>        {
+>           \"displayName\": \"vnic-1\",
+>           \"isPublicIpAssigned\": false,
+>           \"subnetId\": \"$SUBNET_OCID\"
+>        }
+>      ]" \
+> --wait-for-state "ACCEPTED"
 ```
 
 >_**__NOTA:__** Os valores das variáveis $AVAILABILITY_DOMAIN, $COMPARTMENT_OCID, $SECRET_KEY, $NOSQL_COMPARTMENT_OCID e $SUBNET_OCID devem ser substituídos pelos correspondentes ao seu ambiente no OCI. Para obter uma visão geral dos valores, consulte o [script](../scripts/ci-saopaulo.sh) de exemplo._
+
+## Container Instance como Backend do Load Balancer
+
+Além disso, um dos _Container Instances_ será configurado como _Backup_ no _Backend Set_. Caso o Health Check falhe, o Container Instance Backup assumirá automaticamente a função de _Primário_, garantindo assim a continuidade da disponibilidade da aplicação.

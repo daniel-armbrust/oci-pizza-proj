@@ -1,5 +1,5 @@
 #
-# scripts/pubip-reserved-saopaulo.sh
+# scripts/chapter-3/pubip-reserved-vinhedo.sh
 #
 # Copyright (C) 2005-2024 by Daniel Armbrust <darmbrust@gmail.com>
 #
@@ -28,7 +28,7 @@ region="sa-vinhedo-1"
 oci --region "$region" network public-ip create \
     --compartment-id "$COMPARTMENT_OCID" \
     --lifetime "RESERVED" \
-    --display-name "pubip-lb-saopaulo" \
+    --display-name "pubip-lb-vinhedo" \
     --wait-for-state "AVAILABLE"
 
 oci --region "$region" network public-ip list \

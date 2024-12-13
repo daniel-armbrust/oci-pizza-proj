@@ -1,5 +1,5 @@
 #
-# scripts/network-saopaulo.sh
+# scripts/chapter-3/network-saopaulo.sh
 #
 # Copyright (C) 2005-2024 by Daniel Armbrust <darmbrust@gmail.com>
 #

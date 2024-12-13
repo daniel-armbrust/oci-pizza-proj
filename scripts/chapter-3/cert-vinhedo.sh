@@ -1,5 +1,5 @@
 #
-# scripts/chapter-3/drg.sh
+# scripts/chapter-3/cert-vinhedo.sh
 #
 # Copyright (C) 2005-2024 by Daniel Armbrust <darmbrust@gmail.com>
 #
@@ -18,25 +18,23 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 #
 
-# Source external files.
-source functions.sh
+#-------------------------------------------------#
+# Brazil Southeast (Vinhedo) / sa-vinhedo-1 (VCP) #
+#-------------------------------------------------#
 
 # Globals
-region_saopaulo="sa-saopaulo-1"
-region_vinhedo="sa-vinhedo-1"
+region="sa-vinhedo-1"
+cert_file="cert.pem"
+cert_chain_file="chain.pem"
+privkey_file="privkey.pem"
 
-#-----#
-# DRG #
-#-----#
-
-oci --region "$region_saopaulo" network drg create \
+oci --region "$region" certs-mgmt certificate create-by-importing-config \
     --compartment-id "$COMPARTMENT_OCID" \
-    --display-name "drg-saopaulo" \
-    --wait-for-state "AVAILABLE"
+    --name "certificado-ocipizza" \
+    --description "Certificado Digital da Aplicação OCI Pizza." \
+    --certificate-pem "$(cat $cert_file)" \
+    --cert-chain-pem "$(cat $cert_chain_file)" \
+    --private-key-pem "$(cat $privkey_file)" \
+    --wait-for-state "ACTIVE"
 
-oci --region "$region_vinhedo" network drg create \
-    --compartment-id "$COMPARTMENT_OCID" \
-    --display-name "drg-saopaulo" \
-    --wait-for-state "AVAILABLE"
-
-
+exit 0

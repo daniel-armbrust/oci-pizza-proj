@@ -5,6 +5,7 @@
 - Conceitos de nuvem
 - Nuvem vs. OnPremises
 - IaaS, PaaS, SaaS
+- Tenancy
 
 ## Visão geral do OCI
 

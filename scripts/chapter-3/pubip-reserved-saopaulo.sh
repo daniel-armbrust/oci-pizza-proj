@@ -1,5 +1,5 @@
 #
-# scripts/pubip-reserved-saopaulo.sh
+# scripts/chapter-3/pubip-reserved-saopaulo.sh
 #
 # Copyright (C) 2005-2024 by Daniel Armbrust <darmbrust@gmail.com>
 #

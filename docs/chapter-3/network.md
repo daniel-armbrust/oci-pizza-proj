@@ -2,7 +2,7 @@
 
 O [Serviço de Redes](https://docs.oracle.com/en-us/iaas/Content/Network/Concepts/landing.htm) do OCI disponibiliza versões virtuais para a maioria dos componentes de redes tradicionais que conhecemos. A configuração da rede é um pré-requisito essencial para o funcionamento de qualquer aplicação na nuvem.
 
-Todos os comandos utilizados neste capítulo estão disponíveis nos scripts [scripts/network-saopaulo.sh](../scripts/network-saopaulo.sh) e [scripts/network-vinhedo.sh](../scripts/network-vinhedo.sh), conforme a sua região.
+>_**__NOTA:__** Todos os comandos utilizados neste capítulo estão disponíveis nos scripts [scripts/chapter-3/network-saopaulo.sh](../scripts/chapter-3/network-saopaulo.sh) e [scripts/chapter-3/network-vinhedo.sh](../scripts/chapter-3/network-vinhedo.sh)._
 
 A topologia da rede utilizada para a aplicação OCI Pizza pode ser visualizada no desenho abaixo:
 
