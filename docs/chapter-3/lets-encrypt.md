@@ -76,7 +76,7 @@ value(s) you've just added.
 Press Enter to Continue
 ```
 
-A saída do comando acima corresponde a um registro DNS do tipo TXT (_acme-challenge.www.ocipizza.com.br) e seu respectivo valor (XaAAAAAAAOZ-uUU-BaCOPAPAMdamsDASKDASAI_AAOE). Antes de prosseguir, é necessário adicionar esse registro com o valor correspondente no domíno "ocipizza.com.br" no [Serviço de DNS Público](https://docs.oracle.com/en-us/iaas/Content/DNS/Concepts/gettingstarted.htm) do OCI:
+A saída do comando acima corresponde a um registro DNS do tipo TXT _(\_acme-challenge.www.ocipizza.com.br)_ e seu respectivo valor _(XaAAAAAAAOZ-uUU-BaCOPAPAMdamsDASKDASAI\_AAOE)_. Antes de prosseguir, é necessário adicionar esse registro com o valor correspondente no domíno "ocipizza.com.br" no [Serviço de DNS Público](https://docs.oracle.com/en-us/iaas/Content/DNS/Concepts/gettingstarted.htm) do OCI:
 
 ```
 $ oci dns record domain patch \
