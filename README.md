@@ -55,3 +55,4 @@ Bora entender...
 - Capítulo X: Tópicos Avançados
 	- [X.X - pfSense no OCI](./docs/pfsense.md)
 	- [X.X - Roteamento entre VCNs passando por um Firewall]()
+	- [X.X - Load Balancer Avançado]()

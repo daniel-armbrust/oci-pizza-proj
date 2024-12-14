@@ -169,7 +169,8 @@ function get_lb_ocid() {
         --compartment-id "$COMPARTMENT_OCID" \
         --all \
         --display-name "$name" \
-        --lifecycle-state "ACTIVE"
+        --lifecycle-state "ACTIVE" \
+        --query 'data[].id' | tr -d '"[]\n '
 }
 
 function get_cert_ocid() {
@@ -179,5 +180,6 @@ function get_cert_ocid() {
     oci --region "$region" certs-mgmt certificate list \
         --compartment-id "$COMPARTMENT_OCID" \
         --all \
+        --name "$name" \
         --query 'data.items[].id' | tr -d '"[]\n '    
 }

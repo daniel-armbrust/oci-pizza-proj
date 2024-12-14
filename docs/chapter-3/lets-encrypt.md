@@ -178,7 +178,7 @@ $ oci --region "sa-saopaulo-1" certs-mgmt certificate create-by-importing-config
 > --cert-chain-pem "$(cat chain.pem)" \
 > --certificate-pem "$(cat cert.pem)" \
 > --private-key-pem "$(cat privkey.pem)" \
-> --name "certificado-ocipizza" \
+> --name "certificado-saopaulo" \
 > --description "Certificado Digital da Aplicação OCI Pizza." \
 > --wait-for-state "ACTIVE"
 ```
@@ -189,10 +189,19 @@ O comando abaixo é utilizado para obter o OCID do certificado recém-importado:
 $ oci --region "sa-saopaulo-1" certs-mgmt certificate list \
 > --compartment-id "ocid1.compartment.oc1..aaaaaaaaaaaaaaaabbbbbbbbccc" \
 > --all \
-> --name "certificado-ocipizza" \
+> --name "certificado-saopaulo" \
 > --lifecycle-state "ACTIVE" \
 > --query 'data.items[].id'
 [
   "ocid1.certificate.oc1.sa-saopaulo-1.aaaaaaaaaaaaaaaabbbbbbbbccc"
 ]
+```
+
+Para concluir, o comando a seguir remove o registro DNS do tipo TXT que foi utilizado pelo Let’s Encrypt, uma vez que não será mais necessário:
+
+```
+$ oci dns record domain delete \
+> --zone-name-or-id "ocipizza.com.br" \
+> --domain "_acme-challenge.www.ocipizza.com.br." \
+> --force 
 ```

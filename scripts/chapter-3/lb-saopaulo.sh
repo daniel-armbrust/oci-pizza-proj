@@ -27,14 +27,19 @@ source functions.sh
 
 # Globals
 region="sa-saopaulo-1"
+vcn_name="vcn-saopaulo"
+pubsubnet_name="subnpub"
+reserved_ip_name="pubip-lb-saopaulo"
 lb_name="lb-saopaulo"
 backendset_name="backendset-1"
+cert_name="certificado-saopaulo"
+http_ruleset_name="http_redirect_https"
 
 ## Load Balancer
 
-vcn_ocid="$(get_vcn_ocid "$region" "vcn-saopaulo")"
-subnpub_ocid="$(get_subnet_ocid "$region" "subnpub" "$vcn_ocid")"
-reserved_ip_ocid="$(get_reserved_ip_ocid "$region" "pubip-lb-saopaulo")"
+vcn_ocid="$(get_vcn_ocid "$region" "$vcn_name")"
+subnpub_ocid="$(get_subnet_ocid "$region" "$pubsubnet_name" "$vcn_ocid")"
+reserved_ip_ocid="$(get_reserved_ip_ocid "$region" "$reserved_ip_name")"
 
 oci --region "$region" lb load-balancer create \
     --compartment-id "$COMPARTMENT_OCID" \
@@ -58,20 +63,55 @@ oci --region "$region" lb backend-set create \
     --health-checker-port "5000" \
     --wait-for-state "SUCCEEDED"
 
+## Rule Set (HTTP to HTTPS Redirect)
+
+oci --region "$region" lb rule-set create \
+    --load-balancer-id "$lb_ocid" \
+    --name "$http_ruleset_name" \
+    --items '[
+        {
+           "action": "REDIRECT", 
+           "conditions": [
+               {
+                  "attributeName": "PATH", 
+                  "attributeValue": "/", 
+                  "operator": "FORCE_LONGEST_PREFIX_MATCH"
+                }
+            ], 
+            "redirectUri": {
+                "host": "{host}", 
+                "path": "{path}", 
+                "port": 443, 
+                "protocol": "HTTPS", 
+                "query": "{query}"
+            }, 
+            "responseCode": 301
+        }
+    ]' \
+    --wait-for-state "SUCCEEDED"
+
 ## HTTP Listener
 
 oci --region "$region" lb listener create \
     --default-backend-set-name "$backendset_name" \
     --load-balancer-id "$lb_ocid" \
     --name "listener-http" \
+    --rule-set-names "[\"$http_ruleset_name\"]" \
     --port 80 \
     --protocol "HTTP" \
     --wait-for-state "SUCCEEDED"
 
 ## HTTPS Listener
 
+cert_ocid="$(get_cert_ocid "$region" "$cert_name")"
+
+oci --region "$region" lb listener create \
+    --default-backend-set-name "$backendset_name" \
+    --load-balancer-id "$lb_ocid" \
+    --name "listener-https" \
+    --port 443 \
+    --protocol "HTTP" \
+    --ssl-certificate-ids "[\"$cert_ocid\"]" \
+    --wait-for-state "SUCCEEDED"
+
 exit 0
-
-
-
-

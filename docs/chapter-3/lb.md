@@ -84,7 +84,7 @@ O Load Balancer terá um _Listener HTTP_ na porta 80/TCP e outro _HTTPS_ na port
 
 ## Criando o Load Balancer
 
-É necessário configurar dois Load Balancers: um para a região de _São Paulo (sa-saopaulo-1)_ e outro para a região de _Vinhedo (sa-vinhedo-1)_. Para evitar redundâncias, apresentaremos apenas os comandos da região de São Paulo, uma vez que a sintaxe é a mesma para a região de Vinhedo.
+É necessário configurar dois Load Balancers sendo na região de _São Paulo (sa-saopaulo-1)_ e outro na região de _Vinhedo (sa-vinhedo-1)_. Para evitar redundâncias, será apresentado apenas os comandos da região de São Paulo, uma vez que a sintaxe é a mesma para a região de Vinhedo.
 
 >_**__NOTA:__** Todos os comandos utilizados neste capítulo estão disponíveis nos scripts [scripts/chapter-3/lb-saopaulo.sh](../scripts/chapter-3/lb-saopaulo.sh) e [scripts/chapter-3/lb-vinhedo.sh](../scripts/chapter-3/lb-vinhedo.sh)._
 
@@ -107,7 +107,7 @@ $ oci --region "sa-saopaulo-1" network public-ip list \
 Também é necessário obter o OCID da sub-rede pública onde o Load Balancer será criado:
 
 ```
-$ oci network subnet list \
+$ oci --region "sa-saopaulo-1" network subnet list \
     --compartment-id "ocid1.compartment.oc1..aaaaaaaaaaaaaaaabbbbbbbbccc" \
     --display-name "subnpub" \
     --lifecycle-state "AVAILABLE" \
@@ -134,4 +134,11 @@ $ oci lb load-balancer create \
 ### Backend Set
 
 ```
+$ oci --region "sa-saopaulo-1" lb backend-set create \
+> --load-balancer-id "$lb_ocid" \
+> --name "backendset-1" \
+> --policy "ROUND_ROBIN" \
+> --health-checker-protocol "TCP" \
+> --health-checker-port "5000" \
+> --wait-for-state "SUCCEEDED"
 ```

@@ -30,7 +30,7 @@ privkey_file="privkey.pem"
 
 oci --region "$region" certs-mgmt certificate create-by-importing-config \
     --compartment-id "$COMPARTMENT_OCID" \
-    --name "certificado-ocipizza" \
+    --name "certificado-vinhedo" \
     --description "Certificado Digital da Aplicação OCI Pizza." \
     --certificate-pem "$(cat $cert_file)" \
     --cert-chain-pem "$(cat $cert_chain_file)" \
