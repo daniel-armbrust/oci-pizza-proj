@@ -1,7 +1,5 @@
 # Load Balancer
 
-## Expondo a aplicação por meio do Load Balancer
-
 [Load Balancer](https://docs.oracle.com/en-us/iaas/Content/Balance/home.htm), também conhecido como Balanceador de Carga ou LBaaS, é um serviço disponível no OCI que desempenha um papel crucial na distribuição do tráfego de rede entre múltiplos servidores de aplicação _"saudáveis"_. Essa funcionalidade é essencial para garantir que as aplicações permaneçam disponíveis e operem de maneira eficiente, otimizando o desempenho e a resiliência do sistema.
 
 De um modo geral, sua principal função é direcionar o tráfego de rede de um ponto de entrada para vários servidores de aplicação. Isso não apenas otimiza a utilização dos recursos, mas também possibilita o escalonamento da aplicação. Ao utilizar multiplos servidores, o Load Balancer promove a alta disponibilidade e elimina o risco de um ponto único de falha. Sua aplicação então, torna-se tolerante a falhas.
@@ -18,7 +16,9 @@ No OCI, estão disponíveis dois tipos de balanceadores:
 - **[Network Load Balancer (NLB)](https://docs.oracle.com/en-us/iaas/Content/NetworkLoadBalancer/home.htm)**
     - Este é um balanceador de carga que opera na [Camada 4](https://www.geeksforgeeks.org/transport-layer-in-osi-model/) do modelo OSI para os protocolos [TCP](https://en.wikipedia.org/wiki/Transmission_Control_Protocol) e [UDP](https://en.wikipedia.org/wiki/User_Datagram_Protocol).
 
-Para a aplicação OCI Pizza, que é uma aplicação web, será utilizado um Load Balancer de Camada 7.
+Como o Load Balancer é um recurso de rede, neste capítulo, apresentaremos os conceitos fundamentais relacionados a esse serviço e o prepararemos para a inclusão dos servidores da aplicação OCI Pizza. A adição dos servidores de aplicação será realizada no Capítulo 4, onde será possível testar e acessar a aplicação diretamente pela Internet.
+
+Para a aplicação OCI Pizza, que é uma aplicação web, utilizaremos um Load Balancer de Camada 7.
 
 ## Visão geral do Load Balancer
 
@@ -131,14 +131,103 @@ $ oci lb load-balancer create \
     --wait-for-state "SUCCEEDED"
 ```
 
+Para obter o OCID do Load Balancer, utilize o comando abaixo:
+
+```
+$  oci --region "sa-saopaulo-1" lb load-balancer list \
+> --compartment-id "ocid1.compartment.oc1..aaaaaaaaaaaaaaaabbbbbbbbccc \
+> --all \
+> --display-name "lb-saopaulo" \
+> --lifecycle-state "ACTIVE" \
+> --query 'data[].id'
+[
+  "ocid1.loadbalancer.oc1.sa-saopaulo-1.aaaaaaaaaaaaaaaabbbbbbbbccc"
+]
+```
+
 ### Backend Set
+
+Um Backend Set é uma configuração que define um grupo de servidores disponíveis para processar solicitações e que receberão o tráfego de rede proveniente do Load Balancer. Além disso, é no Backend Set que são estabelecidas as configurações de Health Check, que monitoram todos os servidores integrantes do grupo.
+
+Para a aplicação OCI Pizza, será criado um Backend Set que, posteriormente, no Capítulo 4, receberá os servidores de aplicação. O Health Check será configurado para monitorar esses servidores na porta 5000/TCP.
 
 ```
 $ oci --region "sa-saopaulo-1" lb backend-set create \
-> --load-balancer-id "$lb_ocid" \
+> --load-balancer-id "ocid1.loadbalancer.oc1.sa-saopaulo-1.aaaaaaaaaaaaaaaabbbbbbbbccc" \
 > --name "backendset-1" \
 > --policy "ROUND_ROBIN" \
 > --health-checker-protocol "TCP" \
 > --health-checker-port "5000" \
 > --wait-for-state "SUCCEEDED"
 ```
+
+### Rule Sets
+
+[Rule Sets](https://docs.oracle.com/en-us/iaas/Content/Balance/Tasks/managingrulesets.htm) são regras definidas pelo administrador do Load Balancer para tomar alguma ação sobre o tráfego que entra no Load Balancer, mais especificamenete, no tráfego que entra no Listener do Load Balancer.
+
+O ponto de entrada de tráfego do Load Balancer é o Listener. O tráfego de rede que chega ao Listener é analisado pelas Rule Sets, se houver, para então tomar alguma ação.
+
+Neste contexto, para a aplicação OCI Pizza, será criada uma Rule Set que redireciona automaticamente todo o tráfego de rede que chega ao Listener HTTP na porta 80/TCP para o Listener HTTPS na porta 443/TCP. Essa é uma boa prática, pois garante que apenas tráfego criptografado seja permitido para a aplicação.
+
+```
+$ oci --region "sa-saopaulo-1" lb rule-set create \
+> --load-balancer-id "ocid1.loadbalancer.oc1.sa-saopaulo-1.aaaaaaaaaaaaaaaabbbbbbbbccc" \
+> --name "http_redirect_https" \
+> --items '[{
+>     "action": "REDIRECT", 
+>     "conditions": [{
+>          "attributeName": "PATH", 
+>          "attributeValue": "/", 
+>          "operator": "FORCE_LONGEST_PREFIX_MATCH"
+>     }], 
+>     "redirectUri": {
+>        "host": "{host}", 
+>        "path": "{path}", 
+>        "port": 443, 
+>        "protocol": "HTTPS", 
+>        "query": "{query}"
+>     }, 
+>     "responseCode": 301
+> }]' \
+> --wait-for-state "SUCCEEDED"
+```
+
+### HTTP Listener
+
+O primeiro Listener a ser criado será o responsável por receber tráfego de rede pelo protocolo HTTP na porta 80/TCP. É nesse Listener que será especificado o Rule Set para redirecionar o tráfego para o Listener HTTPS.
+
+```
+$ oci --region "sa-saopaulo-1" lb listener create \
+> --default-backend-set-name "backendset-1" \
+> --load-balancer-id "ocid1.loadbalancer.oc1.sa-saopaulo-1.aaaaaaaaaaaaaaaabbbbbbbbccc" \
+> --name "listener-http" \
+> --rule-set-names "[\"http_redirect_https\"]" \
+> --port 80 \
+> --protocol "HTTP" \
+> --wait-for-state "SUCCEEDED"
+```
+
+Observe também que, no comando acima, foi necessário especificar o nome do Backend Set. Isso significa que, após o tráfego de rede passar pelo Listener, ele será direcionado para os servidores de aplicação daquele Backend Set que foi indicado.
+
+>_**__NOTA:__** É possível configurar múltiplos Backend Sets em um Listener utilizando [Virtual Hostnames](https://docs.oracle.com/en-us/iaas/Content/Balance/Tasks/hostname_management.htm). Este assunto será abordado em detalhes no Capítulo X._
+
+### HTTPS Listener
+
+O segundo Listener será responsável por receber tráfego de rede pelo protocolo HTTPS na porta 443/TCP. Neste caso, é necessário especificar o OCID do certificado digital que foi configurado no capítulo _[3.5 - Let's Encrypt e o Serviço de Certificados do OCI](./docs/chapter-3/lets-encrypt.md)_.
+
+```
+$ oci --region "sa-saopaulo-1" lb listener create \
+> --default-backend-set-name "backendset-1" \
+> --load-balancer-id "ocid1.loadbalancer.oc1.sa-saopaulo-1.aaaaaaaaaaaaaaaabbbbbbbbccc" \
+> --name "listener-https" \
+> --port 443 \
+> --protocol "HTTP" \
+> --ssl-certificate-ids "[\"ocid1.certificate.oc1.sa-saopaulo-1.aaaaaaaaaaaaaaaabbbbbbbbccc\"]" \
+> --wait-for-state "SUCCEEDED"
+```
+
+>_**__NOTA:__** Observe que o valor do parâmetro --protocol é HTTP e não HTTPS._
+
+## Conclusão
+
+Aqui foram apresentados os comandos para criar um Load Balancer capaz de gerenciar tráfego HTTP e HTTPS. Os servidores da aplicação OCI Pizza, que na verdade são contêineres de aplicação, serão adicionados ao Backend Set no Capítulo 4. O Backend Set poderá ser populado apenas após a obtenção dos endereços IP dos contêineres de aplicação.
