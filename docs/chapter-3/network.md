@@ -6,7 +6,7 @@ O [Serviço de Redes](https://docs.oracle.com/en-us/iaas/Content/Network/Concept
 
 A topologia da rede utilizada para a aplicação OCI Pizza pode ser visualizada no desenho abaixo:
 
-![alt_text](./imgs/network-topology-1.png "Network Topology 1")
+![alt_text](./img/network-topology-1.png "Network Topology 1")
 
 ## Descrição dos Componentes da Rede
 

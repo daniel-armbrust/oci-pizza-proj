@@ -27,9 +27,10 @@ region="sa-vinhedo-1"
 cert_file="cert.pem"
 cert_chain_file="chain.pem"
 privkey_file="privkey.pem"
+compartment_ocid="$COMPARTMENT_OCID"
 
 oci --region "$region" certs-mgmt certificate create-by-importing-config \
-    --compartment-id "$COMPARTMENT_OCID" \
+    --compartment-id "$compartment_ocid" \
     --name "certificado-vinhedo" \
     --description "Certificado Digital da Aplicação OCI Pizza." \
     --certificate-pem "$(cat $cert_file)" \

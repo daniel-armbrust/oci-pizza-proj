@@ -21,9 +21,10 @@
 function get_vcn_ocid() {  
     local region="$1"
     local name="$2"
+    local compartment_ocid="$3"
 
     oci --region "$region" network vcn list \
-        --compartment-id "$COMPARTMENT_OCID" \
+        --compartment-id "$compartment_ocid" \
         --all \
         --display-name "$name" \
         --query 'data[].id' | tr -d '[]" \n'
@@ -33,9 +34,10 @@ function get_dhcpoptions_ocid() {
     local region="$1"
     local name="$2"
     local vcn_ocid="$3"
+    local compartment_ocid="$4"
 
     oci --region "$region" network dhcp-options list \
-        --compartment-id "$COMPARTMENT_OCID" \
+        --compartment-id "$compartment_ocid" \
         --all \
         --display-name "$name" \
         --lifecycle-state "AVAILABLE" \
@@ -70,9 +72,10 @@ function get_all_services_cidr_block() {
 function get_sgw_ocid() {
     local region="$1"
     local vcn_ocid="$2"
+    local compartment_ocid="$3"
 
     oci --region "$region" network service-gateway list \
-        --compartment-id "$COMPARTMENT_OCID" \
+        --compartment-id "$compartment_ocid" \
         --all \
         --vcn-id "$vcn_ocid" \
         --lifecycle-state "AVAILABLE" \
@@ -83,9 +86,10 @@ function get_igw_ocid() {
     local region="$1"
     local name="$2"
     local vcn_ocid="$3"
+    local compartment_ocid="$4"
 
     oci --region "$region" network internet-gateway list \
-        --compartment-id "$COMPARTMENT_OCID" \
+        --compartment-id "$compartment_ocid" \
         --all \
         --display-name "$name" \
         --vcn-id "$vcn_ocid" \
@@ -97,9 +101,10 @@ function get_ngw_ocid() {
     local region="$1"
     local name="$2"
     local vcn_ocid="$3"
+    local compartment_ocid="$4"
 
     oci --region "$region" network nat-gateway list \
-        --compartment-id "$COMPARTMENT_OCID" \
+        --compartment-id "$compartment_ocid" \
         --all \
         --display-name "$name" \
         --vcn-id "$vcn_ocid" \
@@ -110,10 +115,11 @@ function get_ngw_ocid() {
 function get_seclist_ocid() {
     local region="$1"
     local name="$2"
-    local vcn_ocid="$3"    
+    local vcn_ocid="$3"
+    local compartment_ocid="$4"    
 
     oci --region "$region" network security-list list \
-        --compartment-id "$COMPARTMENT_OCID" \
+        --compartment-id "$compartment_ocid" \
         --all \
         --display-name "$name" \
         --vcn-id "$vcn_ocid" \
@@ -124,10 +130,11 @@ function get_seclist_ocid() {
 function get_rtb_ocid() {
     local region="$1"
     local name="$2"
-    local vcn_ocid="$3"    
+    local vcn_ocid="$3"
+    local compartment_ocid="$4"    
 
     oci --region "$region" network route-table list \
-        --compartment-id "$COMPARTMENT_OCID" \
+        --compartment-id "$compartment_ocid" \
         --all \
         --display-name "$name" \
         --vcn-id "$vcn_ocid" \
@@ -138,9 +145,10 @@ function get_rtb_ocid() {
 function get_reserved_ip_ocid() {
     local region="$1"
     local name="$2"
+    local compartment_ocid="$3"
 
     oci --region "$region" network public-ip list \
-        --compartment-id "$COMPARTMENT_OCID" \
+        --compartment-id "$compartment_ocid" \
         --lifetime "RESERVED" \
         --scope "REGION" \
         --all \
@@ -151,9 +159,10 @@ function get_subnet_ocid() {
     local region="$1"
     local name="$2"
     local vcn_ocid="$3"
+    local compartment_ocid="$4"
 
     oci --region "$region" network subnet list \
-        --compartment-id "$COMPARTMENT_OCID" \
+        --compartment-id "$compartment_ocid" \
         --all \
         --display-name "$name" \
         --lifecycle-state "AVAILABLE" \
@@ -164,9 +173,10 @@ function get_subnet_ocid() {
 function get_lb_ocid() {
     local region="$1"
     local name="$2"
+    local compartment_ocid="$3"
     
     oci --region "$region" lb load-balancer list \
-        --compartment-id "$COMPARTMENT_OCID" \
+        --compartment-id "$compartment_ocid" \
         --all \
         --display-name "$name" \
         --lifecycle-state "ACTIVE" \
@@ -176,10 +186,54 @@ function get_lb_ocid() {
 function get_cert_ocid() {
     local region="$1"
     local name="$2"
+    local compartment_ocid="$3"
     
     oci --region "$region" certs-mgmt certificate list \
-        --compartment-id "$COMPARTMENT_OCID" \
+        --compartment-id "$compartment_ocid" \
         --all \
         --name "$name" \
         --query 'data.items[].id' | tr -d '"[]\n '    
+}
+
+function get_email_domain_ocid() {
+    local region="$1"
+    local name="$2"
+    local compartment_ocid="$3"
+
+    oci --region "$region" email domain list \
+        --compartment-id "$compartment_ocid" \
+        --all \
+        --name "$name" \
+        --lifecycle-state "ACTIVE" \
+        --query 'data.items[].id' | tr -d '"[]\n ' 
+}
+
+function get_email_dkim_ocid() {
+    local region="$1"
+    local name="$2"
+    local email_domain_ocid="$3"
+
+    oci --region "$region" email dkim list \
+        --email-domain-id "$email_domain_ocid" \
+        --all \
+        --name "$name" \
+        --query 'data.items[].id' | tr -d '"[]\n '
+}
+
+function get_email_dkim_cname() {
+    local region="$1"  
+    local dkim_ocid="$2"
+
+    oci --region "$region" email dkim get \
+        --dkim-id "$dkim_ocid" \
+        --query "data.\"dns-subdomain-name\"" | tr -d '"'
+}
+
+function get_email_dkim_cname_record() {
+    local region="$1"  
+    local dkim_ocid="$2"
+
+    oci --region "$region" email dkim get \
+        --dkim-id "$dkim_ocid" \
+        --query "data.\"cname-record-value\"" | tr -d '"'
 }

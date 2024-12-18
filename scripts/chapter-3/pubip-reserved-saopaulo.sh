@@ -18,21 +18,22 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 #
 
-# Globals
-region="sa-saopaulo-1"
-
 #-----------------------------------------------#
 # Brazil East (Sao Paulo) / sa-saopaulo-1 (GRU) #
 #-----------------------------------------------#
 
+# Globals
+region="sa-saopaulo-1"
+compartment_ocid="$COMPARTMENT_OCID"
+
 oci --region "$region" network public-ip create \
-    --compartment-id "$COMPARTMENT_OCID" \
+    --compartment-id "$compartment_ocid" \
     --lifetime "RESERVED" \
     --display-name "pubip-lb-saopaulo" \
     --wait-for-state "AVAILABLE"
 
 oci --region "$region" network public-ip list \
-    --compartment-id "$COMPARTMENT_OCID" \
+    --compartment-id "$compartment_ocid" \
     --lifetime "RESERVED" \
     --scope "REGION" \
     --query data[].\"ip-address\" \

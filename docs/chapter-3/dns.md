@@ -61,6 +61,6 @@ ns3.p201.dns.oraclecloud.net.
 ns4.p201.dns.oraclecloud.net.
 ```
 
-![alt_text](./imgs/registrobr-1.png "registro.br #1")
+![alt_text](./img/registrobr-1.png "registro.br #1")
 
-![alt_text](./imgs/registrobr-2.png "registro.br #2")
+![alt_text](./img/registrobr-2.png "registro.br #2")

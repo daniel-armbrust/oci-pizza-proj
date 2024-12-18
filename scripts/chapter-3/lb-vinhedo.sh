@@ -1,5 +1,5 @@
 #
-# scripts/chapter-3/lb-saopaulo.sh
+# scripts/chapter-3/lb-vinhedo.sh
 #
 # Copyright (C) 2005-2024 by Daniel Armbrust <darmbrust@gmail.com>
 #
@@ -18,21 +18,21 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 #
 
-#-----------------------------------------------#
-# Brazil East (Sao Paulo) / sa-saopaulo-1 (GRU) #
-#-----------------------------------------------#
+#-------------------------------------------------#
+# Brazil Southeast (Vinhedo) / sa-vinhedo-1 (VCP) #
+#-------------------------------------------------#
 
 # Source external files.
 source functions.sh
 
 # Globals
-region="sa-saopaulo-1"
-vcn_name="vcn-saopaulo"
+region="sa-vinhedo-1"
+vcn_name="vcn-vinhedo"
 pubsubnet_name="subnpub"
-reserved_ip_name="pubip-lb-saopaulo"
-lb_name="lb-saopaulo"
+reserved_ip_name="pubip-lb-vinhedo"
+lb_name="lb-vinhedo"
 backendset_name="backendset-1"
-cert_name="certificado-saopaulo"
+cert_name="certificado-vinhedo"
 http_ruleset_name="http_redirect_https"
 compartment_ocid="$COMPARTMENT_OCID"
 

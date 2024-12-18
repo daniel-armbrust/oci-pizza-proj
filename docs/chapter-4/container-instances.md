@@ -10,7 +10,7 @@ O Container Instances oferece flexibilidade ao permitir a execução de um ou ma
 
 Para a aplicação _OCI Pizza_, serão implementados dois Container Instances. O primeiro será o contêiner primário, responsável por receber os acessos provenientes da Internet, enquanto o segundo funcionará como um Container Instance de backup, assegurando a continuidade do serviço em caso de falha no primário. Essa estratégia oferece maior resiliência e disponibilidade, garantindo que a aplicação permaneça operante mesmo diante de imprevistos.
 
-![alt_text](./imgs/ci-1.png "Oracle Container Instace")
+![alt_text](./img/ci-1.png "Oracle Container Instace")
 
 ## Compute Shape
 

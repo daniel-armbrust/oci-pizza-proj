@@ -76,7 +76,7 @@ Antes de avançar com a criação do Load Balancer que será utilizado pela apli
 
 A arquitetura do Load Balancer utilizado pela aplicação OCI Pizza é ilustrada no desenho abaixo:
 
-![alt_text](./imgs/lb-1.png "OCI Pizza Load Balancer")
+![alt_text](./img/lb-1.png "OCI Pizza Load Balancer")
 
 O Load Balancer terá um _Listener HTTP_ na porta 80/TCP e outro _HTTPS_ na porta 443/TCP. A política de balanceamento selecionada será a _Weighted Round Robin_, e o monitoramento _Health Check_ será realizado na porta _5000/TCP_. 
 

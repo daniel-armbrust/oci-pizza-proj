@@ -14,7 +14,7 @@ Em resumo, um processo é uma instância de um programa que está sendo executad
 
 Todo processo possui um número único, denominado PID (Process Identifier ou Identificador de Processo), que é utilizado para sua identificação no sistema operacional. Além disso, os processos têm a capacidade de se comunicar entre si, acessar arquivos e até mesmo enviar dados pela rede.
 
-![alt_text](./imgs/processos-1.png "Processos #1")
+![alt_text](./img/processos-1.png "Processos #1")
 
 Os contêineres, ou Software Containers, foram desenvolvidos como uma solução eficaz para isolar a execução de processos dentro de um sistema operacional. Além dessa capacidade de isolamento, todo o conteúdo de um contêiner pode ser compactado em um único arquivo tarball, resultando no que chamamos de imagem de contêiner. Essa imagem contém tudo o que é necessário para executar o aplicativo, incluindo bibliotecas, dependências e configurações, garantindo um ambiente consistente e portátil.
 
@@ -40,13 +40,13 @@ O Container Registry atua como um repositório centralizado onde os desenvolvedo
 
 Além do _Docker Hub_, que é o maior registry público de imagens de contêiner, a Oracle também oferece o seu próprio registry público, acessível através do seguinte link:: [https://container-registry.oracle.com](https://container-registry.oracle.com/)
 
-![alt_text](./imgs/oracle-container-registry-1.png "Oracle Container Registry")
+![alt_text](./img/oracle-container-registry-1.png "Oracle Container Registry")
 
 Uma das vantagens do [Oracle Container Registry](https://container-registry.oracle.com/) em comparação com o _Docker Hub_, é que o _Docker Hub_ impõe limites para o download das imagens que ele armazena (rate limits).  Em contrapartida, o Oracle Container Registry não aplica essas restrições, permitindo que os desenvolvedores baixem imagens da Oracle à vontade, sem se preocupar com limitações de uso.
 
 Na aplicação _OCI Pizza_, foi utilizada como _imagem base_ o [Oracle Linux 8](https://container-registry.oracle.com/ords/ocr/ba/os/oraclelinux) na versão _slim_, que é uma imagem mais leve e compacta. Essa versão otimizada permite downloads e implantações mais ágeis, pois contém apenas os componentes essenciais do sistema operacional.
 
-![alt_text](./imgs/oracle-container-registry-2.png "Oracle Linux 8 Slim")
+![alt_text](./img/oracle-container-registry-2.png "Oracle Linux 8 Slim")
 
 >_**__NOTA:__** Uma Docker Base Image (imagem base do Docker) é uma imagem de contêiner que serve como ponto de partida para a criação de outras imagens._
 
@@ -167,7 +167,7 @@ Existem duas operações fundamentais relacionadas ao Container Registry:
 
 2. **Pull (Puxar)**: Esta operação refere-se à recuperação de uma imagem de contêiner do Container Registry para implantação e uso (download).
 
-![alt_text](./imgs/oracle-container-registry-3.png "Oracle Container Registry")
+![alt_text](./img/oracle-container-registry-3.png "Oracle Container Registry")
 
 Antes de enviar a imagem por meio da operação _Push_, é necessário criar um _repositório_. O repositório servirá para armazenar diferentes versões de uma mesma imagem e pode ser configurado como _público_ ou _privado_. Um _repositório privado_ permite acesso apenas a partir dos recursos de uma VCN (Virtual Cloud Network), restringindo o acesso pela Internet.
 
@@ -182,7 +182,7 @@ $ oci artifacts container repository create \
 
 Uma vez criado o repositório, é necessário nomear ou taguear (docker tag), seguindo o padrão estabelecido pelo OCI, que deve obedecer ao seguinte formato:
 
-![alt_text](./imgs/oracle-container-registry-4.png "Oracle Container Registry")
+![alt_text](./img/oracle-container-registry-4.png "Oracle Container Registry")
 
 1. **registry-domain**: É o hostname que identifica o serviço OCIR dentro de uma região.
 
@@ -203,7 +203,7 @@ $ oci os ns get
 
 No caso da aplicação _OCI Pizza_, ela será implantada na região **Brazil East (São Paulo)**, que possui o identificador **sa-saopaulo-1**. Diante disso, a nova _tag_ da aplicação é:
 
-![alt_text](./imgs/oracle-container-registry-5.png "Oracle Container Registry")
+![alt_text](./img/oracle-container-registry-5.png "Oracle Container Registry")
 
 Para aplicar a nova _tag_ à imagem existente _ocipizza:1.0_, utilize o seguinte comando:
 

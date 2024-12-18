@@ -2,6 +2,8 @@
 
 ## Introdução
 
+![alt_text](./docs/chapter-1/img/oci-pizza-logo-1.png "OCI Pizza")
+
 Bem-vindo ao OCI Pizza!
 
 OCI Pizza é uma aplicação web foi desenvolvida para documentar de forma abrangente todo o processo de desenvolvido e implantação (deploy) de uma aplicação Cloud Native na Oracle Cloud Infrastructure (OCI).
@@ -34,8 +36,7 @@ Bora entender...
 	- [3.4 - DNS Público](./docs/chapter-3/dns.md)
 	- [3.5 - Let's Encrypt e o Serviço de Certificados do OCI](./docs/chapter-3/lets-encrypt.md)
 	- [3.6 - Load Balancer](./docs/chapter-3/lb.md)	
-	- [3.7 - E-mail Delivery](./docs/chapter-3/email-delivery.md)
-	- [3.8 - Testes através do Network path analyzer](./docs/chapter-3/network-path-analyzer.md)
+	- [3.7 - Email Delivery](./docs/chapter-3/email-delivery.md)
     
 - [Capítulo 4: Desenvolvimento Moderno](./docs/chapter-4.md)
 	- [4.1 - Entendendo os Contêineres](./docs/chapter-4.md/containers.md)

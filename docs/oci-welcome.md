@@ -6,6 +6,7 @@
 - Nuvem vs. OnPremises
 - IaaS, PaaS, SaaS
 - Tenancy
+- 169.254.169.254
 
 ## Visão geral do OCI
 
@@ -13,6 +14,7 @@
 - Edge Locations
 - Conceito de Outbound Data Transfer
 - Conceito de sub-rede publica, privada e regional.
+- Cloud Shell (acesso sub-rede privada).
 
 ## Compartments, Dynamic Group e Policies
 

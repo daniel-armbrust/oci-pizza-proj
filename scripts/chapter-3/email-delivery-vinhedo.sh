@@ -1,5 +1,5 @@
 #
-# scripts/chapter-3/pubip-reserved-vinhedo.sh
+# scripts/chapter-3/email-delivery-saopaulo.sh
 #
 # Copyright (C) 2005-2024 by Daniel Armbrust <darmbrust@gmail.com>
 #
@@ -24,19 +24,3 @@
 
 # Globals
 region="sa-vinhedo-1"
-compartment_ocid="$COMPARTMENT_OCID"
-
-oci --region "$region" network public-ip create \
-    --compartment-id "$compartment_ocid" \
-    --lifetime "RESERVED" \
-    --display-name "pubip-lb-vinhedo" \
-    --wait-for-state "AVAILABLE"
-
-oci --region "$region" network public-ip list \
-    --compartment-id "$compartment_ocid" \
-    --lifetime "RESERVED" \
-    --scope "REGION" \
-    --query data[].\"ip-address\" \
-    --all
-
-exit 0

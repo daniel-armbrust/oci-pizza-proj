@@ -18,11 +18,16 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 #
 
+# Globals
+region="sa-saopaulo-1"
+compartment_ocid="$COMPARTMENT_OCID"
+
 ## Create DNS Zone "ocipizza.com.br".
 
 echo -e "[INFO] Creating OCI DNS Zone \"ocipizza.com.br\" ...\n"
 
-oci dns zone create --compartment-id "$COMPARTMENT_OCID" \
+oci --region "$region" dns zone create \
+    --compartment-id "$compartment_ocid" \
     --name "ocipizza.com.br" \
     --zone-type "PRIMARY" \
     --scope "GLOBAL" \
@@ -32,7 +37,8 @@ oci dns zone create --compartment-id "$COMPARTMENT_OCID" \
 
 echo -e "[INFO] Nameservers from \"ocipizza.com.br\" ...\n"
 
-oci dns zone get --compartment-id "$COMPARTMENT_OCID" \
+oci --region "$region" dns zone get \
+    --compartment-id "$compartment_ocid" \
     --zone-name-or-id "ocipizza.com.br" \
     --scope "GLOBAL" | grep "hostname" | tr -d '"' | awk '{print $2}'
 

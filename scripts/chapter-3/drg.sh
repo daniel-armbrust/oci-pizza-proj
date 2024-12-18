@@ -24,18 +24,19 @@ source functions.sh
 # Globals
 region_saopaulo="sa-saopaulo-1"
 region_vinhedo="sa-vinhedo-1"
+compartment_ocid="$COMPARTMENT_OCID"
 
 #-----#
 # DRG #
 #-----#
 
 oci --region "$region_saopaulo" network drg create \
-    --compartment-id "$COMPARTMENT_OCID" \
+    --compartment-id "$compartment_ocid" \
     --display-name "drg-saopaulo" \
     --wait-for-state "AVAILABLE"
 
 oci --region "$region_vinhedo" network drg create \
-    --compartment-id "$COMPARTMENT_OCID" \
+    --compartment-id "$compartment_ocid" \
     --display-name "drg-saopaulo" \
     --wait-for-state "AVAILABLE"
 
