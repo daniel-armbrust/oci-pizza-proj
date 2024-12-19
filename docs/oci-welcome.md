@@ -31,3 +31,4 @@
 - json
 - sintaxe shell
 
+- intro: O livro trás atona minha experiência profissional desde que eu era admininstrador de redes que cuidava de 2 servidores e 25 máquinas clientes, em um escritório de contabilidade da minha cidade, passando a operador de datacenter em uma empresa de TV a cabo, empresa de consultoria, cliente da empresa de consultoria e chegando hoje até a Oracle.
