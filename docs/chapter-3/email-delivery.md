@@ -86,3 +86,5 @@ Basicamente, essa é uma das funções do Email Delivery por meio do protocolo S
 [SPF (Sender Policy Framework)](https://docs.oracle.com/en-us/iaas/Content/Email/Tasks/configurespf.htm) e [DKIM (DomainKeys Identified Mail)](https://docs.oracle.com/en-us/iaas/Content/Email/Tasks/configuredkim.htm) são ambos mecanismos de autenticação de e-mail que ajudam a proteger contra fraudes e spoofing.
 
 SPF e DKIM são, essencialmente, registros DNS que desempenham um papel crucial na melhoria da segurança e confiabilidade do e-mail, ajudando a reduzir a incidência de spam e fraudes. Atualmente, esses registros são obrigatórios e devem ser configurados no servidor DNS responsável pelo domínio que envia e recebe e-mails. A falta de SPF e DKIM pode resultar em diversos impactos negativos, como a deterioração da reputação do domínio e o bloqueio ou a classificação de e-mails legítimos como spam.
+
+Antes de configurar SPF e DKIM, é necessário criar o domínio da aplicação dentro do Email Delivery.
