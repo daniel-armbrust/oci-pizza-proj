@@ -136,4 +136,15 @@ $ oci --region "sa-saopaulo-1" dns record domain patch \
 > --items "[{\"domain\": \"ocipizza.com.br\", \"rdata\": \"v=spf1 include:rp.oracleemaildelivery.com ~all\", \"rtype\": \"TXT\", \"ttl\": 3600}]"
 ```
 
+Para verificar se o valor foi inserido corretamente, é possível realizar uma consulta utilizando o utilitário [nslookup](https://en.wikipedia.org/wiki/Nslookup):
+
+```
+$ nslookup -type=txt ocipizza.com.br
+Server:         10.255.255.254
+Address:        10.255.255.254#53
+
+Non-authoritative answer:
+ocipizza.com.br text = "v=spf1" "include:rp.oracleemaildelivery.com" "~all"
+```
+
 ### DKIM
