@@ -109,7 +109,7 @@ SPF e DKIM são, essencialmente, registros DNS que desempenham um papel crucial 
 
 Após a criação do domínio no Email Delivery, é possível verificar na console web a ausência das configurações referentes ao DKIM e SPF.
 
-![alt_text](./img/email-delivery-4.png.png "SPF e DKIM")
+![alt_text](./img/email-delivery-4.png "SPF e DKIM")
 
 Iniciaremos pelas configurações do SPF e, em seguida, abordaremos as do DKIM.
 
@@ -123,7 +123,7 @@ Os servidores autorizados a enviar e-mails em nome de um domínio são declarado
 
 Por ser um serviço gerenciado, a Oracle disponibiliza na [documentação](https://docs.oracle.com/en-us/iaas/Content/Email/Tasks/configurespf.htm#top) do Email Delivery o valor do SPF que será inserido no DNS da aplicação.
 
-![alt_text](./img/email-delivery-5.png.png "SPF")
+![alt_text](./img/email-delivery-5.png "SPF")
 
 Para a aplicação OCI Pizza, localizada na região das Américas, o registro TXT correspondente ao SPF pode ser adicionado ao DNS utilizando o comando abaixo:
 
