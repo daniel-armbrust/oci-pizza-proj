@@ -28,7 +28,7 @@ No contexto da aplicação OCI Pizza, quando o usuário solicita a recuperação
 
 Para facilitar a compreensão desse fluxo, irei utilizar a ilustração abaixo, na qual um usuário da aplicação solicita a criação de uma nova senha por meio do link _"Esqueci minha senha"_:
 
-![alt_text](./img/email-delivery-2.png "OCI Pizza - Email Delivery")
+![alt_text](./img/email-delivery-2.png "Email Delivery")
 
 1. O usuário clica no link _"Esqueci minha senha"_ e fornece o seu e-mail de cadastro.
 
@@ -81,10 +81,59 @@ gmail.com       mail exchanger = 40 alt4.gmail-smtp-in.l.google.com.
 
 >_**__NOTA:__** Os números de prioridade podem variar de 0 a 65536. Por convenção, muitos administradores optam por definir valores de prioridade em múltiplos de 10, o que proporciona maior flexibilidade ao adicionar servidores temporários entre dois servidores em produção, por exemplo._
 
+## Domínio de e-mail no Email Delivery
+
+O primeiro passo na configuração do Email Delivery deve ser a configuração do domínio dentro do serviço. 
+
+No contexto do Email Delivery, o domínio refere-se ao domínio DNS que você controla e que será utilizado para o envio de e-mails. Essa configuração é necessária para que o serviço saiba qual é o domínio que ele está autorizado a enviar e-mails.
+
+>_**__NOTA:__** É importante destacar que o domínio da aplicação "ocipizza.com.br" já foi criado e configurado na seção [3.4 - DNS Público](./docs/chapter-3/dns.md). A configuração que será realizada aqui não interfere nem altera o domínio no serviço de DNS Público._
+
+Para criar o domínio no serviço de Email Delivery na região sa-saopaulo-1, utilize o comando abaixo:
+
+```
+$ oci --region "sa-saopaulo-1" email domain create \
+> --compartment-id "ocid1.compartment.oc1..aaaaaaaaaaaaaaaabbbbbbbbccc" \
+> --name "ocipizza.com.br" \
+> --description "OCI Pizza - Email Delivery (Sao Paulo)" \
+> --wait-for-state "SUCCEEDED"
+```
+
+>_**__NOTA:__** É importante lembrar que o serviço é regional, e será necessário aplicar as mesmas configurações na região sa-vinhedo-1. Isso garantirá que, em caso de indisponibilidade da região sa-saopaulo-1, a aplicação continue a enviar e-mails a partir de sa-vinhedo-1._
+
 ## SPF e DKIM
  
 [SPF (Sender Policy Framework)](https://docs.oracle.com/en-us/iaas/Content/Email/Tasks/configurespf.htm) e [DKIM (DomainKeys Identified Mail)](https://docs.oracle.com/en-us/iaas/Content/Email/Tasks/configuredkim.htm) são ambos mecanismos de autenticação de e-mail que ajudam a proteger contra fraudes e spoofing.
 
 SPF e DKIM são, essencialmente, registros DNS que desempenham um papel crucial na melhoria da segurança e confiabilidade do e-mail, ajudando a reduzir a incidência de spam e fraudes. Atualmente, esses registros são obrigatórios e devem ser configurados no servidor DNS responsável pelo domínio que envia e recebe e-mails. A falta de SPF e DKIM pode resultar em diversos impactos negativos, como a deterioração da reputação do domínio e o bloqueio ou a classificação de e-mails legítimos como spam.
 
-Antes de configurar SPF e DKIM, é necessário criar o domínio da aplicação dentro do Email Delivery.
+Após a criação do domínio no Email Delivery, é possível verificar na console web a ausência das configurações referentes ao DKIM e SPF.
+
+![alt_text](./img/email-delivery-4.png.png "SPF e DKIM")
+
+Iniciaremos pelas configurações do SPF e, em seguida, abordaremos as do DKIM.
+
+### SPF
+
+[SPF (Sender Policy Framework)](https://docs.oracle.com/en-us/iaas/Content/Email/Tasks/configurespf.htm) é utilizado pelos servidores de e-mail receptores como um mecanismo para identificar e combater spam.
+
+A configuração do SPF consiste em adicionar um registro DNS do tipo TXT que indica quais servidores estão autorizados a enviar e-mails em nome de um domínio. Essa informação é verificada pelo servidor receptor ao receber um e-mail. 
+
+Os servidores autorizados a enviar e-mails em nome de um domínio são declarados em um registro DNS do tipo TXT, utilizando uma sintaxe específica. Para a aplicação OCI Pizza, esse registro será adicionado ao DNS Público associado ao domínio _"ocipizza.com.br"_. Dessa forma, quando um servidor receber um e-mail desse domínio, ele consultará o DNS responsável por _"ocipizza.com.br"_ para verificar se o servidor que enviou a mensagem possui autorização para fazê-lo.
+
+Por ser um serviço gerenciado, a Oracle disponibiliza na [documentação](https://docs.oracle.com/en-us/iaas/Content/Email/Tasks/configurespf.htm#top) do Email Delivery o valor do SPF que será inserido no DNS da aplicação.
+
+![alt_text](./img/email-delivery-5.png.png "SPF")
+
+Para a aplicação OCI Pizza, localizada na região das Américas, o registro TXT correspondente ao SPF pode ser adicionado ao DNS utilizando o comando abaixo:
+
+```
+$ oci --region "sa-saopaulo-1" dns record domain patch \
+> --compartment-id "ocid1.compartment.oc1..aaaaaaaaaaaaaaaabbbbbbbbccc" \
+> --zone-name-or-id "ocipizza.com.br" \
+> --domain "ocipizza.com.br" \
+> --scope "GLOBAL" \
+> --items "[{\"domain\": \"ocipizza.com.br\", \"rdata\": \"v=spf1 include:rp.oracleemaildelivery.com ~all\", \"rtype\": \"TXT\", \"ttl\": 3600}]"
+```
+
+### DKIM

@@ -4,6 +4,7 @@
 
 - Conceitos de nuvem
 - Nuvem vs. OnPremises
+- Conceitos de serviços regionais, de AD.
 - IaaS, PaaS, SaaS
 - Tenancy
 - 169.254.169.254

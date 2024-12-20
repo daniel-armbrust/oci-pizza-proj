@@ -30,6 +30,7 @@ region="sa-saopaulo-1"
 compartment_ocid="$COMPARTMENT_OCID"
 root_compartment_ocid="$ROOT_COMPARTMENT_OCID"
 noreply_email_address="no-reply@ocipizza.com.br"
+spf_record="v=spf1 include:rp.oracleemaildelivery.com ~all"
 
 # Email Domain
 oci --region "$region" email domain create \
@@ -38,11 +39,13 @@ oci --region "$region" email domain create \
     --description "OCI Pizza - Email Delivery (Sao Paulo)" \
     --wait-for-state "SUCCEEDED"
 
-# Approved Sender
-oci --region "$region" email sender create \
+# DNS - SPF
+oci --region "$region" dns record domain patch \
     --compartment-id "$compartment_ocid" \
-    --email-address "$noreply_email_address" \
-    --wait-for-state "ACTIVE"
+    --zone-name-or-id "ocipizza.com.br" \
+    --domain "$dkim_cname" \
+    --scope "GLOBAL" \
+    --items "[{\"domain\": \"ocipizza.com.br\", \"rdata\": \"$spf_record\", \"rtype\": \"TXT\", \"ttl\": 3600}]"
 
 # DKIM
 email_domain_ocid="$(get_email_domain_ocid "$region" "ocipizza.com.br" "$compartment_ocid")"
@@ -59,12 +62,18 @@ dkim_ocid="$(get_email_dkim_ocid "$region" "$dkim_name" "$email_domain_ocid")"
 dkim_cname="$(get_email_dkim_cname "$region" "$dkim_ocid")"
 dkim_cname_record="$(get_email_dkim_cname_record "$region" "$dkim_ocid")"
 
-# DNS
+# DNS - DKIM
 oci --region "$region" dns record domain patch \
     --compartment-id "$compartment_ocid" \
     --zone-name-or-id "ocipizza.com.br" \
     --domain "$dkim_cname" \
     --scope "GLOBAL" \
     --items "[{\"domain\": \"$dkim_cname\", \"rdata\": \"$dkim_cname_record\", \"rtype\": \"CNAME\", \"ttl\": 3600}]"
+
+# Approved Sender
+oci --region "$region" email sender create \
+    --compartment-id "$compartment_ocid" \
+    --email-address "$noreply_email_address" \
+    --wait-for-state "ACTIVE"
 
 exit 0
