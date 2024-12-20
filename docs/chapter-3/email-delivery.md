@@ -81,7 +81,7 @@ gmail.com       mail exchanger = 40 alt4.gmail-smtp-in.l.google.com.
 
 >_**__NOTA:__** Os números de prioridade podem variar de 0 a 65536. Por convenção, muitos administradores optam por definir valores de prioridade em múltiplos de 10, o que proporciona maior flexibilidade ao adicionar servidores temporários entre dois servidores em produção, por exemplo._
 
-## Domínio de e-mail no Email Delivery
+## Domínio DNS no Email Delivery
 
 O primeiro passo na configuração do Email Delivery deve ser a configuração do domínio dentro do serviço. 
 
