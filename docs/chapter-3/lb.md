@@ -90,7 +90,7 @@ O Load Balancer terá um _Listener HTTP_ na porta 80/TCP e outro _HTTPS_ na port
 
 ### Load Balancer
 
-Antes de criar o Load Balancer, é necessário obter o OCID do Endereço IP Público que foi reservado, conforme descrito no capítulo _[3.3 - Reserva de Endereço IP Público](./docs/chapter-3/reserved-public-ip.md)_. 
+Antes de criar o Load Balancer, é necessário obter o OCID do Endereço IP Público que foi reservado, conforme descrito na seção _[3.3 - Reserva de Endereço IP Público](./reserved-public-ip.md)_. 
 
 ```
 $ oci --region "sa-saopaulo-1" network public-ip list \
@@ -213,7 +213,7 @@ Observe também que, no comando acima, foi necessário especificar o nome do Bac
 
 ### HTTPS Listener
 
-O segundo Listener será responsável por receber tráfego de rede pelo protocolo HTTPS na porta 443/TCP. Neste caso, é necessário especificar o OCID do certificado digital que foi configurado no capítulo _[3.5 - Let's Encrypt e o Serviço de Certificados do OCI](./docs/chapter-3/lets-encrypt.md)_.
+O segundo Listener será responsável por receber tráfego de rede pelo protocolo HTTPS na porta 443/TCP. Neste caso, é necessário especificar o OCID do certificado digital que foi configurado na seção _[3.5 - Let's Encrypt e o Serviço de Certificados do OCI](./lets-encrypt.md)_.
 
 ```
 $ oci --region "sa-saopaulo-1" lb listener create \

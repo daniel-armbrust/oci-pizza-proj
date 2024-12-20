@@ -87,7 +87,7 @@ O primeiro passo na configuração do Email Delivery deve ser a configuração d
 
 No contexto do Email Delivery, o domínio refere-se ao domínio DNS que você controla e que será utilizado para o envio de e-mails. Essa configuração é necessária para que o serviço saiba qual é o domínio que ele está autorizado a enviar e-mails.
 
->_**__NOTA:__** É importante destacar que o domínio da aplicação "ocipizza.com.br" já foi criado e configurado na seção [3.4 - DNS Público](./docs/chapter-3/dns.md). A configuração que será realizada aqui não interfere nem altera o domínio no serviço de DNS Público._
+>_**__NOTA:__** É importante destacar que o domínio da aplicação "ocipizza.com.br" já foi criado e configurado na seção [3.4 - DNS Público](./dns.md). A configuração que será realizada aqui não interfere nem altera o domínio no serviço de DNS Público._
 
 Para criar o domínio no serviço de Email Delivery na região sa-saopaulo-1, utilize o comando abaixo:
 
