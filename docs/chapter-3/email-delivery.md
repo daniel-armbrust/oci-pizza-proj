@@ -241,7 +241,7 @@ $ oci --region "sa-saopaulo-1" email dkim get \
 Por fim, esses valores devem ser inseridos no DNS público da aplicação:
 
 ```
-$ oci --region "sa-saopaulo-1"  dns record domain patch \
+$ oci --region "sa-saopaulo-1" dns record domain patch \
 > --compartment-id "ocid1.compartment.oc1..aaaaaaaaaaaaaaaabbbbbbbbccc" \
 > --zone-name-or-id "ocipizza.com.br" \
 > --domain "ocipizza-sa-saopaulo-1-20241221._domainkey.ocipizza.com.br" \
@@ -304,6 +304,8 @@ $ oci --region "sa-saopaulo-1" email-data-plane email-submitted-response submit-
 > --subject "Olá! Isso é um e-mail de teste." \
 > --body-text "Olá! Isso é um e-mail de teste."
 ```
+
+Por fim, é possível confirmar o recebimento adequado do e-mail por meio do serviço Email Delivery que foi configurado:
 
 ![alt_text](./img/email-delivery-9.png "E-mail de teste")
 
