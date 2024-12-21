@@ -121,6 +121,8 @@ A configuração do SPF consiste em adicionar um registro DNS do tipo TXT que in
 
 Os servidores autorizados a enviar e-mails em nome de um domínio são declarados em um registro DNS do tipo TXT, utilizando uma sintaxe específica. Para a aplicação OCI Pizza, esse registro será adicionado ao DNS Público associado ao domínio _"ocipizza.com.br"_. Dessa forma, quando um servidor receber um e-mail desse domínio, ele consultará o DNS responsável por _"ocipizza.com.br"_ para verificar se o servidor que enviou a mensagem possui autorização para fazê-lo.
 
+>_**__NOTA:__** Consulte o link [Sender Policy Framework](http://www.open-spf.org/Introduction/) para maiores detalhes._
+
 Por ser um serviço gerenciado, a Oracle disponibiliza na [documentação](https://docs.oracle.com/en-us/iaas/Content/Email/Tasks/configurespf.htm#top) do Email Delivery o valor do SPF que será inserido no DNS da aplicação.
 
 ![alt_text](./img/email-delivery-5.png "SPF")
@@ -148,3 +150,161 @@ ocipizza.com.br text = "v=spf1" "include:rp.oracleemaildelivery.com" "~all"
 ```
 
 ### DKIM
+
+[DKIM (DomainKeys Identified Mail)](https://docs.oracle.com/en-us/iaas/Content/Email/Tasks/configuredkim.htm) é um framework de autenticação de e-mails que permite aos servidores de recebimento verificar a origem do servidor remetente e assegurar que o conteúdo da mensagem não foi alterado durante o trânsito.
+
+Por meio do DKIM, quem envia um e-mail a partir do seu domínio, pode assinar a mensagem utilizando criptografia, assumindo assim a responsabilidade por sua autenticidade. O destinatário, por sua vez, verifica a assinatura consultando o domínio do emissor em busca da chave pública, a fim de confirmar que a assinatura foi gerada com a chave privada correspondente.
+
+Configurar corretamente o DKIM ajuda a proteger um domínio contra falsificações, prevenindo a proliferação de spam e tentativas de phishing.
+
+>_**__NOTA:__** Consulte o link [DomainKeys Identified Mail (DKIM) Signatures](https://datatracker.ietf.org/doc/html/rfc6376) para maiores detalhes._
+
+Para configurar o DKIM, é necessário primeiro obter o valor do OCID correspondente ao domínio que foi criado no Email Delivery:
+
+```
+$ oci --region "sa-saopaulo-1" email domain list \
+> --compartment-id "ocid1.compartment.oc1..aaaaaaaaaaaaaaaabbbbbbbbccc" \
+> --all \
+> --name "ocipizza.com.br" \
+> --lifecycle-state "ACTIVE" \
+> --query 'data.items[].id'
+[
+  "ocid1.emaildomain.oc1.sa-saopaulo-1.aaaaaaaaaaaaaaaabbbbbbbbccc"
+]
+```
+
+O DKIM requer uma string seletor usado pela chave de criptografia no seguinte formato:
+
+![alt_text](./img/email-delivery-6.png "DKIM Seletor")
+
+- **Prefixo**
+
+    - É utilizado criar o nome do registro DNS do tipo CNAME. Esse prefixo pode ser o nome da aplicação responsável pelo envio de e-mails.
+
+- **Código da Região**
+
+    - Aqui será a identificação da região onde reside o Email Delivery.
+
+- **YYYYMMDD**
+
+    - Ano, mês e dia que correspondem à data de criação do seletor. Manter esse padrão é útil caso seja necessário realizar a rotação da chave.
+
+Com base nessas informações, para a região _sa-saopaulo-1_, a string seletora da aplicação terá o seguinte valor:
+
+![alt_text](./img/email-delivery-7.png "DKIM Seletor para OCI Pizza")
+
+A partir do shell, você pode criar uma variável que armazena a string seletora:
+
+```
+$ dkim_selector="ocipizza-sa-saopaulo-1-$(date +%Y%m%d)"
+```
+
+Em seguida, você pode criar o DKIM no Email Delivery:
+
+```
+$ oci --region "sa-saopaulo-1" email dkim create \
+> --email-domain-id "ocid1.emaildomain.oc1.sa-saopaulo-1.aaaaaaaaaaaaaaaabbbbbbbbccc" \
+> --name "$dkim_selector" \
+> --description "OCI Pizza - DKIM (Sao Paulo)" \
+> --wait-for-state "SUCCEEDED"
+```
+
+Após a criação do DKIM, é necessário obter seu OCID para acessar o valor do registro DNS do tipo CNAME, que será inserido no DNS público da aplicação:
+
+```
+$ oci --region "sa-saopaulo-1" email dkim list \
+> --email-domain-id "ocid1.emaildomain.oc1.sa-saopaulo-1.aaaaaaaaaaaaaaaabbbbbbbbccc" \
+> --all \
+> --name "$dkim_selector" \
+> --query 'data.items[].id'
+[
+  "ocid1.emaildkim.oc1.sa-saopaulo-1.aaaaaaaaaaaaaaaabbbbbbbbccc"
+]
+```
+
+Com o OCID do DKIM, é possível obter o registro DNS CNAME e seu valor correspondente:
+
+```
+$ oci --region "sa-saopaulo-1" email dkim get \
+> --dkim-id "ocid1.emaildkim.oc1.sa-saopaulo-1.aaaaaaaaaaaaaaaabbbbbbbbccc" \
+> --query "data.\"dns-subdomain-name\""
+"ocipizza-sa-saopaulo-1-20241221._domainkey.ocipizza.com.br."
+```
+
+```
+$ oci --region "sa-saopaulo-1" email dkim get \
+> --dkim-id "ocid1.emaildkim.oc1.sa-saopaulo-1.aaaaaaaaaaaaaaaabbbbbbbbccc" \
+> --query "data.\"cname-record-value\""
+"ocipizza-sa-saopaulo-1-20241221.ocipizza.com.br.dkim.gru1.oracleemaildelivery.com"
+```
+
+Por fim, esses valores devem ser inseridos no DNS público da aplicação:
+
+```
+$ oci --region "sa-saopaulo-1"  dns record domain patch \
+> --compartment-id "ocid1.compartment.oc1..aaaaaaaaaaaaaaaabbbbbbbbccc" \
+> --zone-name-or-id "ocipizza.com.br" \
+> --domain "ocipizza-sa-saopaulo-1-20241221._domainkey.ocipizza.com.br" \
+> --scope "GLOBAL" \
+> --items "[{\"domain\": \"ocipizza-sa-saopaulo-1-20241221._domainkey.ocipizza.com.br\", \"rdata\": \"ocipizza-sa-saopaulo-1-20241221.ocipizza.com.br.dkim.gru1.oracleemaildelivery.com\", \"rtype\": \"CNAME\", \"ttl\": 3600}]"
+```
+
+Ao final do processo, é possível verificar na console web que tanto o SPF quanto o DKIM estão configurados corretamente:
+
+![alt_text](./img/email-delivery-8.png "SPF e DKIM - OK")
+
+## Approved Senders
+
+Basicamente, um [Approved Sender](https://docs.oracle.com/en-us/iaas/Content/Email/Tasks/managingapprovedsenders.htm) é um endereço de e-mail que está autorizado a enviar mensagens. Cada região deve ter seu próprio conjunto de Approved Senders para poder enviar e-mails pelo Email Delivery da região.
+
+Para a funcionalidade _"Esqueci minha senha"_ da aplicação OCI Pizza, o Approved Sender que será criado é o e-mail **no-reply@ocipizza.com.br**. Este será o endereço do remetente que aparecerá para o usuário.
+
+```
+$ oci --region "sa-saopaulo-1" email sender create \
+> --compartment-id "ocid1.compartment.oc1..aaaaaaaaaaaaaaaabbbbbbbbccc" \
+> --email-address "no-reply@ocipizza.com.br" \
+> --wait-for-state "ACTIVE"
+```
+
+## Enviando e-mail
+
+O serviço Email Delive possibilita submeter e-mails para envio através de dois diferentes modos:
+
+- **Modo [HTTPS](https://docs.oracle.com/en-us/iaas/Content/Email/Concepts/email-submission-using-https.htm)**
+
+    - Submissão de e-mails através de uma API REST do OCI.
+
+- **Modo [SMTP](https://docs.oracle.com/en-us/iaas/Content/Email/Concepts/email-submission-using-smtp.htm)**
+
+    - Submissão de e-mails através do acesso direto, através do protocolo SMTP, ao servidor do Email Delivery da região.
+
+A principal diferença entre os dois modos é que o modo HTTPS utiliza uma API REST do OCI. Por ser uma API, ela permite interações diretas por meio do OCI CLI e dos SDKs. Além disso, as APIs oferecem diferentes métodos de autenticação e autorização, facilitando a integração com a aplicação dentro do OCI.
+
+Para enviar um e-mail utilizando o modo SMTP, é necessário que a aplicação tenha suporte para interagir diretamente com o protocolo SMTP. Na minha opinião, isso traz uma complexidade adicional, pois requer a inclusão de código extra para lidar com o SMTP.
+
+>_**__NOTA:__** Para saber mais detalhes sobre como interagir com o Email Delivery através do protocolo SMTP consulte ["Using SMTP for Email Submissions"](https://docs.oracle.com/en-us/iaas/Content/Email/Concepts/email-submission-using-smtp.htm)._
+
+A aplicação OCI Pizza usa o modo HTTPS e o comando abaixo será usado para enviar um e-mail de teste:
+
+```
+$ oci --region "sa-saopaulo-1" email-data-plane email-submitted-response submit-email \
+> --recipients "{
+    \"to\": [
+        {
+            \"email\": \"darmbrust@gmail.com\",
+            \"name\": \"Daniel Armbrust\"
+        }
+    ]}" \
+> --sender "{
+    \"compartmentId\": \"ocid1.compartment.oc1..aaaaaaaaaaaaaaaabbbbbbbbccc\",
+    \"senderAddress\": {
+        \"email\": \"no-reply@ocipizza.com.br\",
+        \"name\": \"no-reply@ocipizza.com.br\"
+    }}" \
+> --subject "Olá! Isso é um e-mail de teste." \
+> --body-text "Olá! Isso é um e-mail de teste."
+```
+
+![alt_text](./img/email-delivery-9.png "E-mail de teste")
+
+## Administração do Email Delivery
