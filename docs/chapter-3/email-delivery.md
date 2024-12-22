@@ -105,9 +105,9 @@ $ oci --region "sa-saopaulo-1" email domain create \
  
 [SPF (Sender Policy Framework)](https://docs.oracle.com/en-us/iaas/Content/Email/Tasks/configurespf.htm) e [DKIM (DomainKeys Identified Mail)](https://docs.oracle.com/en-us/iaas/Content/Email/Tasks/configuredkim.htm) são ambos mecanismos de autenticação de e-mail que ajudam a proteger contra fraudes e spoofing.
 
-SPF e DKIM são, essencialmente, registros DNS que desempenham um papel crucial na melhoria da segurança e confiabilidade do e-mail, ajudando a reduzir a incidência de spam e fraudes. Atualmente, esses registros são obrigatórios e devem ser configurados no servidor DNS responsável pelo domínio que envia e recebe e-mails. A falta de SPF e DKIM pode resultar em diversos impactos negativos, como a deterioração da reputação do domínio e o bloqueio ou a classificação de e-mails legítimos como spam.
+SPF e DKIM são, essencialmente, registros DNS que desempenham um papel crucial na melhoria da segurança e confiabilidade do e-mail, ajudando a reduzir a incidência de spam e fraudes. A falta dessas configurações podem resultar em diversos impactos negativos, como a deterioração da reputação do domínio e o bloqueio ou a classificação de e-mails legítimos como spam.
 
-Após a criação do domínio no Email Delivery, é possível verificar na console web a ausência das configurações referentes ao DKIM e SPF.
+Após a criação do domínio no Email Delivery, é possível verificar na console web a ausência das configurações referentes ao DKIM e SPF:
 
 ![alt_text](./img/email-delivery-4.png "SPF e DKIM")
 
@@ -151,15 +151,13 @@ ocipizza.com.br text = "v=spf1" "include:rp.oracleemaildelivery.com" "~all"
 
 ### DKIM
 
-[DKIM (DomainKeys Identified Mail)](https://docs.oracle.com/en-us/iaas/Content/Email/Tasks/configuredkim.htm) é um framework de autenticação de e-mails que permite aos servidores de recebimento verificar a origem do servidor remetente e assegurar que o conteúdo da mensagem não foi alterado durante o trânsito.
+DKIM (DomainKeys Identified Mail) é um framework de autenticação de e-mails que possibilita aos servidores destinatários verificar se um e-mail foi efetivamente enviado e autorizado pelo domínio remetente, além de assegurar que o conteúdo da mensagem permaneceu inalterado durante o trânsito. Configurar corretamente o DKIM ajuda a proteger um domínio contra falsificações, prevenindo a proliferação de spam e tentativas de phishing.
 
-Por meio do DKIM, quem envia um e-mail a partir do seu domínio, pode assinar a mensagem utilizando criptografia, assumindo assim a responsabilidade por sua autenticidade. O destinatário, por sua vez, verifica a assinatura consultando o domínio do emissor em busca da chave pública, a fim de confirmar que a assinatura foi gerada com a chave privada correspondente.
+Por meio do DKIM, ao enviar um e-mail, o servidor de e-mail do remetente utiliza sua chave privada para gerar uma assinatura digital, que é baseada em partes específicas da mensagem, como o corpo do e-mail e determinados cabeçalhos. O servidor destinatário, por sua vez, localiza a chave pública no DNS do domínio do remetente e a utiliza para validar a assinatura.
 
-Configurar corretamente o DKIM ajuda a proteger um domínio contra falsificações, prevenindo a proliferação de spam e tentativas de phishing.
+>_**__NOTA:__** Lembrando que todo esse processo de utilizar chaves para criptografar, assinar e validar assinaturas digitais, ocorre nos bastidores pelos MTAs que implementam o DKIM sem intervenção dos usuários. Consulte o link [DomainKeys Identified Mail (DKIM) Signatures](https://datatracker.ietf.org/doc/html/rfc6376) para maiores informações sobre o funcionamento do DKIM_
 
->_**__NOTA:__** Consulte o link [DomainKeys Identified Mail (DKIM) Signatures](https://datatracker.ietf.org/doc/html/rfc6376) para maiores detalhes._
-
-Para configurar o DKIM, é necessário primeiro obter o valor do OCID correspondente ao domínio que foi criado no Email Delivery:
+Para configurar o DKIM, é necessário primeiro obter o valor do OCID do domínio que foi criado no Email Delivery:
 
 ```
 $ oci --region "sa-saopaulo-1" email domain list \
@@ -193,29 +191,23 @@ Com base nessas informações, para a região _sa-saopaulo-1_, a string seletora
 
 ![alt_text](./img/email-delivery-7.png "DKIM Seletor para OCI Pizza")
 
-A partir do shell, você pode criar uma variável que armazena a string seletora:
-
-```
-$ dkim_selector="ocipizza-sa-saopaulo-1-$(date +%Y%m%d)"
-```
-
-Em seguida, você pode criar o DKIM no Email Delivery:
+Para criar o DKIM utilizando a string do seletor, utilize o comando abaixo:
 
 ```
 $ oci --region "sa-saopaulo-1" email dkim create \
 > --email-domain-id "ocid1.emaildomain.oc1.sa-saopaulo-1.aaaaaaaaaaaaaaaabbbbbbbbccc" \
-> --name "$dkim_selector" \
+> --name "ocipizza-sa-saopaulo-1-20241221" \
 > --description "OCI Pizza - DKIM (Sao Paulo)" \
 > --wait-for-state "SUCCEEDED"
 ```
 
-Após a criação do DKIM, é necessário obter seu OCID para acessar o valor do registro DNS do tipo CNAME, que será inserido no DNS público da aplicação:
+Em seguida, é necessário obter o seu OCID: 
 
 ```
 $ oci --region "sa-saopaulo-1" email dkim list \
 > --email-domain-id "ocid1.emaildomain.oc1.sa-saopaulo-1.aaaaaaaaaaaaaaaabbbbbbbbccc" \
 > --all \
-> --name "$dkim_selector" \
+> --name "ocipizza-sa-saopaulo-1-20241221" \
 > --query 'data.items[].id'
 [
   "ocid1.emaildkim.oc1.sa-saopaulo-1.aaaaaaaaaaaaaaaabbbbbbbbccc"
@@ -249,7 +241,7 @@ $ oci --region "sa-saopaulo-1" dns record domain patch \
 > --items "[{\"domain\": \"ocipizza-sa-saopaulo-1-20241221._domainkey.ocipizza.com.br\", \"rdata\": \"ocipizza-sa-saopaulo-1-20241221.ocipizza.com.br.dkim.gru1.oracleemaildelivery.com\", \"rtype\": \"CNAME\", \"ttl\": 3600}]"
 ```
 
-Ao final do processo, é possível verificar na console web que tanto o SPF quanto o DKIM estão configurados corretamente:
+Ao final do processo, é possível verificar na console web que tanto o SPF quanto o DKIM foram configurados corretamente:
 
 ![alt_text](./img/email-delivery-8.png "SPF e DKIM - OK")
 
@@ -266,7 +258,7 @@ $ oci --region "sa-saopaulo-1" email sender create \
 > --wait-for-state "ACTIVE"
 ```
 
-## Enviando e-mail
+## Testando o Email Delivery
 
 O serviço Email Delive possibilita submeter e-mails para envio através de dois diferentes modos:
 
@@ -276,15 +268,15 @@ O serviço Email Delive possibilita submeter e-mails para envio através de dois
 
 - **Modo [SMTP](https://docs.oracle.com/en-us/iaas/Content/Email/Concepts/email-submission-using-smtp.htm)**
 
-    - Submissão de e-mails através do acesso direto, através do protocolo SMTP, ao servidor do Email Delivery da região.
+    - Submissão de e-mails através do protocolo SMTP.
 
-A principal diferença entre os dois modos é que o modo HTTPS utiliza uma API REST do OCI. Por ser uma API, ela permite interações diretas por meio do OCI CLI e dos SDKs. Além disso, as APIs oferecem diferentes métodos de autenticação e autorização, facilitando a integração com a aplicação dentro do OCI.
+A principal diferença entre os dois modos é que o modo HTTPS utiliza uma API REST do OCI. Por ser uma API, ela permite interações diretas por meio do OCI CLI e dos SDKs disponíveis. Além disso, as APIs oferecem diferentes métodos de autenticação e autorização.
 
-Para enviar um e-mail utilizando o modo SMTP, é necessário que a aplicação tenha suporte para interagir diretamente com o protocolo SMTP. Na minha opinião, isso traz uma complexidade adicional, pois requer a inclusão de código extra para lidar com o SMTP.
+Para enviar um e-mail utilizando o modo SMTP, é necessário que a aplicação tenha suporte para interagir diretamente com o protocolo SMTP. Isso implica a adição de bibliotecas específicas e a implementação de códigos adicionais para lidar com o SMTP. Por outro lado, como a aplicação OCI Pizza já utiliza o SDK do OCI, optar pelo modo HTTPS torna-se mais simples.
 
 >_**__NOTA:__** Para saber mais detalhes sobre como interagir com o Email Delivery através do protocolo SMTP consulte ["Using SMTP for Email Submissions"](https://docs.oracle.com/en-us/iaas/Content/Email/Concepts/email-submission-using-smtp.htm)._
 
-A aplicação OCI Pizza usa o modo HTTPS e o comando abaixo será usado para enviar um e-mail de teste:
+Para enviar um e-mail de teste utilizando o modo HTTPS, utilize o comando abaixo:
 
 ```
 $ oci --region "sa-saopaulo-1" email-data-plane email-submitted-response submit-email \
@@ -305,8 +297,34 @@ $ oci --region "sa-saopaulo-1" email-data-plane email-submitted-response submit-
 > --body-text "Olá! Isso é um e-mail de teste."
 ```
 
-Por fim, é possível confirmar o recebimento adequado do e-mail por meio do serviço Email Delivery que foi configurado:
+Por fim, é possível confirmar o recebimento do e-mail:
 
 ![alt_text](./img/email-delivery-9.png "E-mail de teste")
+
+## Suppression List
+
+Parte do funcionamento de um serviço de e-mail eficaz é identificar quando um e-mail não pode ser entregue a um destinatário por algum motivo.
+
+Quando um e-mail não é entregue, o servidor de e-mail do destinatário envia uma notificação chamada _"bounce"_ de volta ao servidor do remetente junto com um código que ajuda o emissor a identificar a causa do problema. Esse código pode indicar um problema temporário ou permanente.
+
+Problemas identificados como permanentes, conhecidos como _Hard Bounce_, podem indicar um endereço de e-mail inválido ou inexistente, um domínio do destinatário não encontrado, bloqueio do servidor, entre outros.
+
+_Hard Bounce_ exigem ações corretivas, como a remoção do endereço de e-mail da lista de contatos. Um gerenciamento eficaz dessas situações contribui para melhorar a entregabilidade e a reputação do domínio do remetente.
+
+A [Suppression List](https://docs.oracle.com/en-us/iaas/Content/Email/Tasks/managingsuppressionlist.htm), ou Lista de Supressão, é composta por endereços de e-mail que não devem receber mensagens enviadas pelo Email Delivery.
+
+Sempre que o Email Delivery não consegue entregar um e-mail por conta de um _Hard Bounce_, esse endereço de e-mail é adicionado automaticamente à sua Lista de Supressão.
+
+Também é possível adicionar ou remover um e-mail manualmente da Lista de Supressão. O comando abaixo mostra como adicionar um e-mail manualmente:
+
+```
+$ oci --region "sa-saopaulo-1" email suppression create \
+> --compartment-id "ocid1.tenancy.oc1..aaaaaaaaaaaaaaaabbbbbbbbccc" \
+> --email-address "nao-sei@dominio-inexistente.com.br"
+```
+
+>_**__NOTA:__** Observe que o valor do parâmetro --compartment-id é o OCID que representa o Tenancy, e não um compartimento criado. Essa é uma exigência ao adicionar um e-mail à lista de supressão._
+
+>_**__NOTA:__** A [Suppression List](https://docs.oracle.com/en-us/iaas/Content/Email/Tasks/managingsuppressionlist.htm) é um componente regional. Tanto os e-mails adicionados manualmente quanto aqueles inseridos automaticamente pelo Email Delivery, devem ser replicados para as demais regiões._
 
 ## Administração do Email Delivery

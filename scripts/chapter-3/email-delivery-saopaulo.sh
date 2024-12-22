@@ -35,6 +35,7 @@ email_to="darmbrust@gmail.com"
 email_to_name="Daniel Armbrust"
 email_subject="Olá! Isso é um e-mail de teste."
 email_body_text="Olá! Isso é um e-mail de teste."
+email_deleted="nao-sei@dominio-inexistente.com.br"
 
 # Email Domain
 oci --region "$region" email domain create \
@@ -86,5 +87,10 @@ oci --region "$region" email-data-plane email-submitted-response submit-email \
     --sender "{\"compartmentId\": \"$compartment_ocid\",\"senderAddress\": {\"email\": \"$noreply_email_address\",\"name\": \"$noreply_email_address\"}}" \
     --subject "$email_subject" \
     --body-text "$email_body_text"
+
+# Suppression List
+ oci --region "$region" email suppression create \
+     --compartment-id "$root_compartment_ocid" \
+     --email-address "$email_deleted"
 
 exit 0
