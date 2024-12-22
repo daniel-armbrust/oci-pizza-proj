@@ -327,4 +327,24 @@ $ oci --region "sa-saopaulo-1" email suppression create \
 
 >_**__NOTA:__** A [Suppression List](https://docs.oracle.com/en-us/iaas/Content/Email/Tasks/managingsuppressionlist.htm) é um componente regional. Tanto os e-mails adicionados manualmente quanto aqueles inseridos automaticamente pelo Email Delivery, devem ser replicados para as demais regiões._
 
-## Administração do Email Delivery
+Para visualizar os e-mails adicionados na Lista de Supressão, utilize o comando abaixo:
+
+```
+$ oci --region "sa-saopaulo-1" email suppression list \
+> --compartment-id "ocid1.tenancy.oc1..aaaaaaaaaaaaaaaabbbbbbbbccc" \
+> --all \
+> --query "data[].{\"email-address\":\"email-address\",reason:reason}" \
+> --output table
++------------------------------------+------------+
+| email-address                      | reason     |
++------------------------------------+------------+
+| nao-sei@dominio-inexistente.com.br | MANUAL     |
+| user2@user.com                     | HARDBOUNCE |
+| user3@user.com                     | HARDBOUNCE |
+| user1@user.com                     | HARDBOUNCE |
++------------------------------------+------------+
+```
+
+## Conclusão
+
+Neste capítulo, foram apresentados os conceitos básicos relacionados ao envio de e-mails na Internet, além de detalhes sobre a configuração do serviço Email Delivery. O Email Delivery já está configurado e pronto para ser utilizado pela aplicação OCI Pizza.
