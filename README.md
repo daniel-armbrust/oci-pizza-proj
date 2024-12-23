@@ -42,10 +42,10 @@ Bora entender...
 - [Capítulo 4: Tecnologias para Persistência dos dados](./docs/chapter-4/intro.md)
 	- [X.X - Oracle NoSQL Database Cloud Service](./docs/chapter-4/nosql.md)
 
-- [Capítulo 5: Desenvolvimento Moderno](./docs/chapter-5.md)
-	- [5.1 - Entendendo os Contêineres](./docs/chapter-5.md/containers.md)
-	- [5.2 - Container Instances](./docs/chapter-5.md/container-instances.md)	
-	- [X.X - Introdução ao GraalVM](./docs/chapter-5.md/graalvm.md)
+- [Capítulo 5: Desenvolvimento Moderno](./docs/chapter-5/intro.md)
+	- [5.1 - Entendendo os Contêineres](./docs/chapter-5/containers.md)
+	- [5.2 - Container Instances](./docs/chapter-5/container-instances.md)	
+	- [X.X - Introdução ao GraalVM](./docs/chapter-5/graalvm.md)
 	- [X.X - Functions e Notifications](./docs/chapter-5.md/functions-notifications.md)
 
 - [Capítulo 5: OKE - Oracle Kubernetes Engine](./docs/chapter-5.md)
