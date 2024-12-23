@@ -31,10 +31,6 @@ compartment_ocid="$COMPARTMENT_OCID"
 root_compartment_ocid="$ROOT_COMPARTMENT_OCID"
 noreply_email_address="no-reply@ocipizza.com.br"
 spf_record="v=spf1 include:rp.oracleemaildelivery.com ~all"
-email_to="darmbrust@gmail.com"
-email_to_name="Daniel Armbrust"
-email_subject="Olá! Isso é um e-mail de teste."
-email_body_text="Olá! Isso é um e-mail de teste."
 email_deleted="nao-sei@dominio-inexistente.com.br"
 
 # Email Domain
@@ -48,7 +44,7 @@ oci --region "$region" email domain create \
 oci --region "$region" dns record domain patch \
     --compartment-id "$compartment_ocid" \
     --zone-name-or-id "ocipizza.com.br" \
-    --domain "$dkim_cname" \
+    --domain "ocipizza.com.br" \
     --scope "GLOBAL" \
     --items "[{\"domain\": \"ocipizza.com.br\", \"rdata\": \"$spf_record\", \"rtype\": \"TXT\", \"ttl\": 3600}]"
 
@@ -80,13 +76,6 @@ oci --region "$region" email sender create \
     --compartment-id "$compartment_ocid" \
     --email-address "$noreply_email_address" \
     --wait-for-state "ACTIVE"
-
-# Email Delivery Test
-oci --region "$region" email-data-plane email-submitted-response submit-email \
-    --recipients "{\"to\": [{\"email\": \"$email_to\",\"name\": \"$email_to_name\"}]}" \
-    --sender "{\"compartmentId\": \"$compartment_ocid\",\"senderAddress\": {\"email\": \"$noreply_email_address\",\"name\": \"$noreply_email_address\"}}" \
-    --subject "$email_subject" \
-    --body-text "$email_body_text"
 
 # Suppression List
  oci --region "$region" email suppression create \

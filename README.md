@@ -25,6 +25,7 @@ Bora entender...
 - [Capítulo 1: Conceitos e introdução a Computação em Nuvem no OCI](./docs/chapter-1.md)
 	- [1.1 - O que a Computação em Nuvem?](./docs/cloud-computing.md)
 	- [1.1 - Bem-vindo ao OCI](./docs/oci-welcome.md)
+	- [1.1 - Visão geral da Aplicação OCI Pizza](./docs/ocipizza-overview.md)
 
 - [Capítulo 2: Visão geral da Aplicação OCI Pizza](./docs/chapter-2/intro.md)
 	- [2.1 - Persistência dos dados com o Oracle NoSQL](./docs/chapter-2/nosql.md)
@@ -38,10 +39,14 @@ Bora entender...
 	- [3.6 - Load Balancer](./docs/chapter-3/lb.md)	
 	- [3.7 - Email Delivery](./docs/chapter-3/email-delivery.md)
     
-- [Capítulo 4: Desenvolvimento Moderno](./docs/chapter-4.md)
-	- [4.1 - Entendendo os Contêineres](./docs/chapter-4.md/containers.md)
-	- [4.2 - Container Instances](./docs/chapter-4.md/container-instances.md)	
-	- [X.X - Introdução ao GraalVM](./docs/chapter-4.md/graalvm.md)
+- [Capítulo 4: Tecnologias para Persistência dos dados](./docs/chapter-4/intro.md)
+	- [X.X - Oracle NoSQL Database Cloud Service](./docs/chapter-4/nosql.md)
+
+- [Capítulo 5: Desenvolvimento Moderno](./docs/chapter-5.md)
+	- [5.1 - Entendendo os Contêineres](./docs/chapter-5.md/containers.md)
+	- [5.2 - Container Instances](./docs/chapter-5.md/container-instances.md)	
+	- [X.X - Introdução ao GraalVM](./docs/chapter-5.md/graalvm.md)
+	- [X.X - Functions e Notifications](./docs/chapter-5.md/functions-notifications.md)
 
 - [Capítulo 5: OKE - Oracle Kubernetes Engine](./docs/chapter-5.md)
 	- [5.1 - Introdução ao OKE](./docs/oke-intro.md)
