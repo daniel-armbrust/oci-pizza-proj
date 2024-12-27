@@ -1,4 +1,4 @@
-# O Serviço de Redes do OCI
+# 3.1 - O Serviço de Redes do OCI
 
 O [Serviço de Redes](https://docs.oracle.com/en-us/iaas/Content/Network/Concepts/landing.htm) do OCI disponibiliza versões virtuais para a maioria dos componentes de redes tradicionais que conhecemos. A configuração da rede é um pré-requisito essencial para o funcionamento de qualquer aplicação na nuvem.
 

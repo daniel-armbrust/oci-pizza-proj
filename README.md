@@ -24,7 +24,7 @@ Bora entender...
 
 - [Capítulo 1: Conceitos e introdução a Computação em Nuvem no OCI](./docs/chapter-1.md)
 	- [1.1 - O que a Computação em Nuvem?](./docs/cloud-computing.md)
-	- [1.1 - Bem-vindo ao OCI](./docs/oci-welcome.md)
+	- [1.1 - OCI Foundation](./docs/oci-foundation.md)
 	- [1.1 - Visão geral da Aplicação OCI Pizza](./docs/ocipizza-overview.md)
 
 - [Capítulo 2: Visão geral da Aplicação OCI Pizza](./docs/chapter-2/intro.md)
@@ -44,17 +44,18 @@ Bora entender...
 
 - [Capítulo 5: Desenvolvimento Moderno](./docs/chapter-5/intro.md)
 	- [5.1 - Entendendo os Contêineres](./docs/chapter-5/containers.md)
-	- [5.2 - Container Instances](./docs/chapter-5/container-instances.md)	
-	- [X.X - Introdução ao GraalVM](./docs/chapter-5/graalvm.md)
-	- [X.X - Functions e Notifications](./docs/chapter-5.md/functions-notifications.md)
+	- [5.2 - Introdução ao GraalVM](./docs/chapter-5/graalvm.md)	
+	- [5.3 - Container Instances](./docs/chapter-5/container-instances.md)	
+	- [5.4 - Functions](./docs/chapter-5/functions.md)
+	- [5.5 - Notifications](./docs/chapter-5.md/notifications.md)
 
-- [Capítulo 5: OKE - Oracle Kubernetes Engine](./docs/chapter-5.md)
-	- [5.1 - Introdução ao OKE](./docs/oke-intro.md)
+- [Capítulo 6: OKE - Oracle Kubernetes Engine](./docs/chapter-6/intro.md)
+	- [6.1 - Introdução ao OKE](./docs/chapter-6/oke.md)
 
-- [Capítulo 6: DevOps](./docs/chapter-6.md)
-	- [6.1 - Do GitHub para o OCI DevOps]()
+- [Capítulo 7: DevOps](./docs/chapter-7/intro.md)
+	- [7.1 - Do GitHub para o OCI DevOps]()
 
-- [Capítulo 7: Observabilidade](./docs/chapter-7.md)
+- [Capítulo 8: Monitoração e Observabilidade](./docs/chapter-8/intro.md)
 
 - [Capítulo X: Ferramental de IA]()
 

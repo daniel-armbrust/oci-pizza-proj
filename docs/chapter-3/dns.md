@@ -1,4 +1,4 @@
-# DNS Público
+# 3.4 - DNS Público
 
 ## Configurando o Serviço de DNS Global
 

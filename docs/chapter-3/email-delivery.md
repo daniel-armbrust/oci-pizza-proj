@@ -1,4 +1,4 @@
-# Email Delivery
+# 3.7 - Email Delivery
 
 [Email Delivery](https://docs.oracle.com/en-us/iaas/Content/Email/Concepts/overview.htm) é um serviço gerenciado de [SMTP (Simple Mail Transfer Protocol)](https://datatracker.ietf.org/doc/html/rfc5321) oferecido pelo OCI para o envio de e-mails. Qualquer aplicação que necessite enviar e-mails é um candidato ideal para utilizar esse serviço, pois ele atua como um _"servidor de e-mail de saída" (outbound email server)_. 
 

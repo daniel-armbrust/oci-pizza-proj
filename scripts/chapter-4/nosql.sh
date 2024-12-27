@@ -66,9 +66,11 @@ oci --region "$main_region" nosql table create \
             id INTEGER,
             name STRING,
             email STRING,
-            password STRING, 
+            password STRING,
+            telephone STRING,
+            verified BOOLEAN DEFAULT FALSE,
             json_replica JSON,           
-         PRIMARY KEY(id, email))"
+         PRIMARY KEY(id))"
 
 # User Table Replica
 oci --region "$main_region" nosql table update \
@@ -117,4 +119,29 @@ oci --region "$main_region" nosql table create-replica \
     --max-write-units 5 \
     --wait-for-state "SUCCEEDED"
 
+# Email Verification Table
+oci --region "$main_region" nosql table create \
+    --compartment-id "$compartment_ocid" \
+    --name "email_verification" \
+    --table-limits "{\"capacityMode\": \"PROVISIONED\", \"maxReadUnits\": 2, \"maxWriteUnits\": 2, \"maxStorageInGBs\": 2}" \
+    --wait-for-state "SUCCEEDED" \
+    --ddl-statement "
+         CREATE TABLE IF NOT EXISTS email_verification ( 
+            email STRING,
+            token STRING,                         
+            expiration_ts TIMESTAMP(0),
+         PRIMARY KEY (email)) USING TTL 1 HOURS"
+
+oci --region "$backup_region" nosql table create \
+    --compartment-id "$compartment_ocid" \
+    --name "email_verification" \
+    --table-limits "{\"capacityMode\": \"PROVISIONED\", \"maxReadUnits\": 2, \"maxWriteUnits\": 2, \"maxStorageInGBs\": 2}" \
+    --wait-for-state "SUCCEEDED" \
+    --ddl-statement "
+         CREATE TABLE IF NOT EXISTS email_verification ( 
+            email STRING,
+            token STRING,                         
+            expiration_ts TIMESTAMP(0),
+         PRIMARY KEY (email)) USING TTL 1 HOURS"
+         
 exit 0

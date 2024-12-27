@@ -144,7 +144,7 @@ $ docker build -t ocipizza:1.0 .
 
 >_**__NOTA:__** Lembre-se de estar dentro do diretório onde encontra-se o arquivo [Dockerfile](https://docs.docker.com/engine/reference/builder/) para poder executar o comando docker build._
 
-O parâmetro **-t** (ou --tag) do comando _docker build_, é utilizado para atribuir uma **tag** a uma imagem Docker. Essa tag serve como um identificador, permitindo nomear e versionar a imagem. Isto também facilita o gerenciamento de diferentes versões.
+O parâmetro _**-t** (ou --tag)_ do comando _docker build_, é utilizado para atribuir uma **_tag_** a uma imagem Docker. Essa tag serve como um identificador, permitindo nomear e versionar a imagem. Isto também facilita o gerenciamento de diferentes versões.
 
 Por fim, é possível verificar que a imagem da aplicação foi criada com sucesso:
 

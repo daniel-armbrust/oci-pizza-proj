@@ -1,4 +1,4 @@
-# Reserva de Endereço IP Público
+# 3.3 - Reserva de Endereço IP Público
 
 Um endereço IP público é um endereço que pode ser acessado pela internet. Para que um recurso seja acessível a partir da internet, ele deve estar localizado em uma sub-rede pública, equipada com um Internet Gateway, e deve possuir um endereço IP público.
 

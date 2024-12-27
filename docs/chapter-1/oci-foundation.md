@@ -16,6 +16,8 @@
 - Conceito de Outbound Data Transfer
 - Conceito de sub-rede publica, privada e regional.
 - Cloud Shell (acesso sub-rede privada).
+- Serviço de Logging
+- IAM
 
 ## Compartments, Dynamic Group e Policies
 

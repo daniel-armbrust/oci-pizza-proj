@@ -3,6 +3,7 @@
 #
 
 from oci import config as oci_config
+from oci.auth import signers as oci_signers
 from oci import nosql as oci_nosql
 from oci import exceptions as oci_exceptions
 
@@ -18,7 +19,8 @@ class NoSQL():
             
             self._nosql = oci_nosql.NosqlClient(config=config)
         else:
-            pass    
+            signer = oci_signers.get_resource_principals_signer()
+            self._nosql = oci_nosql.NosqlClient(config={}, signer=signer)
     
     def query(self, sql: str):
         query_details = oci_nosql.models.QueryDetails(

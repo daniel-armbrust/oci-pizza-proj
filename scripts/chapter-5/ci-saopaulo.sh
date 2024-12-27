@@ -1,43 +1,58 @@
 #
-# scripts/ci-saopaulo.sh
+# scripts/chapter-5/ci-saopaulo.sh
 #
-# OCI CONTAINER INSTANCE CLI Documentation:
-# -----------------------------------------
-#    https://docs.oracle.com/en-us/iaas/tools/oci-cli/3.50.2/oci_cli_docs/cmdref/container-instances/container-instance/create.html
+# Copyright (C) 2005-2024 by Daniel Armbrust <darmbrust@gmail.com>
 #
-# How to execute (example):
-# -------------------------
-#    
-#    $ bash ci-saopaulo.sh
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along
+# with this program; if not, write to the Free Software Foundation, Inc.,
+# 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 #
 
-function return_ad() {
-    oci iam availability-domain list \
-        --region sa-saopaulo-1 \
-        --compartment-id "$COMPARTMENT_OCID" \
-        --all \
-        --query "data[0].name" | tr -d '"'
-}
+#-----------------------------------------------#
+# Brazil East (Sao Paulo) / sa-saopaulo-1 (GRU) #
+#-----------------------------------------------#
 
-COMPARTMENT_OCID=""
-NOSQL_COMPARTMENT_OCID="$COMPARTMENT_OCID"
-SUBNET_OCID=""
+# Source external files.
+source functions.sh
 
-SECRET_KEY="$(< /dev/urandom tr -dc 'A-Za-z0-9' | head -c 60; echo)"
-AVAILABILITY_DOMAIN="$(return_ad)"
+# Globals
+region="sa-saopaulo-1"
+compartment_ocid="$COMPARTMENT_OCID"
+nosql_compartment_ocid="$compartment_ocid"
+vcn_name="vcn-saopaulo"
+prvsubnet_name="subnprv"
+
+ad="$(get_ad "$region" "$compartment_ocid")"
+
+vcn_ocid="$(get_vcn_ocid "$region" "$vcn_name" "$compartment_ocid")"
+subnet_ocid="$(get_subnet_ocid "$region" "$prvsubnet_name" "$compartment_ocid" "$vcn_ocid")"
+
+os_namespace="$(get_os_namespace)"
+secret_key="$(< /dev/urandom tr -dc 'A-Za-z0-9' | head -c 60; echo)"
+ocipizza_img_url="ocir.$region.oci.oraclecloud.com/$os_namespace/ocipizza:1.0"
 
 # Container Instance PRIMARY
 oci container-instances container-instance create \
     --display-name "ci-ocipizza-primary" \
-    --availability-domain "$AVAILABILITY_DOMAIN" \
-    --compartment-id "$COMPARTMENT_OCID" \
+    --availability-domain "$ad" \
+    --compartment-id "$compartment_ocid" \
     --containers "[  
            {     
               \"displayName\": \"webapp-container-1\",
-	          \"imageUrl\": \"ocir.sa-saopaulo-1.oci.oraclecloud.com/grxmw2a9myyj/ocipizza:1.0\",
+	          \"imageUrl\": \"$ocipizza_img_url\",
 	          \"environmentVariables\": {
-                  \"SECRET_KEY\": \"$SECRET_KEY\",
-                  \"NOSQL_COMPARTMENT_OCID\": \"$NOSQL_COMPARTMENT_OCID\"
+                  \"SECRET_KEY\": \"$secret_key\",
+                  \"NOSQL_COMPARTMENT_OCID\": \"$nosql_compartment_ocid\"
               }
            }
         ]" \
@@ -48,7 +63,7 @@ oci container-instances container-instance create \
            {
               \"displayName\": \"vnic-1\",
               \"isPublicIpAssigned\": false,
-              \"subnetId\": \"$SUBNET_OCID\"
+              \"subnetId\": \"$subnet_ocid\"
            }
         ]" \
     --wait-for-state "ACCEPTED"
@@ -56,15 +71,15 @@ oci container-instances container-instance create \
 # Container Instance BACKUP
 oci container-instances container-instance create \
     --display-name "ci-ocipizza-backup" \
-    --availability-domain "$AVAILABILITY_DOMAIN" \
-    --compartment-id "$COMPARTMENT_OCID" \
+    --availability-domain "$ad" \
+    --compartment-id "$compartment_ocid" \
     --containers "[  
            {     
               \"displayName\": \"webapp-container-1\",
-	          \"imageUrl\": \"ocir.sa-saopaulo-1.oci.oraclecloud.com/grxmw2a9myyj/ocipizza:1.0\",
+	          \"imageUrl\": \"$ocipizza_img_url\",
 	          \"environmentVariables\": {
-                  \"SECRET_KEY\": \"$SECRET_KEY\",
-                  \"NOSQL_COMPARTMENT_OCID\": \"$NOSQL_COMPARTMENT_OCID\"
+                  \"SECRET_KEY\": \"$secret_key\",
+                  \"NOSQL_COMPARTMENT_OCID\": \"$nosql_compartment_ocid\"
               }
            }
         ]" \
@@ -75,7 +90,7 @@ oci container-instances container-instance create \
            {
               \"displayName\": \"vnic-1\",
               \"isPublicIpAssigned\": false,
-              \"subnetId\": \"$SUBNET_OCID\"
+              \"subnetId\": \"$subnet_ocid\"
            }
         ]" \
     --wait-for-state "ACCEPTED"
