@@ -16,33 +16,33 @@ class NoSQL():
     @property
     def table(self):
         """Getter para o nome da tabela."""
-        return self._table
+        return self.__table
     
     @table.setter
     def table(self, value: str):
-        self._table = value
+        self.__table = value
 
     def __init__(self):
         provider = SignatureProvider.create_with_resource_principal()        
         nosql_handle_config = NoSQLHandleConfig(os.getenv('NOSQL_REGION'), provider).set_logger(None).set_default_compartment(NOSQL_COMPARTMENT_OCID)
         
-        self._nosql = NoSQLHandle(nosql_handle_config)
+        self.__nosql = NoSQLHandle(nosql_handle_config)
         
     def query(self, sql: str):
         query_request = QueryRequest().set_statement(sql)
         query_request.close()
 
-        query_result = self._nosql.query(query_request)
+        query_result = self.__nosql.query(query_request)
 
         return query_result.get_results()
 
     def add(self, data: dict):        
         put_request = PutRequest()
-        put_request.set_table_name(self._table)
+        put_request.set_table_name(self.__table)
         put_request.set_option(PutOption.IF_ABSENT)
         put_request.set_value(data)
 
-        result = self._nosql.put(put_request)
+        result = self.__nosql.put(put_request)
 
         # A successful put returns a non-empty version.
         if result.get_version() is not None:
@@ -51,4 +51,4 @@ class NoSQL():
             return False
  
     def close(self):
-        self._nosql.close()
+        self.__nosql.close()

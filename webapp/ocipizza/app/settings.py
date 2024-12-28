@@ -32,6 +32,8 @@ class Settings():
         self.nosql_order_table_name = os.environ.get('NOSQL_ORDER_TABLE_NAME') or 'user.order'
         self.nosql_compartment_ocid = os.environ.get('NOSQL_COMPARTMENT_OCID')   
 
+        self.ons_topic_user_register_ocid = os.environ.get('ONS_TOPIC_USER_REGISTER_OCID')
+
         self.user_min_password_length = 8    
         self.user_max_password_length = 16
 

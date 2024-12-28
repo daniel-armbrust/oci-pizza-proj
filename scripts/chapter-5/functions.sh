@@ -68,6 +68,20 @@ function get_fnappl_ocid() {
         --query 'data[].id' | tr -d '[]" \n'
 }
 
+function get_fn_ocid() {
+    local region="$1"
+    local name="$2"
+    local compartment_ocid="$3"
+    local fnappl_ocid="$4"
+
+    oci --region "$region" fn function list \
+        --application-id "$fnappl_ocid" \
+        --all \
+        --display-name "$name" \
+        --lifecycle-state "ACTIVE" \
+        --query 'data[].id' | tr -d '[]" \n'
+}
+
 function get_os_namespace() {
     oci os ns get | awk '{print $2}' | tr -d '"\n '
 }
@@ -82,4 +96,17 @@ function get_loggroup_ocid() {
         --all \
         --display-name "$name" \
         --query 'data[].id' | tr -d '[]" \n'
+}
+
+function get_topic_ocid() {
+    local region="$1"
+    local name="$2"
+    local compartment_ocid="$3"
+
+    oci --region "$region" ons topic list \
+        --compartment-id "$compartment_ocid" \
+        --all \
+        --lifecycle-state "ACTIVE" \
+        --name "$name" \
+        --query "data[].\"topic-id\"" | tr -d '[]" \n'
 }

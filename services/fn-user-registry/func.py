@@ -17,24 +17,26 @@ def handler(ctx, data: io.BytesIO = None):
 
     Exemplo do payload que deve ser recebido para processamento:
 
-       {"email": "darmbrust@gmail.com", "password": "",
-        "name": "Daniel Armbrust", "telephone": "9999999999"}
+       {"email": "darmbrust@gmail.com", "password": "S3cr3t0",
+        "name": "Daniel Armbrust", "telephone": "(99) 9999-9999"}
 
-    """   
-    try:
-        body = json.loads(data.getvalue())
+    """
+    try:      
+        bin_data = data.getvalue()
+        decoded_data = bin_data.decode('utf-8')
+        body = json.loads(decoded_data.replace("'", '"'))
 
         user_name = body['name']        
         email_address = body['email']        
-        telephone = body['telephone']                
+        user_telephone = body['telephone']                
     except Exception as ex:       
         error = f'Error parsing json payload: {ex}'
         raise Exception(error)
     
-    message = {}
+    resp = {}
 
     user = User()   
-    user_exists = user.exists(email=email_address, telephone=telephone)  
+    user_exists = user.exists(email=email_address, telephone=user_telephone)  
 
     if not user_exists:
         added = user.add(data=body)
@@ -46,28 +48,28 @@ def handler(ctx, data: io.BytesIO = None):
             email.name = user_name      
             email.send()
 
-            message = {'status': 'success', 
-                       'message': 'E-mail sent successfully.',
-                       'data': {
-                           'name': user_name,
-                           'email': email_address
-                        }}
+            resp = {'status': 'success', 
+                    'message': 'E-mail sent successfully.',
+                    'data': {
+                        'name': user_name,
+                        'email': email_address
+                   }}
         else:
-            message = {'status': 'fail', 
-                       'message': 'The email was not sent.',
-                       'data': {
-                           'name': user_name,
-                           'email': email_address
-                        }}
+            resp = {'status': 'fail', 
+                    'message': 'The email was not sent.',
+                    'data': {
+                        'name': user_name,
+                        'email': email_address
+                   }}
     else:
-        message = {'status': 'fail', 
-                   'message': 'User already exists.',
-                   'data': {
-                       'name': user_name,
-                       'email': email_address
-                    }}
+        resp = {'status': 'fail', 
+                'message': 'User already exists.',
+                'data': {
+                    'name': user_name,
+                    'email': email_address
+               }}
         
     return response.Response(
-        ctx, response_data=json.dumps(message),
+        ctx, response_data=json.dumps(resp),
         headers={'Content-Type': 'application/json'}
     )

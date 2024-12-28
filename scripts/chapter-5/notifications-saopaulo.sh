@@ -27,3 +27,28 @@ source functions.sh
 
 # Globals
 region="sa-saopaulo-1"
+compartment_ocid="$COMPARTMENT_OCID"
+
+fn_appl_name="fn-appl-ocipizza"
+fn_user_register_name="fn-user-register"
+topic_user_register_name="ocipizza-topic-user-registration"
+
+# Topic
+oci --region "$region" ons topic create \
+    --compartment-id "$compartment_ocid" \
+    --name "$topic_user_register_name" \
+    --description "Tópico: Processamento do Registro de um Novo Usuário."
+
+topic_ocid="$(get_topic_ocid "$region" "$topic_user_register_name" "$compartment_ocid")"
+fn_appl_ocid="$(get_fnappl_ocid "$region" "$fn_appl_name" "$compartment_ocid")"
+fn_user_register_ocid="$(get_fn_ocid "$region" "$fn_user_register_name" "$compartment_ocid" "$fn_appl_ocid")"
+
+# Subscription 
+oci --region "$region" ons subscription create \
+    --compartment-id "$compartment_ocid" \
+    --topic-id "$topic_ocid" \
+    --protocol "ORACLE_FUNCTIONS" \
+    --subscription-endpoint "$fn_user_register_ocid" \
+    --wait-for-state "ACTIVE"
+
+exit 0

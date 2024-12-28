@@ -56,28 +56,23 @@ class User():
         if data and (data[0]['email'] == email):
             return True
         else:
-            return False    
+            return False
+    
+    def exists(self, email: str, telephone: str):
+        """Verifica se o usuário existe através do email e telefone."""
 
-    def add(self, data: dict):
-        email_exists = self.check_email(data['email'])
+        sql = f'''
+            SELECT email, telephone FROM {self.__settings.nosql_user_table_name} WHERE
+                email = "{email}" AND telephone = "{telephone}" LIMIT 1
+        '''
 
-        if not email_exists:
-            # Name uppercase    
-            data['name'] = data['name'].upper()
+        result = self.__nosql.query(sql)
 
-            # Keep only number in telephone string.
-            telephone_digits = utils.extract_digits(data['telephone'])
-            data['telephone'] = telephone_digits   
-
-            # Hash the Password
-            data['password'] = generate_password_hash(data['password'])
-
-            added = self.__nosql.save(
-                table_name=self.__settings.nosql_user_table_name, 
-                data=data)
-            
-            # TODO: log errors
-            if added:
+        if result:
+            if result[0]['email'] == email and result[0]['telephone'] == telephone:
                 return True
         
         return False
+
+    def add(self, data: dict):
+        pass

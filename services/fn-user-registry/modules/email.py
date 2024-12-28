@@ -16,7 +16,7 @@ from oci.email_data_plane.models import Sender, Recipients, SubmitEmailDetails, 
 from .nosql import NoSQL
 
 # Globals
-NOSQL_EMAIL_VERIFICATION_TABLE_NAME = os.environ.get('NOSQL_EMAIL_VERIFICATION_TABLE_NAME') or 'email_verification'
+NOSQL_EMAIL_VERIFICATION_TABLE = os.environ.get('NOSQL_EMAIL_VERIFICATION_TABLE') or 'email_verification'
 EMAIL_COMPARTMENT_OCID = os.environ.get('EMAIL_COMPARTMENT_OCID')
 TOKEN_LEN = 22
 EXPIRATION_SECS = 600 # 10 minutos
@@ -25,35 +25,35 @@ URL_PREFIX = 'https://www.ocipizza.com.br'
 class Email():
     @property
     def address(self):
-        return self._address
+        return self.__address
     
     @address.setter
     def address(self, value: str):
-        self._address = value
+        self.__address = value
     
     @property
     def name(self):
-        return self._name
+        return self.__name
     
     @name.setter
     def name(self, value: str):
-        self._name = value
+        self.__name = value
 
     def __init__(self):
         signer = oci_signers.get_resource_principals_signer()        
-        self._email_client = EmailDPClient(config={}, signer=signer)
+        self.__email_client = EmailDPClient(config={}, signer=signer)
         
-        self._token = self._get_token()
-        self._expiration_ts = self._get_expiration_ts()
+        self.__token = self._get__token()
+        self.__expiration_ts = self._get__expiration_ts()
     
-    def _get_token(self):
+    def _get__token(self):
         """Retorna um token."""
         chars = string.ascii_letters + string.digits
         token = ''.join(secrets.choice(chars) for _ in range(TOKEN_LEN))
 
         return token
 
-    def _get_expiration_ts(self):
+    def _get__expiration_ts(self):
         """Retorna um timestamp que indica uma data de expiração futura."""
         expiration_ts = int(datetime.now().timestamp())
         expiration_ts += EXPIRATION_SECS
@@ -63,7 +63,7 @@ class Email():
     def _get_html_email(self):
         """Retorna o link que o usuário deve usar para confirmar seu 
         cadastro."""
-        url_params = urllib.parse.quote(f'e={self._address}&t={self._token}')
+        url_params = urllib.parse.quote(f'e={self.__address}&t={self.__token}')
 
         html_email = f'''
             <!DOCTYPE html>
@@ -84,13 +84,13 @@ class Email():
         confirmar seu cadastro por meio de um link."""
         data = {}
 
-        data['email'] = self._address
-        data['token'] = self._token
-        data['expiration_ts'] = self._expiration_ts
+        data['email'] = self.__address
+        data['token'] = self.__token
+        data['expiration_ts'] = self.__expiration_ts
 
         nosql = NoSQL()
 
-        nosql.table = NOSQL_EMAIL_VERIFICATION_TABLE_NAME
+        nosql.table = NOSQL_EMAIL_VERIFICATION_TABLE
         added = nosql.add(data)
         nosql.close()
 
@@ -119,8 +119,8 @@ class Email():
         )
 
         email_to = EmailAddress(
-            email=self._address,
-            name=self._name
+            email=self.__address,
+            name=self.__name
         )
 
         recipients = Recipients(to=[email_to])
@@ -132,7 +132,7 @@ class Email():
             recipients=recipients
         )
 
-        resp = self._email_client.submit_email(
+        resp = self.__email_client.submit_email(
             submit_email_details=email_details
         )
 

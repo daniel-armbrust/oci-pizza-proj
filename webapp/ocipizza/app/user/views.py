@@ -12,6 +12,8 @@ from flask_jwt_extended import create_access_token
 from . import user_blueprint
 from .user import User, MyUserMixin
 from .forms import LoginForm, NewUserForm
+from app.modules.notifications import Notifications
+
 
 @user_blueprint.route('/login/form', methods=['GET', 'POST'])
 def login_view():
@@ -87,12 +89,26 @@ def add_user_view():
             form_dict.pop('csrf_token')
 
             user = User()
-            user_added = user.add(form_dict)
 
-            if user_added:
-                flask_flash(u'Cadastro efetuado com sucesso. É hora de pedir PIZZA!', 'success')        
+            user_exists = user.exists(
+                email=form_dict['email'], telephone=form_dict['telephone']
+            )
 
-                return redirect(url_for('main.home', next=None))                    
+            if user_exists:
+                flask_flash(u'Usuário já existe!', 'error')
+            else:
+                # Notifica a função para completar o cadastro do novo usuário.
+                ons = Notifications()
+                ons.topic_ocid = app.__settings.ons_topic_user_register_ocid
+                message_published = ons.publish_message(data=str(form_dict))
+
+                # TODO: log
+                if message_published:
+                    flask_flash(u'Cadastro efetuado com sucesso! Aguarde o e-mail para confirmar o seu cadastro.', 'success')
+                else:
+                    flask_flash(u'Erro ao cadastrar o usuário. Tente novamente mais tarde.', 'error')
+
+                return redirect(url_for('main.home', next=None))                        
         
         flask_flash(u'Erro ao cadastrar o novo usuário.', 'error')       
             

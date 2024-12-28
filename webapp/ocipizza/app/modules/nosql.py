@@ -1,5 +1,5 @@
 #
-# api/app/modules/nosql.py
+# modules/nosql.py
 #
 
 from oci import config as oci_config

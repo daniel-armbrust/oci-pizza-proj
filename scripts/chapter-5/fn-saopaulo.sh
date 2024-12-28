@@ -33,7 +33,9 @@ email_compartment_ocid="$compartment_ocid"
 nosql_compartment_ocid="$compartment_ocid"
 vcn_name="vcn-saopaulo"
 prvsubnet_name="subnprv"
-fn_app_name="fn-appl-ocipizza"
+
+fn_appl_name="fn-appl-ocipizza"
+fn_user_register_name="fn-user-register"
 nosql_user_table_name="user"
 nosql_email_verification_table_name="email_verification"
 
@@ -43,7 +45,7 @@ subnet_ocid="$(get_subnet_ocid "$region" "$prvsubnet_name" "$compartment_ocid" "
 # Function Application
 oci --region "$region" fn application create \
     --compartment-id "$compartment_ocid" \
-    --display-name "$fn_app_name" \
+    --display-name "$fn_appl_name" \
     --subnet-ids "[\"$subnet_ocid\"]" \
     --config "{
         \"OCI_REGION\": \"$region\",        
@@ -55,7 +57,7 @@ oci --region "$region" fn application create \
     --shape "GENERIC_X86" \
     --wait-for-state "ACTIVE"
 
-fnappl_ocid="$(get_fnappl_ocid "$region" "$fn_app_name" "$compartment_ocid")"
+fnappl_ocid="$(get_fnappl_ocid "$region" "$fn_appl_name" "$compartment_ocid")"
 os_namespace="$(get_os_namespace)"
 loggroup_ocid="$(get_loggroup_ocid "$region" "ocipizza-loggroup-saopaulo" "$compartment_ocid")"
 
@@ -82,7 +84,7 @@ oci --region "$region" logging log create \
 # Function: fn-user-register:0.0.1
 oci --region "$region" fn function create \
     --application-id "$fnappl_ocid" \
-    --display-name "fn-user-register" \
+    --display-name "$fn_user_register_name" \
     --memory-in-mbs 256 \
     --timeout-in-seconds 300 \
     --image "$region_code.ocir.io/$os_namespace/fn-repo/fn-user-register:0.0.1" \

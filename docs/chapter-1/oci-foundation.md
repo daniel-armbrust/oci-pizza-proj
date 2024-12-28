@@ -18,6 +18,7 @@
 - Cloud Shell (acesso sub-rede privada).
 - Serviço de Logging
 - IAM
+- Audit
 
 ## Compartments, Dynamic Group e Policies
 

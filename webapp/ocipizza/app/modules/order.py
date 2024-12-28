@@ -1,5 +1,5 @@
 #
-# api/app/modules/order.py
+# modules/order.py
 #
 
 from settings import Settings
