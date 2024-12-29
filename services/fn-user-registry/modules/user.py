@@ -2,15 +2,12 @@
 # modules/user.py
 #
 
-import os
+import sys
 import re
 
 from werkzeug.security import generate_password_hash
 
 from .nosql import NoSQL
-
-# Globals
-NOSQL_USER_TABLE_NAME = os.environ.get('NOSQL_USER_TABLE_NAME') or 'user'
 
 class User():       
     def __init__(self):
@@ -20,7 +17,7 @@ class User():
         """Retorna um ID disponível."""
 
         sql = f'''
-            SELECT max(id) FROM {NOSQL_USER_TABLE_NAME}
+            SELECT max(id) FROM user
         '''
 
         result = self.__nosql.query(sql)
@@ -50,23 +47,27 @@ class User():
     def exists(self, email: str, telephone: str):
         """Verifica se o usuário existe através do email e telefone."""
 
+        telephone_num = self.__extract_digits(telephone)
+
         sql = f'''
-            SELECT email, telephone FROM {NOSQL_USER_TABLE_NAME} WHERE
-                email = "{email}" AND telephone = "{telephone}" LIMIT 1
+            SELECT email, telephone 
+                FROM user 
+            WHERE
+                email = "{email}" OR telephone = "{telephone_num}" LIMIT 1
         '''
 
-        result = self.__nosql.query(sql)
+        result = self.__nosql.query(sql)        
 
         if result:
-            if result[0]['email'] == email and result[0]['telephone'] == telephone:
+            if result[0]['email'] == email or result[0]['telephone'] == telephone_num:               
                 return True
-        
+                    
         return False
     
     def add(self, data: dict):
         """Insere um novo usuário."""        
 
-        # Retorna um número ID livre.
+        # Retorna um número ID não utilizado.
         user_id = self.__get_id()        
         data['id'] = user_id    
 
@@ -79,7 +80,7 @@ class User():
         # Hashed password.
         data['password'] = generate_password_hash(data['password'])   
 
-        self.__nosql.table = NOSQL_USER_TABLE_NAME
+        self.__nosql.table = 'user'
         was_added = self.__nosql.add(data)
 
         if was_added:

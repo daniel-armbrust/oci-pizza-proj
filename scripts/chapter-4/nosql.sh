@@ -123,25 +123,25 @@ oci --region "$main_region" nosql table create-replica \
 oci --region "$main_region" nosql table create \
     --compartment-id "$compartment_ocid" \
     --name "email_verification" \
-    --table-limits "{\"capacityMode\": \"PROVISIONED\", \"maxReadUnits\": 2, \"maxWriteUnits\": 2, \"maxStorageInGBs\": 2}" \
+    --table-limits "{\"capacityMode\": \"PROVISIONED\", \"maxReadUnits\": 5, \"maxWriteUnits\": 5, \"maxStorageInGBs\": 2}" \
     --wait-for-state "SUCCEEDED" \
     --ddl-statement "
          CREATE TABLE IF NOT EXISTS email_verification ( 
             email STRING,
             token STRING,                         
             expiration_ts TIMESTAMP(0),
-         PRIMARY KEY (email)) USING TTL 1 HOURS"
+         PRIMARY KEY (email)) USING TTL 1 DAYS"
 
 oci --region "$backup_region" nosql table create \
     --compartment-id "$compartment_ocid" \
     --name "email_verification" \
-    --table-limits "{\"capacityMode\": \"PROVISIONED\", \"maxReadUnits\": 2, \"maxWriteUnits\": 2, \"maxStorageInGBs\": 2}" \
+    --table-limits "{\"capacityMode\": \"PROVISIONED\", \"maxReadUnits\": 5, \"maxWriteUnits\": 5, \"maxStorageInGBs\": 2}" \
     --wait-for-state "SUCCEEDED" \
     --ddl-statement "
          CREATE TABLE IF NOT EXISTS email_verification ( 
             email STRING,
             token STRING,                         
             expiration_ts TIMESTAMP(0),
-         PRIMARY KEY (email)) USING TTL 1 HOURS"
+         PRIMARY KEY (email)) USING TTL 1 DAYS"
          
 exit 0

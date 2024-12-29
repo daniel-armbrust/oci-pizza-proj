@@ -2,6 +2,8 @@
 # modules/nosql.py
 #
 
+import sys
+
 from oci import config as oci_config
 from oci.auth import signers as oci_signers
 from oci import nosql as oci_nosql
@@ -32,7 +34,8 @@ class NoSQL():
         # TODO: check READ exception
         try:
             resp = self._nosql.query(query_details=query_details)
-        except (oci_exceptions.ServiceError, oci_exceptions.ConnectTimeout,):
+        except (oci_exceptions.ServiceError, oci_exceptions.ConnectTimeout,) as e:
+            sys.stderr.write(f'{e}')
             return None
 
         return resp.data.items
@@ -50,7 +53,8 @@ class NoSQL():
         try:
             resp = self._nosql.update_row(table_name_or_id=table_name,
                                           update_row_details=update_row_details)
-        except (oci_exceptions.ServiceError, oci_exceptions.ConnectTimeout,):            
+        except (oci_exceptions.ServiceError, oci_exceptions.ConnectTimeout,) as e:            
+            sys.stderr.write(f'{e}')
             return False        
         
         # TODO: register log in case of failure.

@@ -27,11 +27,7 @@ class Settings():
             self.html_minify = True        
             
         self.oci_config_file = os.environ.get('OCI_CONFIG_FILE') or '~/.oci/config'
-        self.nosql_pizza_table_name = os.environ.get('NOSQL_PIZZA_TABLE_NAME') or 'pizza'
-        self.nosql_user_table_name = os.environ.get('NOSQL_USER_TABLE_NAME') or 'user'
-        self.nosql_order_table_name = os.environ.get('NOSQL_ORDER_TABLE_NAME') or 'user.order'
         self.nosql_compartment_ocid = os.environ.get('NOSQL_COMPARTMENT_OCID')   
-
         self.ons_topic_user_register_ocid = os.environ.get('ONS_TOPIC_USER_REGISTER_OCID')
 
         self.user_min_password_length = 8    

@@ -12,14 +12,13 @@ from flask_jwt_extended import create_access_token
 from . import user_blueprint
 from .user import User, MyUserMixin
 from .forms import LoginForm, NewUserForm
+
 from app.modules.notifications import Notifications
+from app.modules.utils import check_email
 
 
 @user_blueprint.route('/login/form', methods=['GET', 'POST'])
-def login_view():
-    """Login Form.
-
-    """
+def login_view():   
     next_url = request.args.get('next', None)
 
     form = LoginForm()
@@ -61,7 +60,7 @@ def login_view():
                 return resp
             
             else:
-                flask_flash(u'Invalid username or password!', 'error')        
+                flask_flash(u'Nome de usuário ou senha inválidos!', 'error')        
  
     return render_template('user_login_form.html', form=form, next_url=next_url,
                            web_config=app.__settings.web_config,
@@ -78,7 +77,7 @@ def logout_view():
 
 @user_blueprint.route('/new/form', methods=['GET', 'POST'])
 def add_user_view():
-    """New user form.
+    """Formulário para cadastro de usuário.
 
     """
     form = NewUserForm()   
@@ -91,17 +90,20 @@ def add_user_view():
             user = User()
 
             user_exists = user.exists(
-                email=form_dict['email'], telephone=form_dict['telephone']
+                email=form_dict['email'], 
+                telephone=form_dict['telephone']
             )
 
             if user_exists:
-                flask_flash(u'Usuário já existe!', 'error')
+                flask_flash(u'E-mail ou telefone já existem.', 'error')  
+
+                return redirect(url_for('user.add_user_view', next=None))               
             else:
                 # Notifica a função para completar o cadastro do novo usuário.
                 ons = Notifications()
                 ons.topic_ocid = app.__settings.ons_topic_user_register_ocid
                 message_published = ons.publish_message(data=str(form_dict))
-
+                
                 # TODO: log
                 if message_published:
                     flask_flash(u'Cadastro efetuado com sucesso! Aguarde o e-mail para confirmar o seu cadastro.', 'success')
@@ -115,6 +117,30 @@ def add_user_view():
     return render_template('user_add_form.html', form=form,
                            web_config=app.__settings.web_config,
                            api_config=app.__settings.api_config)
+
+
+@user_blueprint.route('/new/confirm', methods=['GET'])
+def user_confirm_view():
+    """Página para o usuário confirmar o seu cadastro.
+
+    """
+    email = request.args.get('e', type=str)
+    token = request.args.get('t', type=str)
+    
+    is_email_valid = check_email(email)
+
+    if is_email_valid and token:
+        user = User()
+        activated = user.activate(email=email, token=token)
+
+        if activated:
+            flask_flash(u'Conta ativada com sucesso.', 'success')            
+
+            return redirect(url_for('user.login_view', next=None))  
+
+    flask_flash(u'Link expirado ou dados inválidos.', 'error')
+
+    return redirect(url_for('main.home', next=None))    
 
 
 @user_blueprint.route('/password/recovery', methods=['GET'])

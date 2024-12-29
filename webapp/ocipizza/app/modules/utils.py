@@ -57,17 +57,22 @@ def check_telephone(telephone: str):
         return True
     else:
         return False
-    
+
+
+def check_email(email: str):
+    if email:
+        pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
+        return re.match(pattern, email) is not None
+    else:
+        return False
+
 
 def check_new_user_data(data: dict):
     """Validate user data for registration.
 
     Parameters:
     data (dict): Dictionary that contains data to register a new user.
-                 data = {'email': '', 
-                         'name': '', 
-                         'password': '', 
-                         'telephone_whatsapp': ''}   
+                 data = {'email': '', 'name': '', 'password': '', 'telephone': ''}   
     """
     try:
         email = data['email']
@@ -96,7 +101,3 @@ def check_new_user_data(data: dict):
         return False, {'name': 'The user name is not valid.'}
     
     return True, {}
-
-
-    
-    

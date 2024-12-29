@@ -62,7 +62,7 @@ class Order():
     def list(self, user_id: int):
         sql = f'''
             SELECT order_id, address, pizza, total, order_datetime, status
-                FROM {self.__settings.nosql_order_table_name} 
+                FROM user.order
             WHERE id = {user_id}
         '''
 

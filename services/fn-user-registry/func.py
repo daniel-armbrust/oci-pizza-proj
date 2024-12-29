@@ -4,6 +4,7 @@
 
 import io
 import json
+import sys
 
 from fdk import response
 
@@ -34,7 +35,7 @@ def handler(ctx, data: io.BytesIO = None):
         raise Exception(error)
     
     resp = {}
-
+        
     user = User()   
     user_exists = user.exists(email=email_address, telephone=user_telephone)  
 

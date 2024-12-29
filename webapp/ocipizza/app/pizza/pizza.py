@@ -14,7 +14,7 @@ class Pizza():
     def list(self):
         sql = f'''
             SELECT id, name, description, price, image
-                FROM {self.__settings.nosql_pizza_table_name}
+                FROM pizza
         '''
 
         data = self.__nosql.query(sql)
@@ -24,7 +24,7 @@ class Pizza():
     def get(self, id: int):
         sql = f'''
             SELECT id, name, description, price, image
-                FROM {self.__settings.nosql_pizza_table_name}
+                FROM pizza
             WHERE id = {id}
         '''
         

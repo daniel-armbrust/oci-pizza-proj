@@ -4,8 +4,8 @@
 
 from oci import config as oci_config
 from oci.auth import signers as oci_signers
-from oci import ons 
 from oci import exceptions as oci_exceptions
+from oci import ons
 
 from app.settings import Settings
 

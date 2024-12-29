@@ -28,9 +28,11 @@ source functions.sh
 # Globals
 region="sa-saopaulo-1"
 region_code="gru"
+env="$ENV"
 compartment_ocid="$COMPARTMENT_OCID"
 email_compartment_ocid="$compartment_ocid"
 nosql_compartment_ocid="$compartment_ocid"
+
 vcn_name="vcn-saopaulo"
 prvsubnet_name="subnprv"
 
@@ -48,7 +50,8 @@ oci --region "$region" fn application create \
     --display-name "$fn_appl_name" \
     --subnet-ids "[\"$subnet_ocid\"]" \
     --config "{
-        \"OCI_REGION\": \"$region\",        
+        \"OCI_REGION\": \"$region\",
+        \"ENV\": \"$ENV\",    
         \"NOSQL_COMPARTMENT_OCID\": \"$nosql_compartment_ocid\",
         \"EMAIL_COMPARTMENT_OCID\": \"$email_compartment_ocid\",
         \"NOSQL_EMAIL_VERIFICATION_TABLE_NAME\": \"$nosql_email_verification_table_name\",
@@ -85,7 +88,7 @@ oci --region "$region" logging log create \
 oci --region "$region" fn function create \
     --application-id "$fnappl_ocid" \
     --display-name "$fn_user_register_name" \
-    --memory-in-mbs 256 \
+    --memory-in-mbs 128 \
     --timeout-in-seconds 300 \
     --image "$region_code.ocir.io/$os_namespace/fn-repo/fn-user-register:0.0.1" \
     --wait-for-state "ACTIVE"

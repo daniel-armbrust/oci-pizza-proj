@@ -16,11 +16,10 @@ from oci.email_data_plane.models import Sender, Recipients, SubmitEmailDetails, 
 from .nosql import NoSQL
 
 # Globals
-NOSQL_EMAIL_VERIFICATION_TABLE = os.environ.get('NOSQL_EMAIL_VERIFICATION_TABLE') or 'email_verification'
 EMAIL_COMPARTMENT_OCID = os.environ.get('EMAIL_COMPARTMENT_OCID')
 TOKEN_LEN = 22
 EXPIRATION_SECS = 600 # 10 minutos
-URL_PREFIX = 'https://www.ocipizza.com.br'
+ENV = os.environ.get('ENV')
 
 class Email():
     @property
@@ -63,16 +62,23 @@ class Email():
     def _get_html_email(self):
         """Retorna o link que o usuário deve usar para confirmar seu 
         cadastro."""
-        url_params = urllib.parse.quote(f'e={self.__address}&t={self.__token}')
+
+        email_encoded = urllib.parse.quote(f'{self.__address}')
+        token_encoded = urllib.parse.quote(f'{self.__token}')
+
+        if ENV == 'dev':
+            url_prefix = 'http://127.0.0.1:5000'
+        else:
+            url_prefix = 'https://www.ocipizza.com.br'
+
+        url = f'{url_prefix}/user/new/confirm?e={email_encoded}&t={token_encoded}'
 
         html_email = f'''
             <!DOCTYPE html>
             <html lang="pt-BR">
             <head></head>
             <body>
-               <a href="{URL_PREFIX}/user/confirm?{url_params}">
-                   Confirme o seu e-mail.
-               </a>
+               <h1><a href="{url}">Confirme o seu e-mail.</a></h1>
             </body>
             </html>
         '''
@@ -90,7 +96,7 @@ class Email():
 
         nosql = NoSQL()
 
-        nosql.table = NOSQL_EMAIL_VERIFICATION_TABLE
+        nosql.table = 'email_verification'
         added = nosql.add(data)
         nosql.close()
 
