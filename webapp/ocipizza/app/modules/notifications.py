@@ -1,6 +1,7 @@
 #
 # modules/notifications.py
 #
+import sys
 
 from oci import config as oci_config
 from oci.auth import signers as oci_signers
@@ -21,7 +22,7 @@ class Notifications():
     def __init__(self):
         self.__settings = Settings()
 
-        if self.__settings.env == 'dev':
+        if self.__settings.env == 'dev':            
             config = oci_config.from_file(file_location=self.__settings.oci_config_file)   
             oci_config.validate_config(config)
             
@@ -38,7 +39,8 @@ class Notifications():
                 topic_id=self.__topic_ocid,
                 message_details=message_details
             )
-        except (oci_exceptions.ServiceError, oci_exceptions.ConnectTimeout,):            
+        except (oci_exceptions.ServiceError, oci_exceptions.ConnectTimeout,) as e:
+            sys.stderr.write(f'{e}')
             return False
 
         if resp.status == 202:

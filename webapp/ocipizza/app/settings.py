@@ -29,6 +29,7 @@ class Settings():
         self.oci_config_file = os.environ.get('OCI_CONFIG_FILE') or '~/.oci/config'
         self.nosql_compartment_ocid = os.environ.get('NOSQL_COMPARTMENT_OCID')   
         self.ons_topic_user_register_ocid = os.environ.get('ONS_TOPIC_USER_REGISTER_OCID')
+        self.ons_topic_password_recovery_ocid = os.environ.get('ONS_TOPIC_PASSWORD_RECOVERY_OCID')
 
         self.user_min_password_length = 8    
         self.user_max_password_length = 16

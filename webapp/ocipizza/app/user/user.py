@@ -1,6 +1,7 @@
 #
-# app/user/ocipizza_user.py
+# app/user/user.py
 #
+
 from flask_login import UserMixin, login_manager
 from werkzeug.security import check_password_hash
 
@@ -53,7 +54,7 @@ class User():
             SELECT email 
                 FROM user
             WHERE
-                email = "{email}" LIMIT 1
+                email = "{email}"
         '''
         data = self.__nosql.query(sql)
 
@@ -89,12 +90,14 @@ class User():
         sql_select = f'''
             SELECT email, token, expiration_ts 
                 FROM email_verification
-            WHERE email = "{email}" AND token = "{token}" LIMIT 1
+            WHERE (email = "{email}" AND token = "{token}") 
+                AND password_recovery = False
         '''
         result = self.__nosql.query(sql_select)
 
         if result:            
             if result[0]['email'] == email and result[0]['token'] == token:
+                # TODO: verificar "expiration_ts"
                 user_id = self.get_id(email=email)
 
                 sql_update = f'''
@@ -114,9 +117,4 @@ class User():
 
                     return True
                 
-        return False
-
-
-
-                
-        
+        return False    

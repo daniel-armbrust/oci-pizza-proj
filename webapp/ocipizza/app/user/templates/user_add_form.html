@@ -15,7 +15,7 @@
                     <div class="card-body rounded" style="border-top: 5px solid gray;">
                         <h5 class="card-title fw-bold fs-4 pb-3">Novo Usuário</h5>
                         <form class="row g-3 needs-validation" id="id_form"
-                              method="post" action="{{ url_for('user.add_user_view') }}" novalidate>
+                              method="post" action="{{ url_for('user.add_user_form_view') }}" novalidate>
                             {{ form.hidden_tag() }}                         
                             <div class="mb-3">   
                                 <div class="input-group has-validation">

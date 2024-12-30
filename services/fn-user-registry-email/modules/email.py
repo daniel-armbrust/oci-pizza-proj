@@ -1,5 +1,5 @@
 #
-# modules/email.py
+# fn-user-registry/modules/email.py
 #
 
 import os
@@ -42,26 +42,26 @@ class Email():
         signer = oci_signers.get_resource_principals_signer()        
         self.__email_client = EmailDPClient(config={}, signer=signer)
         
-        self.__token = self._get__token()
-        self.__expiration_ts = self._get__expiration_ts()
+        self.__token = self.__get_token()
+        self.__expiration_ts = self.__get_expiration_ts()
     
-    def _get__token(self):
+    def __get_token(self):
         """Retorna um token."""
         chars = string.ascii_letters + string.digits
         token = ''.join(secrets.choice(chars) for _ in range(TOKEN_LEN))
 
         return token
 
-    def _get__expiration_ts(self):
-        """Retorna um timestamp que indica uma data de expiração futura."""
+    def __get_expiration_ts(self):
+        """Retorna um timestamp que representa uma data de expiração futura."""
         expiration_ts = int(datetime.now().timestamp())
         expiration_ts += EXPIRATION_SECS
 
         return expiration_ts
     
-    def _get_html_email(self):
-        """Retorna o link que o usuário deve usar para confirmar seu 
-        cadastro."""
+    def __get_html_email(self):
+        """Retorna o HTML que inclui o link que o usuário deve utilizar 
+        para ativar a sua conta."""
 
         email_encoded = urllib.parse.quote(f'{self.__address}')
         token_encoded = urllib.parse.quote(f'{self.__token}')
@@ -85,7 +85,7 @@ class Email():
 
         return html_email
 
-    def _add_email_verification_data(self):
+    def __add_email_verification_data(self):
         """Armazena os dados no banco NoSQL que o usuário utilizará para 
         confirmar seu cadastro por meio de um link."""
         data = {}
@@ -107,12 +107,12 @@ class Email():
         
     def send(self):
         """Envia o e-mail para o usuário."""               
-        added = self._add_email_verification_data()
+        added = self.__add_email_verification_data()
 
         if not added:
             return False
         
-        html_email = self._get_html_email()
+        html_email = self.__get_html_email()
 
         email_from = EmailAddress(
             email='no-reply@ocipizza.com.br', 

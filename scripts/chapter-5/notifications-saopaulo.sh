@@ -30,25 +30,47 @@ region="sa-saopaulo-1"
 compartment_ocid="$COMPARTMENT_OCID"
 
 fn_appl_name="fn-appl-ocipizza"
+
 fn_user_register_name="fn-user-register"
 topic_user_register_name="ocipizza-topic-user-registration"
 
-# Topic
-oci --region "$region" ons topic create \
-    --compartment-id "$compartment_ocid" \
-    --name "$topic_user_register_name" \
-    --description "Tópico: Processamento do Registro de um Novo Usuário."
+fn_passwd_recovery_name="fn-passwd-recovery"
+topic_password_recovery_name="ocipizza-topic-password-recovery"
 
-topic_ocid="$(get_topic_ocid "$region" "$topic_user_register_name" "$compartment_ocid")"
 fn_appl_ocid="$(get_fnappl_ocid "$region" "$fn_appl_name" "$compartment_ocid")"
+
+# Topic - Registro de novo usuário.
+#oci --region "$region" ons topic create \
+#    --compartment-id "$compartment_ocid" \
+#    --name "$topic_user_register_name" \
+#    --description "Tópico: Processamento para Registro de um Novo Usuário."
+
+topic_user_register_ocid="$(get_topic_ocid "$region" "$topic_user_register_name" "$compartment_ocid")"
 fn_user_register_ocid="$(get_fn_ocid "$region" "$fn_user_register_name" "$compartment_ocid" "$fn_appl_ocid")"
 
-# Subscription 
+# Subscription - Topic - Registro de novo usuário.
 oci --region "$region" ons subscription create \
     --compartment-id "$compartment_ocid" \
-    --topic-id "$topic_ocid" \
+    --topic-id "$topic_user_register_ocid" \
     --protocol "ORACLE_FUNCTIONS" \
     --subscription-endpoint "$fn_user_register_ocid" \
+    --wait-for-state "ACTIVE"
+
+# Topic - Redefinição de senha.
+#oci --region "$region" ons topic create \
+#    --compartment-id "$compartment_ocid" \
+#    --name "$topic_password_recovery_name" \
+#    --description "Tópico: Processamento para Recuperação de Senha."
+
+topic_password_recovery_ocid="$(get_topic_ocid "$region" "$topic_password_recovery_name" "$compartment_ocid")"
+fn_password_recovery_ocid="$(get_fn_ocid "$region" "$fn_passwd_recovery_name" "$compartment_ocid" "$fn_appl_ocid")"
+
+# Subscription - Topic - Redefinição de senha.
+oci --region "$region" ons subscription create \
+    --compartment-id "$compartment_ocid" \
+    --topic-id "$topic_password_recovery_ocid" \
+    --protocol "ORACLE_FUNCTIONS" \
+    --subscription-endpoint "$fn_password_recovery_ocid" \
     --wait-for-state "ACTIVE"
 
 exit 0

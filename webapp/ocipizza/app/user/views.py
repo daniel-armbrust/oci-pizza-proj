@@ -11,14 +11,16 @@ from flask_jwt_extended import create_access_token
 
 from . import user_blueprint
 from .user import User, MyUserMixin
-from .forms import LoginForm, NewUserForm
+from .password import Password
+from .forms import LoginForm, NewUserForm, PasswordRecoveryForm, \
+    NewPasswordForm
 
 from app.modules.notifications import Notifications
-from app.modules.utils import check_email
+from app.modules import utils
 
 
 @user_blueprint.route('/login/form', methods=['GET', 'POST'])
-def login_view():   
+def login_form_view():   
     next_url = request.args.get('next', None)
 
     form = LoginForm()
@@ -60,7 +62,7 @@ def login_view():
                 return resp
             
             else:
-                flask_flash(u'Nome de usuário ou senha inválidos!', 'error')        
+                flask_flash(u'E-mail ou senha inválidos!', 'error')        
  
     return render_template('user_login_form.html', form=form, next_url=next_url,
                            web_config=app.__settings.web_config,
@@ -76,7 +78,7 @@ def logout_view():
 
 
 @user_blueprint.route('/new/form', methods=['GET', 'POST'])
-def add_user_view():
+def add_user_form_view():
     """Formulário para cadastro de usuário.
 
     """
@@ -97,9 +99,11 @@ def add_user_view():
             if user_exists:
                 flask_flash(u'E-mail ou telefone já existem.', 'error')  
 
-                return redirect(url_for('user.add_user_view', next=None))               
+                return redirect(url_for('user.add_user_form_view', next=None))               
             else:
-                # Notifica a função para completar o cadastro do novo usuário.
+                # Utiliza o serviço OCI NOTIFICATIONS para acionar uma função 
+                # que enviará um e-mail ao usuário, solicitando a conclusão 
+                # do seu cadastro.                
                 ons = Notifications()
                 ons.topic_ocid = app.__settings.ons_topic_user_register_ocid
                 message_published = ons.publish_message(data=str(form_dict))
@@ -127,7 +131,7 @@ def user_confirm_view():
     email = request.args.get('e', type=str)
     token = request.args.get('t', type=str)
     
-    is_email_valid = check_email(email)
+    is_email_valid = utils.check_email(email)
 
     if is_email_valid and token:
         user = User()
@@ -136,19 +140,95 @@ def user_confirm_view():
         if activated:
             flask_flash(u'Conta ativada com sucesso.', 'success')            
 
-            return redirect(url_for('user.login_view', next=None))  
+            return redirect(url_for('user.login_form_view', next=None))  
 
     flask_flash(u'Link expirado ou dados inválidos.', 'error')
 
     return redirect(url_for('main.home', next=None))    
 
 
-@user_blueprint.route('/password/recovery', methods=['GET'])
-def password_recovery_view():
+@user_blueprint.route('/password/recovery/form', methods=['GET', 'POST'])
+def password_recovery_form_view():
     """Página para recuperar a senha do usuário.
 
     """
-    return render_template('user_passwdrecovery_form.html', 
+    form = PasswordRecoveryForm()
+
+    if request.method == 'POST':        
+        if form.validate_on_submit():
+            form_dict = request.form.to_dict()
+            form_dict.pop('csrf_token')
+            
+            user = User()
+            is_email_valid = user.check_email(email=form_dict['email'])
+
+            if is_email_valid:                                
+                ons = Notifications()
+                ons.topic_ocid = app.__settings.ons_topic_password_recovery_ocid
+                message_published = ons.publish_message(data=str(form_dict))
+                
+                # TODO: log
+                if message_published:
+                    flask_flash(u'Foi enviado um e-mail para a recuperação da sua senha.', 'success')
+                else:
+                    flask_flash(u'Erro ao processar a solicitação. Tente novamente mais tarde.', 'error')    
+
+                return redirect(url_for('main.home', next=None))
+            else:
+                flask_flash(u'Usuário não encontrado.', 'error')
+
+                return redirect(url_for('user.password_recovery_form_view', next=None))
+
+    return render_template('user_passwdrecovery_form.html', form=form,
+                           web_config=app.__settings.web_config,
+                           api_config=app.__settings.api_config)
+
+
+@user_blueprint.route('/new/password/form', methods=['GET', 'POST'])
+def new_password_form_view():
+    """Página para definir uma nova senha.
+
+    """
+    email = request.args.get('e', type=str)
+    token = request.args.get('t', type=str)
+
+    form = NewPasswordForm()
+
+    if request.method == 'GET':
+        if not email or not token:
+            return redirect(url_for('main.home', next=None))
+
+    if request.method == 'POST':        
+        if form.validate_on_submit():
+            form_dict = request.form.to_dict()          
+
+            user = User()
+            is_email_valid = user.check_email(email=form_dict['email'])
+
+            if is_email_valid:
+                user_id = user.get_id(email=form_dict['email'])
+
+                password = Password()
+                password.user_id = user_id
+                password.email = form_dict['email']
+                password.token = form_dict['token']
+                password.password = form_dict['password']
+                password_set = password.set()
+
+                if password_set is True:
+                    flask_flash(u'Nova senha definida com sucesso.', 'success')            
+
+                    return redirect(url_for('user.login_form_view', next=None))  
+                else:
+                    flask_flash(u'Erro ao processar a solicitação. Tente novamente mais tarde.', 'error')    
+
+            else:                
+                flask_flash(u'Usuário não encontrado.', 'error')
+
+            return redirect(url_for('main.home', next=None))
+    
+    return render_template('user_new_password_form.html', form=form,
+                           email=email, token=token,
                            web_config=app.__settings.web_config,
                            api_config=app.__settings.api_config)
 

@@ -1,10 +1,9 @@
 #
-# user-register-fn/func.py
+# fn-user-registry/func.py
 #
 
 import io
 import json
-import sys
 
 from fdk import response
 

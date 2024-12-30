@@ -1,8 +1,7 @@
 #
-# modules/user.py
+# fn-user-registry/modules/user.py
 #
 
-import sys
 import re
 
 from werkzeug.security import generate_password_hash

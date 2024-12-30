@@ -99,7 +99,7 @@ oci --region "$main_region" nosql table create \
             address JSON,
             pizza JSON,  
             total NUMBER,
-            order_datetime TIMESTAMP(0),
+            order_datetime INTEGER,
             status ENUM(PREPARING,OUT_FOR_DELIVERY,DELIVERED,CANCELED) DEFAULT PREPARING,             
          PRIMARY KEY (order_id))"
 
@@ -128,8 +128,9 @@ oci --region "$main_region" nosql table create \
     --ddl-statement "
          CREATE TABLE IF NOT EXISTS email_verification ( 
             email STRING,
-            token STRING,                         
-            expiration_ts TIMESTAMP(0),
+            token STRING,   
+            password_recovery BOOLEAN DEFAULT FALSE,                      
+            expiration_ts INTEGER,
          PRIMARY KEY (email)) USING TTL 1 DAYS"
 
 oci --region "$backup_region" nosql table create \
@@ -141,7 +142,7 @@ oci --region "$backup_region" nosql table create \
          CREATE TABLE IF NOT EXISTS email_verification ( 
             email STRING,
             token STRING,                         
-            expiration_ts TIMESTAMP(0),
+            expiration_ts INTEGER,
          PRIMARY KEY (email)) USING TTL 1 DAYS"
          
 exit 0
