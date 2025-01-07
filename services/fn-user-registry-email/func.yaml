@@ -5,4 +5,5 @@ runtime: python3.8
 build_image: fnproject/python:3.8-dev
 run_image: fnproject/python:3.8
 entrypoint: /python/bin/fdk /function/func.py handler
-memory: 128
+memory: 256
+timeout: 120

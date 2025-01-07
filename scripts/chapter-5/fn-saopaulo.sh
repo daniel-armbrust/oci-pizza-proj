@@ -41,9 +41,6 @@ fn_appl_name="fn-appl-ocipizza"
 fn_user_register_name="fn-user-register"
 fn_passwd_recovery_name="fn-password-recovery"
 
-nosql_user_table_name="user"
-nosql_email_verification_table_name="email_verification"
-
 vcn_ocid="$(get_vcn_ocid "$region" "$vcn_name" "$compartment_ocid")"
 subnet_ocid="$(get_subnet_ocid "$region" "$prvsubnet_name" "$compartment_ocid" "$vcn_ocid")"
 
@@ -56,9 +53,7 @@ oci --region "$region" fn application create \
         \"OCI_REGION\": \"$region\",
         \"ENV\": \"$ENV\",    
         \"NOSQL_COMPARTMENT_OCID\": \"$nosql_compartment_ocid\",
-        \"EMAIL_COMPARTMENT_OCID\": \"$email_compartment_ocid\",
-        \"NOSQL_EMAIL_VERIFICATION_TABLE_NAME\": \"$nosql_email_verification_table_name\",
-        \"NOSQL_USER_TABLE_NAME\": \"$nosql_user_table_name\"
+        \"EMAIL_COMPARTMENT_OCID\": \"$email_compartment_ocid\"        
     }" \
     --shape "GENERIC_X86" \
     --wait-for-state "ACTIVE"
@@ -91,8 +86,8 @@ oci --region "$region" logging log create \
 oci --region "$region" fn function create \
     --application-id "$fnappl_ocid" \
     --display-name "$fn_user_register_name" \
-    --memory-in-mbs 128 \
-    --timeout-in-seconds 300 \
+    --memory-in-mbs 256 \
+    --timeout-in-seconds 120 \
     --image "$region_code.ocir.io/$os_namespace/fn-repo/$fn_user_register_name:0.0.1" \
     --wait-for-state "ACTIVE"
 
@@ -100,8 +95,8 @@ oci --region "$region" fn function create \
 oci --region "$region" fn function create \
     --application-id "$fnappl_ocid" \
     --display-name "$fn_passwd_recovery_name" \
-    --memory-in-mbs 128 \
-    --timeout-in-seconds 300 \
+    --memory-in-mbs 256 \
+    --timeout-in-seconds 120 \
     --image "$region_code.ocir.io/$os_namespace/fn-repo/$fn_passwd_recovery_name:0.0.1" \
     --wait-for-state "ACTIVE"
 

@@ -36,7 +36,11 @@ def handler(ctx, data: io.BytesIO = None):
     resp = {}
         
     user = User()   
-    user_exists = user.exists(email=email_address, telephone=user_telephone)  
+    
+    user_exists = user.exists(
+        email=email_address, 
+        telephone=user_telephone
+    )  
 
     if not user_exists:
         added = user.add(data=body)

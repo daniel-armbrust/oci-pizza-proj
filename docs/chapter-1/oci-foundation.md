@@ -6,6 +6,9 @@
 - Nuvem vs. OnPremises
 - Conceitos de serviços regionais, de AD.
 - IaaS, PaaS, SaaS
+- Escalabilidade horizontal, vertical.
+- Resiliency and availability refers to the ability of a system to continue operating, despite the failure or sub-optimal performance of some of its components.
+- Concurrency refers to the ability of a system to run multiple operations in parallel using shared resources. Scalability refers to the ability of the system to scale capacity (both up and down) to meet demand.
 - Tenancy
 - 169.254.169.254
 
@@ -18,7 +21,11 @@
 - Cloud Shell (acesso sub-rede privada).
 - Serviço de Logging
 - IAM
+- Quotas
 - Audit
+
+suporte... 
+devido ao modelo computacional da cloud, quando vc suspeita de que ha um problema, a sua funcao é coletar o maior numero de evidências possíveis como.tambem, explicar de forma clara qual é o problema que esta sendo enfrentado.
 
 ## Compartments, Dynamic Group e Policies
 
