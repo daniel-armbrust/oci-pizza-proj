@@ -2,11 +2,11 @@
 
 [Oracle Functions](https://docs.oracle.com/en-us/iaas/Content/Functions/Concepts/functionsoverview.htm), ou simplesmente [Functions](https://docs.oracle.com/en-us/iaas/Content/Functions/Concepts/functionsoverview.htm), é uma plataforma _serverless_ que possibilita a criação e execução de códigos na infraestrutura do OCI, sem a necessidade de provisionar, configurar ou gerenciar servidores.
 
-_Serverless_ é usado para descrever uma plataforma capaz de executar código e que abstrai a gestão de servidores. Embora o nome possa sugerir a ausência de servidores, na verdade, eles estão presentes, mas a sua administração é completamente gerenciada pelo provedor de nuvem. Isso permite que os desenvolvedores se concentrem na lógica de suas aplicações, sem se preocupar com a infraestrutura subjacente.
+_Serverless_ é um termo que se refere a um modelo de computação em nuvem onde o gerenciamento da infraestrutura do servidor é abstraído do desenvolvedor. Embora o nome possa sugerir a ausência de servidores, na verdade, eles estão presentes, mas a sua administração é completamente gerenciada pelo provedor de nuvem. Isso permite que os desenvolvedores se concentrem na lógica de suas aplicações, sem se preocupar com a infraestrutura subjacente.
 
 Em vez de precisar criar e configurar servidores, você simplesmente faz o deployment do seu código e o OCI se encarrega de provisionar a infraestrutura necessária para executar a sua aplicação. Isso inclui também a escalabilidade automática dos recursos utilizados, garantindo que sua aplicação possa se adaptar às variações de demanda sem a necessidade de intervenção manual.
 
-OCI Functions é baseado no projeto de código aberto [Fn Project](https://fnproject.io/), que oferece uma plataforma de _Função como Serviço (FaaS - Function as a Service)_ para o desenvolvimento e execução de aplicações serverless. A escolha em usar um projeto de código aberto é evitar o _vendor lock-in_, comum em outras plataformas serverless. Aplicações desenvolvidas usando o Fn Project não estão sujeitas a esse lock-in, permitindo que sejam executadas localmente ou em qualquer outro provedor de nuvem.
+O serviço OCI Functions é baseado no projeto de código aberto [Fn Project](https://fnproject.io/), que oferece uma plataforma de _Função como Serviço (FaaS - Function as a Service)_ para o desenvolvimento e execução de aplicações serverless. A escolha em usar um projeto de código aberto é evitar o _vendor lock-in_, comum em outras plataformas serverless. Aplicações desenvolvidas usando o Fn Project não estão sujeitas a esse lock-in, permitindo que sejam executadas localmente ou em qualquer outro provedor de nuvem.
 
 ![alt_text](./img/oci-functions-2.png "Fn Project")
 
@@ -16,45 +16,47 @@ Embora o conceito de serverless possa parecer a solução mágica e definitiva p
 
 ## Funções em Contêineres
 
-Functions é, essencialmente, um contêiner que é executado na infraestrutura do OCI, seja por meio de uma chamada direta ou em resposta a um evento específico. O conceito de criação e envio do contêiner ao _[OCIR](https://docs.oracle.com/en-us/iaas/Content/Registry/home.htm)_ se aplica da mesma forma, mas de maneira diferente, utilizando o utilitário de linha de comando fornecido pela instalação do Fn Project.
+Uma [Function](https://docs.oracle.com/en-us/iaas/Content/Functions/Concepts/functionsoverview.htm) é, essencialmente, um contêiner que é executado na infraestrutura do OCI, seja por meio de uma chamada direta ou em resposta a um evento específico. O processo de construção da imagem do contêiner e seu envio para o [OCIR](https://docs.oracle.com/en-us/iaas/Content/Registry/home.htm) permanece o mesmo;  no entanto, é realizado de maneira diferente, utilizando a ferramenta de linha de comando fornecida pelo Fn Project.
 
-As funções que você cria devem ser projetadas para executar uma única tarefa de forma simples e eficiente. O serviço não é destinado à execução de grandes aplicações e sim, pequenas tarefas, como, por exemplo, realizar um processamento de dados simples e, ao final, enviar um e-mail.
+As Functions que você cria devem ser projetadas para executar uma única tarefa de forma simples e eficiente. O serviço não é destinado à execução de grandes aplicações e sim, pequenas tarefas, como, por exemplo, realizar um processamento de dados simples e, ao final, enviar um e-mail.
 
 Aqui, já encontramos uma limitação em relação ao código que será executado como uma função: o tempo total de execução e a quantidade de memória disponível para que a função realize a sua tarefa.
 
-Ao criar uma função, é obrigatório informar o _"tempo máximo de vida do contêiner"_ como também, a quantidade máxima de memória que ele pode utilizar. O tempo máximo de execução pode ser configurado entre 30 segundos e 300 segundos (5 minutos). Em relação à memória, é possível configurar entre 128 MB e 3072 MB (3 GB).
+Ao criar uma função, é obrigatório informar o _"tempo máximo de vida do contêiner"_ como também, a quantidade máxima de memória que ele pode utilizar. O tempo máximo de execução pode ser configurado entre _30 segundos_ até no máximo _300 segundos (5 minutos)_. Em relação à memória, é possível alocar no minímo _128 MB_ e no máximo _3072 MB (3 GB)_.
 
 Isso significa que, se a execução da função ultrapassar o tempo máximo especificado, o OCI encerrará a função. Da mesma forma, se a função exigir mais memória do que a alocada, o OCI também encerrará a função. 
 
-Outra limitação importante é a quantidade máxima de dados que podem ser enviados para a função, bem como a quantidade máxima de dados que ela pode retornar. Esses limites são fixos em 6 MB e não podem ser alterados.
+Outra limitação importante é a _quantidade máxima de dados_ que podem ser enviados para a função, bem como a quantidade máxima de dados que ela pode retornar. Esses limites são fixos em _6 MB_ e não podem ser alterados.
 
-Essas limitações também se refletem em como o serviço é cobrado. A cobrança é baseada no tempo em que o contêiner permaneceu ativo e na quantidade de memória alocada.
-
-Por exemplo, ao calcular rapidamente o custo do serviço para 200 chamadas por dia, o que totaliza 6.200 chamadas por mês, considerando que cada função é executada por 300 segundos e utiliza 256 MB de memória, o custo mensal seria de R$ 5,08.
+Essas limitações também se refletem na forma como o serviço é cobrado. A cobrança é baseada no tempo em que a função permanece ativa e na quantidade de memória alocada. Por exemplo, ao calcular rapidamente o custo do serviço para _200 chamadas por dia_, totalizando _6.200 chamadas por mês_ (200 * 31 = 6.200), com um tempo de execução de _300 segundos_ e utilização de _256 MB de memória_, o custo mensal seria de _R$ 5,08_.
 
 ![alt_text](./img/oci-functions-1.png "OCI Functions - Estimated Monthly Cost")
 
 >_**__NOTA:__** Sempre verifique o custo do serviço atráves do link [OCI Cost Estimator](https://www.oracle.com/cloud/costestimator.html) para obter valores atualizados._
 
-É essencial compreender a tecnologia para projetar de maneira eficaz quais tipos de aplicações ou funcionalidades podem se beneficiar do OCI Functions. Neste capítulo, utilizaremos como exemplo duas funcionalidades da aplicação OCI Pizza que fazem uso do OCI Functions para enviar e-mails ao usuário final.
+É fundamental entender a tecnologia para projetar de forma eficaz o que pode ser transformado em uma função ou o que é mais apropriado para essa finalidade. Neste capítulo, utilizaremos como exemplo duas funcionalidades da aplicação OCI Pizza que utilizam o OCI Functions para enviar e-mails aos usuários finais.
 
 ## Cold Start e Hot Start
 
 Como já mencionado, uma função é essencialmente um contêiner que é executado pelo OCI. Essa execução pode ser realizada por meio do utilitário de linha de comando fornecido pelo Fn Project, OCI CLI, SDKs, chamadas HTTP diretas ou em resposta a eventos configuráveis.
 
-Toda execução de aplicações conteinerizadas segue o mesmo processo de deployment. Primeiramente, a imagem do contêiner é baixada do registro (pull) e, em seguida, é executada por uma infraestrutura que suporte a execução de contêineres por exemplo, [Container Instances](./docs/chapter-5/container-instances.md) ou [OKE](./docs/chapter-6/intro.md). 
+Toda execução de aplicações conteinerizadas segue o mesmo processo de deployment. Primeiramente, a imagem do contêiner é baixada do registro de imagens (OCIR) e, em seguida, é executada por uma infraestrutura que suporte a execução de contêineres por exemplo, [Container Instances](./docs/chapter-5/container-instances.md) ou [OKE](./docs/chapter-6/intro.md). 
 
 O tempo total do processo de deployment, desde a inicialização até a disponibilização da função para processar a requisição é denominado **Cold Start**.
 
-**Cold Start** é o termo utilizado em ambientes de computação serverless que se refere ao atraso inicial que ocorre quando uma função é invocado pela primeira vez ou após um período de inatividade _(idle time)_. Em outras palavras, é o tempo total que o provedor de nuvem leva para preparar e disponibilizar a função, permitindo que ela processe a solicitação recebida.
+**Cold Start** é o termo utilizado em ambientes de computação serverless que se refere ao atraso inicial que ocorre quando uma função é invocado pela primeira vez ou após um período de inatividade _(idle time)_. Em outras palavras, é o tempo total que o provedor de nuvem leva para disponibilizar a função e, em seguida, executar o seu código.
+
+![alt_text](./img/oci-functions-3.png "OCI Functions - Cold Start")
 
 Uma função que foi criada e permanece inativa por um certo período, é encerrada pelo OCI. Se ela for invocada novamente, o período de _cold start_ se reinicia para essa função. 
 
-O período de _cold start_ não pode ser ajustado e é imprevisível, o que significa que não é possível determinar com precisão quanto tempo uma função levará para se tornar ativa e processar uma solicitação. Essa é uma limitação adicional que deve ser levada em conta ao se projetar funções.
+O período de _cold start_ não pode ser ajustado e é imprevisível, o que significa que não é possível estimar com precisão o tempo que o OCI levará para disponibilizar a função para uso. Essa é uma das características do serviço que deve ser levada em conta ao se projetar funções. 
 
-Já o termo **Hot Start** tem um significado oposto. Quando uma função ainda está ativa ou, se a infraestrutura de execução estiver _"de pé"_, as requisições para essa função geralmente apresentam um tempo de resposta inferior a um segundo, pois não há necessidade de realizar todo o provisionamento nesse caso. 
+Já o termo **Hot Start** tem um significado oposto. Quando uma função ainda está ativa ou, se a infraestrutura de execução estiver _"de pé"_, as requisições para essa função geralmente apresentam um tempo de resposta inferior a um segundo, pois não é necessário realizar todo o processo de implantação nesse caso _(deploy)_.
 
-É importante dizer que requisições subsequentes são direcionadas ao mesmo contêiner. Se necessário, o OCI escala automaticamente a infraestrutura de forma horizontal para atender a um maior volume de requisições, até um limite máximo de 60 GB de memória alocado para execução de todas as funções. Esse é o limite do tenancy, e, se necessário, é possível solicitar uma alteração para aumentar a capacidade de memória.
+É importante dizer que, requisições subsequentes são direcionadas ao mesmo contêiner. Se necessário, o OCI escala automaticamente a infraestrutura de forma horizontal para atender a um maior volume de requisições, até um limite máximo de _60 GB de memória_ para execução de todas as funções. Esse é o limite do tenancy, e, se necessário, é possível solicitar uma alteração para aumentar a capacidade máxima de memória.
+
+## Provisioned Concurrency
 
 Uma forma de garantir que as funções estejam prontas para uso e evitar o cold start é habilitar o Provisioned Concurrency. Essa funcionalidade assegura que a infraestrutura de execução permaneça disponível para um número mínimo de invocações simultâneas, permitindo que as funções sejam acionadas rapidamente.
 
