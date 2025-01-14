@@ -16,9 +16,11 @@ Embora o conceito de serverless possa parecer a solução mágica e definitiva p
 
 ## Funções em Contêineres
 
-Uma [Function](https://docs.oracle.com/en-us/iaas/Content/Functions/Concepts/functionsoverview.htm) é, essencialmente, um contêiner que é executado na infraestrutura do OCI, seja por meio de uma chamada direta ou em resposta a um evento específico. O processo de construção da imagem do contêiner e seu envio para o [OCIR](https://docs.oracle.com/en-us/iaas/Content/Registry/home.htm) permanece o mesmo;  no entanto, é realizado de maneira diferente, utilizando a ferramenta de linha de comando fornecida pelo Fn Project.
+Uma [função](https://docs.oracle.com/en-us/iaas/Content/Functions/Concepts/functionsoverview.htm) é, essencialmente, um contêiner que é executado na infraestrutura do OCI, seja por meio de uma chamada direta ou em resposta a um evento específico. O processo de construção da imagem do contêiner e seu envio para o [OCIR](https://docs.oracle.com/en-us/iaas/Content/Registry/home.htm) permanece o mesmo;  no entanto, é realizado de maneira diferente, utilizando a ferramenta de linha de comando fornecida pelo Fn Project.
 
-As Functions que você cria devem ser projetadas para executar uma única tarefa de forma simples e eficiente. O serviço não é destinado à execução de grandes aplicações e sim, pequenas tarefas, como, por exemplo, realizar um processamento de dados simples e, ao final, enviar um e-mail.
+>_**__NOTA:__** Por ser um contêiner, é possível criar seu próprio Dockerfile do zero em um processo conhecido como Bring-Your-Own-Dockerfile (BYOD). Para mais informações, consulte ["Using Custom Dockerfiles"](https://docs.oracle.com/en-us/iaas/Content/Functions/Tasks/functionsusingcustomdockerfiles.htm#Using_Custom_Docker_Files)._
+
+As funções que você cria devem ser projetadas para executar uma única tarefa de forma simples e eficiente. O serviço não é destinado à execução de grandes aplicações e sim, pequenas tarefas, como, por exemplo, realizar um processamento de dados simples e, ao final, enviar um e-mail.
 
 Aqui, já encontramos uma limitação em relação ao código que será executado como uma função: o tempo total de execução e a quantidade de memória disponível para que a função realize a sua tarefa.
 
@@ -52,13 +54,19 @@ Uma função que foi criada e permanece inativa por um certo período, é encerr
 
 O período de _cold start_ não pode ser ajustado e é imprevisível, o que significa que não é possível estimar com precisão o tempo que o OCI levará para disponibilizar a função para uso. Essa é uma das características do serviço que deve ser levada em conta ao se projetar funções. 
 
-Já o termo **Hot Start** tem um significado oposto. Quando uma função ainda está ativa ou, se a infraestrutura de execução estiver _"de pé"_, as requisições para essa função geralmente apresentam um tempo de resposta inferior a um segundo, pois não é necessário realizar todo o processo de implantação nesse caso _(deploy)_.
+Já o termo **Hot Start** tem um significado oposto. Quando uma função ainda está ativa ou, se a infraestrutura de execução estiver _"de pé"_, as requisições para essa função geralmente apresentam um tempo de resposta inferior a um segundo, pois não é necessário realizar todo o processo de deploy nesse caso.
 
 É importante dizer que, requisições subsequentes são direcionadas ao mesmo contêiner. Se necessário, o OCI escala automaticamente a infraestrutura de forma horizontal para atender a um maior volume de requisições, até um limite máximo de _60 GB de memória_ para execução de todas as funções. Esse é o limite do tenancy, e, se necessário, é possível solicitar uma alteração para aumentar a capacidade máxima de memória.
 
 ## Provisioned Concurrency
 
-Uma forma de garantir que as funções estejam prontas para uso e evitar o cold start é habilitar o Provisioned Concurrency. Essa funcionalidade assegura que a infraestrutura de execução permaneça disponível para um número mínimo de invocações simultâneas, permitindo que as funções sejam acionadas rapidamente.
+Uma maneira de garantir que as funções estejam prontas para uso e evitar o cold start é utilizar o recurso _[Provisioned Concurrency](https://docs.oracle.com/en-us/iaas/Content/Functions/Tasks/functionsusingprovisionedconcurrency.htm#functionsusingprovisionedconcurrency)_. Essa funcionalidade assegura que a infraestrutura de execução permaneça disponível para um número mínimo de invocações simultâneas, permitindo que as funções sejam acionadas rapidamente.
+
+Provisioned Concurrency é medido em _"provisioned concurrency units" (PCUs)_. Você determina a quantidade de PCUs com base no número de invocações concorrentes que você espera para a função. Ao especificar PCUs, a infraestrutura de execução da função se torna dedicada a você e está sempre disponível. No entanto, essa disponibilidade contínua resulta em um custo mais elevado.
+
+![alt_text](./img/oci-functions-4.png "OCI Functions - PCUs Cost")
+
+Para a aplicação OCI Pizza, não será definido nenhum valor para Provisioned Concurrency, uma vez que as funções da aplicação podem tolerar o cold start. Para mais informações sobre o assunto, consulte _["Reducing Initial Latency Using Provisioned Concurrency"](https://docs.oracle.com/en-us/iaas/Content/Functions/Tasks/functionsusingprovisionedconcurrency.htm#functionsusingprovisionedconcurrency)_.
 
 ## Criando Funções
 
@@ -82,7 +90,7 @@ fn version 0.6.36
     /_/   /_/ /_/`
 ```
 
-Uma forma de verificar se a instalação foi concluída com sucesso é utilizando o comando _[fn](https://github.com/fnproject/docs/tree/master/cli)_ que acaba de ser instalado:
+Uma forma de verificar se a instalação foi concluída com sucesso é através do comando _[fn](https://github.com/fnproject/docs/tree/master/cli)_ que acaba de ser instalado:
 
 ```bash
 $ fn version
@@ -94,7 +102,7 @@ Server version:  ?
 
 ### Function Application
 
-Toda função antes de ser criada, deve fazer parte de um [Application](https://docs.oracle.com/en-us/iaas/Content/Functions/Concepts/functionsconcepts.htm#applications) que é um meio usado pelo OCI para agrupar funções que serão executadas tendo configurações em comum. 
+Toda função antes de ser criada, deve fazer parte de um _[Application](https://docs.oracle.com/en-us/iaas/Content/Functions/Concepts/functionsconcepts.htm#applications)_, que serve como um meio de agrupar funções com configurações comuns no OCI.
 
 As funções dentro de um mesmo Application compartilham a mesma sub-rede, utilizam as mesmas variáveis de ambiente e a mesma arquitetura de processador, possuem configurações de log em comum e são executadas de forma isolada em relação a outras Applications.
 
@@ -181,15 +189,17 @@ $ fn create context ocipizza-ctx --provider oracle
 Successfully created context: ocipizza-ctx
 ```
 
-2. Após, utilize o contexto que foi recentemente criado:
+2. Após, utilize o _[contexto](https://github.com/fnproject/docs/blob/master/cli/ref/fn-create-context.md)_ que foi recentemente criado:
 
 ```bash
 $ fn use context ocipizza-ctx
 Now using context: ocipizza-ctx
 ```
 
+3. Atualize o contexto com as informações referentes ao OCID do compartimento onde as funções serão implantadas, ao OCID do compartimento que armazena as imagens de contêiner (serviço OCIR), à URL da região para o endpoint das funções e à URL do repositório de imagens para onde as imagens serão enviadas (push) e baixadas (pull): 
+
 ```bash
-$ fn update context ocid1.compartment.oc1..aaaaaaaaaaaaaaaabbbbbbbbccc
+$ fn update context oracle.compartment-id ocid1.compartment.oc1..aaaaaaaaaaaaaaaabbbbbbbbccc
 ```
 
 ```bash
@@ -204,31 +214,33 @@ $ fn update context api-url https://functions.sa-saopaulo-1.oci.oraclecloud.com
 $ fn update context registry sa-saopaulo-1.ocir.io/grxmw2a9myyj/fn-repo
 ```
 
+4. Por fim, é necessário fazer login no serviço OCIR da região:
+
 ```bash
 $ docker login -u 'grxmw2a9myyj/darmbrust@gmail.com' sa-saopaulo-1.ocir.io
 ```
 
->_**__NOTA:__** Consulte o [Fn CLI Guide](https://github.com/fnproject/docs/tree/master/cli) para obter mais detalhes sobre os comandos e suas opções disponíveis._
+>_**__NOTA:__** Para obter mais informações sobre os comandos utilizados, consulte [Functions QuickStart on Local Host](https://docs.oracle.com/en-us/iaas/Content/Functions/Tasks/functionsquickstartlocalhost.htm#functionsquickstartlocalhost)._
 
-## Funções da aplicação OCI Pizza
+### Funções da aplicação OCI Pizza
 
-Existem duas funções que estão no diretório _"services/"_ e que são utilizadas pela aplicação OCI Pizza:
+Existem duas funções localizadas no diretório _"services/"_ que são utilizadas pela aplicação OCI Pizza:
 
 - **fn-user-registry-email**
 
     - Função destinada a registrar um novo usuário. 
-    - Após o usuário submeter seus dados de cadastro por meio da aplicação, a função insere essas informações no banco de dados e, em seguida, envia um e-mail ao usuário para confirmar seu cadastro. 
+    - Após o usuário submeter seus dados de cadastro, a função insere essas informações no banco de dados e, em seguida, envia um e-mail ao usuário para confirmar e efetivar o seu cadastro.
 
 - **fn-password-recovery-email**
 
     - Função destinada para recuperação de senha do usuário.
-    - Após o usuário submeter seu endereço de e-mail, essa função será executada para gerar um link de recuperação de senha, que será enviado ao usuário por e-mail.
+    - Essa função será executada para gerar um link de recuperação de senha, que será enviado ao usuário por e-mail.
 
-Todas elas, após o seu devido processamento, utilizam o serviço [Email Delivery](../chapter-3/email-delivery.md) para enviar um e-mail ao usuário.
+Ambas as fuções, após o seu devido processamento, utilizam o serviço [Email Delivery](../chapter-3/email-delivery.md) para enviar um e-mail ao usuário.
 
 Aqui apresentarei os detalhes sobre como criar uma função, utilizando como exemplo a função _fn-password-recovery-email_.
 
-Primeiramente, é necessário criar a função utilizando alguns parâmetros por meio do comando _[fn init](https://github.com/fnproject/docs/blob/master/cli/ref/fn-init.md)_:
+Depois de todo o ambiente local do _[Fn Project](https://fnproject.io/)_ estar configurado, a função é criada utilizando o comando _[fn init](https://github.com/fnproject/docs/blob/master/cli/ref/fn-init.md)_:
 
 ```bash
 $ fn init --runtime python3.8 --memory 256 --timeout 120 fn-password-recovery-email
@@ -237,13 +249,11 @@ Function boilerplate generated.
 func.yaml created.
 ```
 
->_**__NOTA:__** A criação ou inicialização (init) de uma função no contexto do Fn Project podem ser interpretadas de maneira equivalente e possuem um significado similar.._
-
 Note que, no comando acima, além de definir a _memória alocada (--memory)_ e o _tempo máximo de execução (--timeout)_, é obrigatório especificar o _ambiente de execução_ responsável por executar o código da função _(--runtime)_. Para a aplicação OCI Pizza, todo o código foi desenvolvido na linguagem de programação Python, versão 3.8.
 
->_**__NOTA:__** É importante destacar que é possível criar funções usando outras linguagens de programação. Para mais informações, consulte a seção de [Tutorials](https://fnproject.io/tutorials/) na documentação oficial do Fn Project._
+>_**__NOTA:__** OCI Functions oferece suporte a diversas linguagens de programação. Para verificar se a sua linguagem de programação é suportada, consulte o link ["Languages Supported by OCI Functions"](https://docs.oracle.com/en-us/iaas/Content/Functions/Tasks/languagessupportedbyfunctions.htm#functionssupportedlanguageversions_topic_Language_versions_supported_by_FDKs)._
 
-O comando após ser executado cria o diretório _"fn-password-recovery-email/"_ com três arquivos:
+O comando _fn init_ cria o diretório _"fn-password-recovery-email/"_ com três arquivos:
 
 ```bash
 $ ls -1 fn-password-recovery-email/
@@ -264,7 +274,7 @@ requirements.txt
 
     - Arquito que contém a lista de depêndencias Python necessárias para executar a função.
 
-Como mencionado anteriormente, uma função é essencialmente um contêiner. Isso significa que podemos criar diretórios, adicionar pacotes extras para expandir suas funcionalidades, desenvolver bibliotecas específicas, entre outras possibilidades, sempre considerando suas limitações, especialmente em relação ao tempo máximo de execução e à memória disponível.
+Por ser um contêiner, a função permite a criação de diretórios, a adição de pacotes extras e o desenvolvimento de bibliotecas específicas, entre outras personalizações. No entanto, é importante notar que quanto maior o tamanho da função, mais tempo será necessário para o seu deployment. Além disso, quanto mais funcionalidades forem incorporadas, maior será a demanda de memória durante a execução da função.
 
 A função _fn-password-recovery-email_ apresenta a seguinte estrutura de arquivos e diretórios:
 
@@ -285,3 +295,21 @@ $ tree .
 ```
 
 ### Build e Push
+
+Para construir a imagem da função, navegue até o diretório _"fn-password-recovery-email/"_ e execute o comando _[fn build](https://github.com/fnproject/docs/blob/master/cli/ref/fn-build.md)_:
+
+```bash
+$ cd fn-password-recovery-email/
+$ fn -v build
+```
+
+Por fim, é necessário enviar a imagem para o OCIR utilizando o comando _[fn push](https://github.com/fnproject/docs/blob/master/cli/ref/fn-push.md)_:
+
+```bash
+$ fn -v push
+```
+
+>_**__NOTA:__** O comando [fn deploy](https://github.com/fnproject/docs/blob/master/cli/ref/fn-deploy.md) combina a execução dos comandos [fn build](https://github.com/fnproject/docs/blob/master/cli/ref/fn-build.md) e [fn push](https://github.com/fnproject/docs/blob/master/cli/ref/fn-push.md). Além de realizar essas operações simultaneamente, ele também atualiza a versão da função para cada nova execução._
+
+### Criando a função no OCI
+
