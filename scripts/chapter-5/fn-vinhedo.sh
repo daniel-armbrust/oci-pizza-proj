@@ -27,3 +27,77 @@ source functions.sh
 
 # Globals
 region="sa-vinhedo-1"
+region_code="vcp"
+env="$ENV"
+compartment_ocid="$COMPARTMENT_OCID"
+email_compartment_ocid="$compartment_ocid"
+nosql_compartment_ocid="$compartment_ocid"
+
+vcn_name="vcn-vinhedo"
+prvsubnet_name="subnprv"
+
+fn_appl_name="fn-appl-ocipizza"
+
+fn_user_register_name="fn-user-register-email"
+fn_passwd_recovery_name="fn-password-recovery-email"
+
+vcn_ocid="$(get_vcn_ocid "$region" "$vcn_name" "$compartment_ocid")"
+subnet_ocid="$(get_subnet_ocid "$region" "$prvsubnet_name" "$compartment_ocid" "$vcn_ocid")"
+
+# Function Application
+oci --region "$region" fn application create \
+    --compartment-id "$compartment_ocid" \
+    --display-name "$fn_appl_name" \
+    --subnet-ids "[\"$subnet_ocid\"]" \
+    --config "{
+        \"OCI_REGION\": \"$region\",
+        \"ENV\": \"$ENV\",    
+        \"NOSQL_COMPARTMENT_OCID\": \"$nosql_compartment_ocid\",
+        \"EMAIL_COMPARTMENT_OCID\": \"$email_compartment_ocid\"        
+    }" \
+    --shape "GENERIC_X86" \
+    --wait-for-state "ACTIVE"
+
+fnappl_ocid="$(get_fnappl_ocid "$region" "$fn_appl_name" "$compartment_ocid")"
+os_namespace="$(get_os_namespace)"
+loggroup_ocid="$(get_loggroup_ocid "$region" "ocipizza-loggroup-vinhedo" "$compartment_ocid")"
+
+# Function Service Log
+oci --region "$region" logging log create \
+    --log-group-id "$loggroup_ocid" \
+    --display-name "log-service-fn" \
+    --log-type "SERVICE" \
+    --retention-duration 30 \
+    --is-enabled "true" \
+    --configuration "{
+        \"archiving\": {
+            \"isEnabled\": false
+        },
+        \"compartmentId\": \"$compartment_ocid\",
+        \"source\": {
+            \"category\": \"invoke\",            
+            \"resource\": \"$fnappl_ocid\",
+            \"service\": \"functions\",
+            \"sourceType\": \"OCISERVICE\"
+        }}" \
+    --wait-for-state "SUCCEEDED"
+
+# Function: fn-user-register:0.0.1
+oci --region "$region" fn function create \
+    --application-id "$fnappl_ocid" \
+    --display-name "$fn_user_register_name" \
+    --memory-in-mbs 256 \
+    --timeout-in-seconds 120 \
+    --image "$region_code.ocir.io/$os_namespace/fn-repo/$fn_user_register_name:0.0.1" \
+    --wait-for-state "ACTIVE"
+
+# Function: fn-password-recovery:0.0.1
+oci --region "$region" fn function create \
+    --application-id "$fnappl_ocid" \
+    --display-name "$fn_passwd_recovery_name" \
+    --memory-in-mbs 256 \
+    --timeout-in-seconds 120 \
+    --image "$region_code.ocir.io/$os_namespace/fn-repo/$fn_passwd_recovery_name:0.0.1" \
+    --wait-for-state "ACTIVE"
+
+exit 0    

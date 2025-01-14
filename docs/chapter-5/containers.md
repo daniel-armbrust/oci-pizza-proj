@@ -52,19 +52,19 @@ Na aplicação _OCI Pizza_, foi utilizada como _imagem base_ o [Oracle Linux 8](
 
 Para baixar a imagem [Oracle Linux 8 Slim](https://container-registry.oracle.com/ords/ocr/ba/os/oraclelinux) localmente em sua máquina, basta executar o comando abaixo:
 
-```
+```bash
 $ docker pull container-registry.oracle.com/os/oraclelinux:8-slim
 ```
 
 Com a _imagem baixada_ localmente, é possível criar um contêiner e iniciar um shell a partir do ID dessa _imagem base_:
 
-```
+```bash
 $ docker images
 REPOSITORY                                     TAG       IMAGE ID       CREATED       SIZE
 container-registry.oracle.com/os/oraclelinux   8-slim    95e2d27d5c61   2 weeks ago   115MB
 ```
 
-```
+```bash
 $ docker run -it 95e2d27d5c61 bash
 bash-4.4# whoami
 root
@@ -74,7 +74,7 @@ root
 
 O Dockerfile é um arquivo de texto que contém todas as instruções necessárias para construir uma imagem de contêiner. O Dockerfile da aplicação _OCI Pizza_ inclui o seguinte conteúdo:
 
-```
+```bash
 $ cat webapp/Dockerfile
 
 #
@@ -132,13 +132,13 @@ Abaixo, a explicação de alguns dos comandos existentes neste _Dockerfile_:
 
 Para criar a imagem da aplicação, navegue até diretório que contém o arquivo Dockerfile:
 
-```
+```bash
 $ cd webapp/
 ```
 
 Em seguida, execute o comando abaixo e aguarde sua conclusão:
 
-```
+```bash
 $ docker build -t ocipizza:1.0 .
 ```
 
@@ -173,11 +173,11 @@ Antes de enviar a imagem por meio da operação _Push_, é necessário criar um 
 
 Para criar um repositório privado, utilize o comando abaixo:
 
-```
+```bash
 $ oci artifacts container repository create \
-    --compartment-id "ocid1.compartment.oc1..aaaaaaaaaaaaaaaabbbbbbbbccc" \
-    --display-name "ocipizza" \
-    --wait-for-state "AVAILABLE"
+> --compartment-id "ocid1.compartment.oc1..aaaaaaaaaaaaaaaabbbbbbbbccc" \
+> --display-name "ocipizza" \
+> --wait-for-state "AVAILABLE"
 ```
 
 Uma vez criado o repositório, é necessário nomear ou taguear (docker tag), seguindo o padrão estabelecido pelo OCI, que deve obedecer ao seguinte formato:
@@ -194,7 +194,7 @@ Uma vez criado o repositório, é necessário nomear ou taguear (docker tag), se
 
 Para obter o valor do **tenancy-namespace**, utilize o comando abaixo:
 
-```
+```bash
 $ oci os ns get
 {
   "data": "grxmw2a9myyj"
@@ -207,13 +207,13 @@ No caso da aplicação _OCI Pizza_, ela será implantada na região **Brazil Eas
 
 Para aplicar a nova _tag_ à imagem existente _ocipizza:1.0_, utilize o seguinte comando:
 
-```
+```bash
 $ docker tag ocipizza:1.0 ocir.sa-saopaulo-1.oci.oraclecloud.com/grxmw2a9myyj/ocipizza:1.0
 ```
 
 Antes de executar o _push_, é necessário fazer o login no serviço OCIR da região onde as imagens da aplicação serão enviadas (sa-saopaulo-1):
 
-```
+```bash
 $ docker login ocir.sa-saopaulo-1.oci.oraclecloud.com
 Username: grxmw2a9myyj/darmbrust@gmail.com
 Password:
@@ -228,18 +228,23 @@ Login Succeeded
 
 Por último, executamos o _push_ para enviar a imagem da aplicação ao OCIR:
 
-```
+```bash
 $ docker push ocir.sa-saopaulo-1.oci.oraclecloud.com/grxmw2a9myyj/ocipizza:1.0
 ```
 
 Para exibir todas as imagens do repositório _ocipizza_, execute o comando abaixo:
 
-```
+```bash
 $ oci artifacts container image list \
-    --compartment-id "ocid1.compartment.oc1..aaaaaaaaaaaaaaaabbbbbbbbccc" \
-    --all \
-    --repository-name "ocipizza"
+> --compartment-id "ocid1.compartment.oc1..aaaaaaaaaaaaaaaabbbbbbbbccc" \
+> --all \
+> --repository-name "ocipizza"
 ```
+
+### Habilitando o Scan de Vulnerabilidades
+
+Allow service vulnerability-scanning-service to read compartments in tenancy
+Allow service vulnerability-scanning-service to read repos in tenancy
 
 ## Conclusão
 

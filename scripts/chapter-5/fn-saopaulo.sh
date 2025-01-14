@@ -38,8 +38,8 @@ prvsubnet_name="subnprv"
 
 fn_appl_name="fn-appl-ocipizza"
 
-fn_user_register_name="fn-user-register"
-fn_passwd_recovery_name="fn-password-recovery"
+fn_user_register_name="fn-user-register-email"
+fn_passwd_recovery_name="fn-password-recovery-email"
 
 vcn_ocid="$(get_vcn_ocid "$region" "$vcn_name" "$compartment_ocid")"
 subnet_ocid="$(get_subnet_ocid "$region" "$prvsubnet_name" "$compartment_ocid" "$vcn_ocid")"
@@ -91,7 +91,7 @@ oci --region "$region" fn function create \
     --image "$region_code.ocir.io/$os_namespace/fn-repo/$fn_user_register_name:0.0.1" \
     --wait-for-state "ACTIVE"
 
-# Function: fn-user-register:0.0.1
+# Function: fn-password-recovery:0.0.1
 oci --region "$region" fn function create \
     --application-id "$fnappl_ocid" \
     --display-name "$fn_passwd_recovery_name" \

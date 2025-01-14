@@ -211,13 +211,13 @@ $ fn update context api-url https://functions.sa-saopaulo-1.oci.oraclecloud.com
 ```
 
 ```bash
-$ fn update context registry sa-saopaulo-1.ocir.io/grxmw2a9myyj/fn-repo
+$ fn update context registry gru.ocir.io/grxmw2a9myyj/fn-repo
 ```
 
 4. Por fim, é necessário fazer login no serviço OCIR da região:
 
 ```bash
-$ docker login -u 'grxmw2a9myyj/darmbrust@gmail.com' sa-saopaulo-1.ocir.io
+$ docker login -u 'grxmw2a9myyj/darmbrust@gmail.com' gru.ocir.io
 ```
 
 >_**__NOTA:__** Para obter mais informações sobre os comandos utilizados, consulte [Functions QuickStart on Local Host](https://docs.oracle.com/en-us/iaas/Content/Functions/Tasks/functionsquickstartlocalhost.htm#functionsquickstartlocalhost)._
@@ -238,7 +238,7 @@ Existem duas funções localizadas no diretório _"services/"_ que são utilizad
 
 Ambas as fuções, após o seu devido processamento, utilizam o serviço [Email Delivery](../chapter-3/email-delivery.md) para enviar um e-mail ao usuário.
 
-Aqui apresentarei os detalhes sobre como criar uma função, utilizando como exemplo a função _fn-password-recovery-email_.
+>_**__NOTA:__** Aqui, apresentarei os detalhes sobre como criar uma função, utilizando como exemplo a função "fn-password-recovery-email". Os mesmos comandos devem ser aplicados à função "fn-user-registry-email" para que a aplicação OCI Pizza funcione por completo._
 
 Depois de todo o ambiente local do _[Fn Project](https://fnproject.io/)_ estar configurado, a função é criada utilizando o comando _[fn init](https://github.com/fnproject/docs/blob/master/cli/ref/fn-init.md)_:
 
@@ -249,7 +249,7 @@ Function boilerplate generated.
 func.yaml created.
 ```
 
-Note que, no comando acima, além de definir a _memória alocada (--memory)_ e o _tempo máximo de execução (--timeout)_, é obrigatório especificar o _ambiente de execução_ responsável por executar o código da função _(--runtime)_. Para a aplicação OCI Pizza, todo o código foi desenvolvido na linguagem de programação Python, versão 3.8.
+Note que, no comando acima, além de definir a _memória alocada (--memory)_ e o _tempo máximo de execução (--timeout)_, é obrigatório especificar o _ambiente de execução_ responsável por executar o código da função _(--runtime)_. Para a aplicação OCI Pizza, todo o código foi desenvolvido na linguagem de programação Python, versão 3.8 _(python3.8)_.
 
 >_**__NOTA:__** OCI Functions oferece suporte a diversas linguagens de programação. Para verificar se a sua linguagem de programação é suportada, consulte o link ["Languages Supported by OCI Functions"](https://docs.oracle.com/en-us/iaas/Content/Functions/Tasks/languagessupportedbyfunctions.htm#functionssupportedlanguageversions_topic_Language_versions_supported_by_FDKs)._
 
@@ -313,3 +313,31 @@ $ fn -v push
 
 ### Criando a função no OCI
 
+Uma vez que a imagem da função está disponível no OCIR, o próximo passo é criar a função no OCI. Para isso, é necessário especificar a quantidade de memória a ser alocada, o tempo máximo de execução e a URL completa da imagem correspondente à região onde a função será executada:
+
+```bash
+$ oci --region "sa-saopaulo-1" fn function create \
+> --application-id "ocid1.fnapp.oc1.sa-saopaulo-1.aaaaaaaaaaaaaaaabbbbbbbbccc" \
+> --display-name "fn-password-recovery-email" \
+> --memory-in-mbs 256 \
+> --timeout-in-seconds 120 \
+> --image "gru.ocir.io/grxmw2a9myyj/fn-repo/fn-password-recovery-email:0.0.1" \
+> --wait-for-state "ACTIVE"
+```
+
+### Invocando a Função
+
+```bash
+$ echo -n '{"email": "darmbrust@gmail.com"}' | fn invoke fn-appl-ocipizza fn-password-recovery-email | jq .
+{
+  "status": "success",
+  "message": "E-mail for password recovery sent successfully.",
+  "data": {
+    "email": "darmbrust@gmail.com"
+  }
+}
+```
+
+Allow dynamic-group ocipizza-dyngrp to use fn-invocation in compartment id ocid1.compartment.oc1..aaaaaaaaaaaaaaaabbbbbbbbccc
+
+Allow dynamic-group ocipizza-dyngrp to read repos in compartment id ocid1.compartment.oc1..aaaaaaaaaaaaaaaabbbbbbbbccc
