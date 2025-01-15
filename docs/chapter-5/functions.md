@@ -400,3 +400,9 @@ Lembre-se de que o horário em que o OCI registra as informações é em UTC. No
 >_**__NOTA:__** Consulte [Logging Query Language Specification](https://docs.oracle.com/en-us/iaas/Content/Logging/Reference/query_language_specification.htm) para obter mais informações sobre a sintaxe utilizada pelo OCI para consultar logs._
 
 ## Conclusão
+
+Neste capítulo, exploramos as funcionalidades e características do OCI Functions, uma plataforma _serverless_ no qual é possibilida a execução de código em contêineres. 
+
+Funções são úteis para desacoplar funcionalidades de uma aplicação maior ou, em alguns casos, para executar códigos que podem levar um certo tempo para gerar uma resposta.
+
+Além disso, discutimos algumas particularidades que devem ser consideradas ao projetar funções, como o tempo de cold start, o tempo máximo de vida do contêiner e a alocação de memória. Todos esses detalhes devem ser levados conta ao se projetar funções, visto que uma função é destinada para execução de uma única tarefa.
