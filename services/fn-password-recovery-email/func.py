@@ -1,5 +1,5 @@
 #
-# fn-password-recovery/func.py
+# fn-password-recovery-email/func.py
 #
 
 import io

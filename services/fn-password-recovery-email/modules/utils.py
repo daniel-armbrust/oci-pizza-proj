@@ -1,5 +1,5 @@
 #
-# fn-password-recovery/modules/utils.py
+# fn-password-recovery-email/modules/utils.py
 #
 
 import string
@@ -11,7 +11,7 @@ TOKEN_LEN = 22
 EXPIRATION_SECS = 600 # 10 minutos
 
 def get_token() -> str:
-    """Retorna um token."""
+    """Retorna um token aleatório."""
     chars = string.ascii_letters + string.digits
     token = ''.join(secrets.choice(chars) for _ in range(TOKEN_LEN))
 

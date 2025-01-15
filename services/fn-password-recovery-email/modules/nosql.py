@@ -1,5 +1,5 @@
 #
-# fn-password-recovery/modules/nosql.py
+# fn-password-recovery-email/modules/nosql.py
 #
 
 import os

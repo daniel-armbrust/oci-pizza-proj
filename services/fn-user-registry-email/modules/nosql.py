@@ -1,5 +1,5 @@
 #
-# fn-user-registry/modules/nosql.py
+# fn-user-registry-email/modules/nosql.py
 #
 
 import os

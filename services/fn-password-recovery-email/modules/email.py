@@ -1,5 +1,5 @@
 #
-# fn-password-recovery/modules/email.py
+# fn-password-recovery-email/modules/email.py
 #
 
 import os

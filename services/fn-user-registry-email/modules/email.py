@@ -1,5 +1,5 @@
 #
-# fn-user-registry/modules/email.py
+# fn-user-registry-email/modules/email.py
 #
 
 import os

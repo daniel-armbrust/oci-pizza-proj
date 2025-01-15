@@ -325,7 +325,25 @@ $ oci --region "sa-saopaulo-1" fn function create \
 > --wait-for-state "ACTIVE"
 ```
 
-### Invocando a Função
+### Executando a Função
+
+Existem diferentes maneiras de executar uma função que já foi criada e configurada no OCI. São elas:
+
+- Utilizando o comando _[fn invoke](https://docs.oracle.com/en-us/iaas/Content/Functions/Tasks/functionsinvokingfunctions.htm#usingfncli)_.
+
+- Por meio do OCI CLI.
+
+- Por meio dos SDKs do OCI.
+
+- Por meio de uma chamada HTTP assinada.
+
+Os métodos _fn invoke_, _OCI CLI_ e _SDKs_ constroem automaticamente a requisição para se comunicar com as APIs do OCI. Por outro lado, ao utilizar o método _"HTTP assinado"_, você precisará criar manualmente a requisição que será enviada às APIs do OCI. Isso inclui a geração de uma assinatura válida e a inclusão do respectivo OCID do compartimento onde a função está localizada. Essas informações devem ser inseridas no cabeçalho HTTP que será utilizado para chamar a função.
+
+É importante lembrar que há uma camada de [IAM (Identity and Access Management)](../chapter-1/iam.md) na frente do serviço Functions, que protege contra execuções não autorizadas. Isso significa que, independentemente do método utilizado para invocar a função, a camada de IAM será responsável por validar a autenticação e verificar se o usuário possui autorização para executar a função.
+
+>_**__NOTA:__** Consulte ["Invoking Functions"](https://docs.oracle.com/en-us/iaas/Content/Functions/Tasks/functionsinvokingfunctions.htm#Invoking_Functions) para obter mais informações sobre os diferentes métodos de execução de uma função._
+
+Aqui, será usado o comando _fn invoke_ para chamar a função _"fn-password-recovery-email"_:
 
 ```bash
 $ echo -n '{"email": "darmbrust@gmail.com"}' | fn invoke fn-appl-ocipizza fn-password-recovery-email | jq .
@@ -338,6 +356,47 @@ $ echo -n '{"email": "darmbrust@gmail.com"}' | fn invoke fn-appl-ocipizza fn-pas
 }
 ```
 
-Allow dynamic-group ocipizza-dyngrp to use fn-invocation in compartment id ocid1.compartment.oc1..aaaaaaaaaaaaaaaabbbbbbbbccc
+>_**__NOTA:__** O comando [jq](https://jqlang.github.io/jq/), usado no final da linha de comando, não é necessário. Ele foi utilizado apenas para formatar a resposta retornada da função, tornando-a mais legível._
 
-Allow dynamic-group ocipizza-dyngrp to read repos in compartment id ocid1.compartment.oc1..aaaaaaaaaaaaaaaabbbbbbbbccc
+Um último detalhe a ser observado sobre o tempo de _cold start_: utilizando o utilitário de linha de comando _[time](https://www.man7.org/linux/man-pages/man1/time.1.html)_, é possível verificar que a primeira execução da função levou quase _16 segundos_ para completar. Esse foi o tempo total que o OCI levou para preparar a função, incluindo o tempo necessário para a execução do código.
+
+```bash
+real    0m15.932s
+user    0m0.118s
+sys     0m0.056s
+```
+
+Na segunda execução, com a infraestrutura ainda ativa _(hot start)_, o tempo total foi de aproximadamente _1 segundo_:
+
+```bash
+real    0m1.010s
+user    0m0.092s
+sys     0m0.062s
+```
+
+É importante lembrar que o período de _cold start_ é imprevisível, e esses valores podem variar, podendo ser maiores ou menores.
+
+### Exibindo os logs de execução
+
+Para verificar os logs relacionados à execução da função, recomendo consultar o Console da Web. Essa opção facilita a aplicação de filtros e proporciona uma visualização mais intuitiva das informações.
+
+![alt_text](./img/oci-functions-5.png "OCI Functions - Logs")
+
+A sintaxe para visualizar os logs por meio do OCI CLI é mais complexa e geralmente é utilizada quando se deseja enviar os logs para processamento em outra aplicação. De qualquer forma, aqui está um exemplo de comando:
+
+```bash
+$ oci --region "sa-saopaulo-1" logging-search search-logs \
+> --search-query "search
+>     \"ocid1.compartment.oc1..aaaaaaaaaaaaaaaabbbbbbbbccc/ocid1.loggroup.oc1.sa-saopaulo-1.aaaaaaaaaaaaaaaabbbbbbbbccc/ocid1.log.oc1.sa-saopaulo-1.aaaaaaaaaaaaaaaabbbbbbbbccc\"
+>     | sort by datetime desc" \
+> --time-start "2025-01-15T13:20:52.684Z" \
+> --time-end "2025-01-15T14:20:52.684Z" \
+> --is-return-field-info false \
+> --limit 2
+```
+
+Lembre-se de que o horário em que o OCI registra as informações é em UTC. No exemplo acima, o comando _fn invoke_ foi executado às 10:20:52 no meu horário local (GMT-3).
+
+>_**__NOTA:__** Consulte [Logging Query Language Specification](https://docs.oracle.com/en-us/iaas/Content/Logging/Reference/query_language_specification.htm) para obter mais informações sobre a sintaxe utilizada pelo OCI para consultar logs._
+
+## Conclusão

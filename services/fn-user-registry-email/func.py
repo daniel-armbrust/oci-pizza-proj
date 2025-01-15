@@ -1,5 +1,5 @@
 #
-# fn-user-registry/func.py
+# fn-user-registry-email/func.py
 #
 
 import io

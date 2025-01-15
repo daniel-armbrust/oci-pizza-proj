@@ -1,5 +1,5 @@
 #
-# fn-user-registry/modules/user.py
+# fn-user-registry-email/modules/user.py
 #
 
 import re

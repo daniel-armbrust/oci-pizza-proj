@@ -1,5 +1,5 @@
 #
-# fn-password-recovery/modules/user.py
+# fn-password-recovery-email/modules/user.py
 #
 
 from . import utils
@@ -33,14 +33,39 @@ class User():
         
         return False
     
+    def __update_recv_info(self, data: dict):
+        """Atualiza os dados de recuperação de senha."""
+
+        sql = f'''
+            UPDATE email_verification 
+                SET token = "{data['token']}", 
+                    expiration_ts = "{data['expiration_ts']}",
+                    password_recovery = True
+            WHERE email = "{data['email']}"
+        '''
+
+        result = self.__nosql.query(sql)        
+
+        if result:
+            if result[0]['NumRowsUpdated'] == 1:
+                return True
+            
+        return False
+
     def __add_recv_info(self, data: dict):
-        added = self.__nosql.add(data)
+        status = False
+
+        for i in range(2): 
+            status = self.__nosql.add(data)            
+        
+            if status is True:                
+                break
+            else:
+                status = self.__update_recv_info(data)                
+        
         self.__nosql.close()
         
-        if added:
-            return True
-        else:
-            return False       
+        return status
 
     def password_recovery(self):
         user_exists = self.__exists()        
