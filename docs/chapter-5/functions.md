@@ -296,10 +296,9 @@ $ tree .
 
 ### Build e Push
 
-Para construir a imagem da função, navegue até o diretório _"fn-password-recovery-email/"_ e execute o comando _[fn build](https://github.com/fnproject/docs/blob/master/cli/ref/fn-build.md)_:
+Para construir a imagem da função, dentro do diretório _"fn-password-recovery-email/"_ e execute o comando _[fn build](https://github.com/fnproject/docs/blob/master/cli/ref/fn-build.md)_:
 
 ```bash
-$ cd fn-password-recovery-email/
 $ fn -v build
 ```
 
@@ -339,8 +338,6 @@ Existem diferentes maneiras de executar uma função que já foi criada e config
 
 Os métodos _fn invoke_, _OCI CLI_ e _SDKs_ constroem automaticamente a requisição para se comunicar com as APIs do OCI. Por outro lado, ao utilizar o método _"HTTP assinado"_, você precisará criar manualmente a requisição que será enviada às APIs do OCI. Isso inclui a geração de uma assinatura válida e a inclusão do respectivo OCID do compartimento onde a função está localizada. Essas informações devem ser inseridas no cabeçalho HTTP que será utilizado para chamar a função.
 
-É importante lembrar que há uma camada de [IAM (Identity and Access Management)](../chapter-1/iam.md) na frente do serviço Functions, que protege contra execuções não autorizadas. Isso significa que, independentemente do método utilizado para invocar a função, a camada de IAM será responsável por validar a autenticação e verificar se o usuário possui autorização para executar a função.
-
 >_**__NOTA:__** Consulte ["Invoking Functions"](https://docs.oracle.com/en-us/iaas/Content/Functions/Tasks/functionsinvokingfunctions.htm#Invoking_Functions) para obter mais informações sobre os diferentes métodos de execução de uma função._
 
 Aqui, será usado o comando _fn invoke_ para chamar a função _"fn-password-recovery-email"_:
@@ -358,7 +355,7 @@ $ echo -n '{"email": "darmbrust@gmail.com"}' | fn invoke fn-appl-ocipizza fn-pas
 
 >_**__NOTA:__** O comando [jq](https://jqlang.github.io/jq/), usado no final da linha de comando, não é necessário. Ele foi utilizado apenas para formatar a resposta retornada da função, tornando-a mais legível._
 
-Um último detalhe a ser observado sobre o tempo de _cold start_: utilizando o utilitário de linha de comando _[time](https://www.man7.org/linux/man-pages/man1/time.1.html)_, é possível verificar que a primeira execução da função levou quase _16 segundos_ para completar. Esse foi o tempo total que o OCI levou para preparar a função, incluindo o tempo necessário para a execução do código.
+Um último detalhe a ser observado sobre o tempo de _cold start_: utilizando o utilitário de linha de comando _[time](https://www.man7.org/linux/man-pages/man1/time.1.html)_, é possível verificar que a primeira execução da função levou quase _16 segundos_ para completar. Esse foi o tempo total que o OCI levou para preparar a função, incluindo o tempo necessário para a execução do código e o tempo do _fn invoke_.
 
 ```bash
 real    0m15.932s
