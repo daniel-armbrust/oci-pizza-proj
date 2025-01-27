@@ -1,10 +1,8 @@
-# 1. Entendendo os Contêineres
+# 5.1 - Entendendo os Contêineres
 
-## Contêineres
+Definir contêineres de maneira concisa pode ser um desafio, pois abrange uma série de conceitos interconectados. Para tornar essa compreensão mais acessível, apresentarei alguns princípios fundamentais que esclarecerão o que são contêineres e como funcionam.
 
-Definir contêineres de forma concisa pode ser desafiador, pois envolve diversos conceitos interligados. Para facilitar a compreensão, apresentarei alguns princípios fundamentais que ajudarão a esclarecer o que são contêineres e como eles funcionam.
-
-### Processos
+## Processos
 
 Programa é uma entidade passiva onde as suas instruções são armazenadas em disco. Pode-se dizer também que, um programa é um _arquivo executável_. 
 

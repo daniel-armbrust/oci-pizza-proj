@@ -15,9 +15,8 @@ from .password import Password
 from .forms import LoginForm, NewUserForm, PasswordRecoveryForm, \
     NewPasswordForm
 
-from app.modules.notifications import Notifications
+from app.modules.functions import Functions
 from app.modules import utils
-
 
 @user_blueprint.route('/login/form', methods=['GET', 'POST'])
 def login_form_view():   
@@ -101,15 +100,12 @@ def add_user_form_view():
 
                 return redirect(url_for('user.add_user_form_view', next=None))               
             else:
-                # Utiliza o serviço OCI NOTIFICATIONS para acionar uma função 
-                # que enviará um e-mail ao usuário, solicitando a conclusão 
-                # do seu cadastro.                
-                ons = Notifications()
-                ons.topic_ocid = app.__settings.ons_topic_user_register_ocid
-                message_published = ons.publish_message(data=str(form_dict))
-                
+                fn = Functions()
+                fn.fn_ocid = app.__settings.fn_user_register_ocid
+                invoke_status = fn.invoke(json_message=form_dict)
+                                
                 # TODO: log
-                if message_published:
+                if invoke_status is True:
                     flask_flash(u'Cadastro efetuado com sucesso! Aguarde o e-mail para confirmar o seu cadastro.', 'success')
                 else:
                     flask_flash(u'Erro ao cadastrar o usuário. Tente novamente mais tarde.', 'error')
@@ -162,13 +158,13 @@ def password_recovery_form_view():
             user = User()
             is_email_valid = user.check_email(email=form_dict['email'])
 
-            if is_email_valid:                                
-                ons = Notifications()
-                ons.topic_ocid = app.__settings.ons_topic_password_recovery_ocid
-                message_published = ons.publish_message(data=str(form_dict))
+            if is_email_valid:                                                
+                fn = Functions()
+                fn.fn_ocid = app.__settings.fn_password_recovery_ocid
+                invoke_status = fn.invoke(json_message=form_dict)
                 
                 # TODO: log
-                if message_published:
+                if invoke_status is True:
                     flask_flash(u'Foi enviado um e-mail para a recuperação da sua senha.', 'success')
                 else:
                     flask_flash(u'Erro ao processar a solicitação. Tente novamente mais tarde.', 'error')    

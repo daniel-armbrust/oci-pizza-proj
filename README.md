@@ -22,8 +22,8 @@ Bora entender...
 - [Sobre o Autor](./docs/daniel-armbrust-about.md)
 - [Introdução](./docs/intro.md)
 
-- [Capítulo 1: Conceitos e introdução a Computação em Nuvem no OCI](./docs/chapter-1.md)
-	- [1.1 - O que a Computação em Nuvem?](./docs/cloud-computing.md)
+- [Capítulo 1: Introdução a Computação em Nuvem no OCI](./docs/chapter-1.md)
+	- [1.1 - O que é Computação em Nuvem?](./docs/cloud-computing.md)
 	- [1.1 - OCI Foundation](./docs/oci-foundation.md)
 	- [1.1 - Visão geral da Aplicação OCI Pizza](./docs/ocipizza-overview.md)
 
@@ -46,8 +46,7 @@ Bora entender...
 	- [5.1 - Entendendo os Contêineres](./docs/chapter-5/containers.md)
 	- [5.2 - Introdução ao GraalVM](./docs/chapter-5/graalvm.md)	
 	- [5.3 - Container Instances](./docs/chapter-5/container-instances.md)	
-	- [5.4 - Functions](./docs/chapter-5/functions.md)
-	- [5.5 - Notifications](./docs/chapter-5.md/notifications.md)
+	- [5.4 - Functions](./docs/chapter-5/functions.md)	
 
 - [Capítulo 6: OKE - Oracle Kubernetes Engine](./docs/chapter-6/intro.md)
 	- [6.1 - Introdução ao OKE](./docs/chapter-6/oke.md)
