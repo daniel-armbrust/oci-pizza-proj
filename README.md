@@ -22,9 +22,15 @@ Bora entender...
 - [Sobre o Autor](./docs/daniel-armbrust-about.md)
 - [Introdução](./docs/intro.md)
 
-- [Capítulo 1: Introdução a Computação em Nuvem no OCI](./docs/chapter-1.md)
-	- [1.1 - O que é Computação em Nuvem?](./docs/cloud-computing.md)
-	- [1.1 - OCI Foundation](./docs/oci-foundation.md)
+- [Capítulo 1: Introdução a Computação em Nuvem](./docs/chapter-1.md)
+	- [1.1 O que é Computação em Nuvem?](./docs/cloud-computing.md#1.1 O que é Computação em Nuvem?)
+	- [1.2 Cinco Características Essenciais](./docs/cloud-computing.md#1.2 Cinco Características Essenciais)
+	- [1.3 Modelos de Serviços (Service Models)](./docs/cloud-computing.md#1.3 Modelos de Serviços (Service Models))
+	- [1.4 Modelos de Implantação (Deployment Models)](./docs/cloud-computing.md#1.4 Modelos de Implantação (Deployment Models))
+	- [1.5 Outras definições sobre Computação em Nuvem](./docs/cloud-computing.md#1.5 Outras definições sobre Computação em Nuvem)
+	- [1.6 Terminologias da Computação em Nuvem](./docs/cloud-computing.md#1.6 Terminologias da Computação em Nuvem)
+	
+- [1.1 - OCI Foundation](./docs/oci-foundation.md)
 	- [1.1 - Visão geral da Aplicação OCI Pizza](./docs/ocipizza-overview.md)
 
 - [Capítulo 2: Visão geral da Aplicação OCI Pizza](./docs/chapter-2/intro.md)

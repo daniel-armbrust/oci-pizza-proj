@@ -23,6 +23,11 @@
 - IAM
 - Quotas
 - Audit
+- O problema do "Out of Host Capacity"
+- OCI Status Site
+- Funcionalidades através de Classes e Métodos pelo uso dos diferentes SDKs.
+- MTU 9000
+- Cloud Adoption Framework
 
 suporte... 
 devido ao modelo computacional da cloud, quando vc suspeita de que ha um problema, a sua funcao é coletar o maior numero de evidências possíveis como.tambem, explicar de forma clara qual é o problema que esta sendo enfrentado.

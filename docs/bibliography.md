@@ -13,3 +13,11 @@
 - [Revistausp, COMPUTAÇÃO EM NUVEM (2013-05-30)](https://www.revistas.usp.br/revusp/issue/view/5058)
 
 - [Redação Oracle (2021). IaaS, PaaS e SaaS: Os diferentes tipos de serviço em nuvem e suas características](https://blogs.oracle.com/oracle-brasil/post/iaas-paas-saas-cloud-servicos-nuvem)
+
+- [Lisdorf, Anders (2021). Cloud Computing Basics: A Non-Technical Introduction. Apress.](https://amzn.to/40Bl8kv)
+
+- [Google Cloud. Vantagens e desvantagens da computação em nuvem](https://cloud.google.com/learn/advantages-of-cloud-computing)
+
+- [Google Cloud. O que é computação na nuvem?](https://cloud.google.com/learn/what-is-cloud-computing)
+
+- [Redação Oracle (2021). Por que a nuvem é uma opção de tecnologia sustentável?](https://blogs.oracle.com/oracle-brasil/post/nuvem-cloud-tecnologia-sustentavel)
