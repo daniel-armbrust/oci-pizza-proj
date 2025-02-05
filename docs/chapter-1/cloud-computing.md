@@ -40,17 +40,19 @@ As tecnologias introduzidas pela _AWS_ tornaram possível algo que antes era ext
 
 Esse modelo permitiu que desenvolvedores, mesmo sem experiência em criação de infraestrutura, provisionassem máquinas rapidamente e disponibilizassem suas aplicações para o mundo. Assim, surgiu a _Infraestrutura como Serviço (IaaS - Infrastructure as a Service)_, que passou a tratar a infraestrutura de TI como software.
 
-Além de oferecer _Infraestrutura como Serviço (IaaS)_, a AWS trouxe um diferencial significativo em relação aos _[VPS (Servidores Virtuais Privados)](https://en.wikipedia.org/wiki/Virtual_private_server)_ da época: a implementação de um modelo inovador de _cobrança e controle_. 
+Além de oferecer _Infraestrutura como Serviço (IaaS)_, a AWS trouxe um diferencial significativo em relação aos _[VPS (Servidores Virtuais Privados)](https://en.wikipedia.org/wiki/Virtual_private_server)_ da época: a implementação de um modelo inovador de **_cobrança e controle_**. 
 
-Em vez de pagar uma mensalidade fixa, os usuários passaram a adotar um sistema de pagamento baseado em _horas de uso_, que ficou conhecido depois como _[Pay-As-You-Go (PAGY)](https://www.oracle.com/industries/payg-services-price-list/)_.
+Em vez de pagar uma mensalidade fixa, os usuários passaram a adotar um sistema de pagamento baseado em **_horas de uso_**, que ficou conhecido depois como _[Pay-As-You-Go (PAGY)](https://www.oracle.com/industries/payg-services-price-list/)_.
 
 ![alt_text](./img/pay-as-you-go-1.png "Pay-As-You-Go (PAGY)")
 
-Pare e reflita por um instante: _"Qual é o custo para uma empresa adquirir e manter o hardware, além de contar com um profissional responsável por criar, configurar e gerenciar a infraestrutura de TI durante toda a vida útil de sua aplicação?"_
+Pare e reflita por um instante: **_"Qual é o custo para uma empresa adquirir e manter o hardware, além de contar com um profissional responsável por criar, configurar e gerenciar a infraestrutura de TI durante toda a vida útil de sua aplicação?"_**
 
 Pagar apenas pelas horas de uso trouxe uma flexibilidade significativa. Se você precisasse de uma máquina maior por um determinado período, bastava fazer a alteração e, em seguida, retornar para uma máquina menor, pagando apenas pelas horas utilizadas de acordo com o tamanho da máquina. 
 
 Ficou fácil criar e recriar ambientes de teste separados dos ambientes de produção, permitindo que uma máquina fosse mantida ligada apenas durante o horário de expediente e desligada, se necessário, nos finais de semana. Essa abordagem não apenas proporcionou agilidade, mas também resultou em uma redução significativa nos custos associados à infraestrutura de TI.
+
+![alt_text](./img/dev-qa-prd-1.png "Dev, QA, Prod")
 
 Por fim, esse novo modelo de provisionamento de infraestrutura foi aprimorado e replicado em várias regiões geográficas ao redor do mundo, em diferentes data centers. Isso possibilitou que grandes empresas escalassem rapidamente suas operações e oferecessem serviços mais próximos de seus usuários finais.
 
@@ -62,7 +64,7 @@ Hoje, a Computação em Nuvem é uma parte fundamental da infraestrutura de TI, 
 
 ## 1.3 Definições do NIST
 
-Computação em Nuvem ou Cloud Computing não é um conceito novo e é difícil definir seu significado em poucas palavras. É necessário compreender um conjunto de definições para entender de fato o que é a Computação em Nuvem.
+Como você viu na seção anterior, a Computação em Nuvem, ou Cloud Computing, não é um conceito recente. Nesta seção, apresentaremos um conjunto de definições formais que contribuirão para um entendimento mais abrangente dessa tecnologia.
 
 Um documento que detalha os conceitos relacionados à definição de Computação em Nuvem é o _["The NIST Definition of Cloud Computing"](https://csrc.nist.gov/pubs/sp/800/145/final)_, publicado em setembro de 2011. Esse documento é amplamente reconhecido como uma referência essencial na área de Computação em Nuvem.
 
