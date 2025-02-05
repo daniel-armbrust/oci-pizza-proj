@@ -4,11 +4,59 @@ _"A verdadeira disrupção não acontece em seu data center, mas sim na nuvem." 
 
 ## 1.2 Um pouco de História
 
+Explicar o que é _Computação em Nuvem_ torna-se mais claro quando se compreende os motivos que levaram à sua criação. A forma moderna da Computação em Nuvem surgiu na _[Amazon](https://en.wikipedia.org/wiki/Amazon_(company))_, quando empresa percebeu a necessidade de criar recursos de TI de maneira ágil, para atender à crescente demanda de seu e-commerce. 
+
+Essa necessidade impulsionou a empresa a buscar soluções que permitissem escalar rapidamente sua infraestrutura, resultando na inovação que conhecemos hoje como Computação em Nuvem.
+
+A Amazon foi fundada por _[Jeff Bezos](https://en.wikipedia.org/wiki/Jeff_Bezos)_ em 1994, começando sua trajetória como uma _livraria online_. Bezos teve a ideia de colocar a venda na Internet, uma quantidade enorme de livros num volume comparável, na sua cabeça, à quantidade de água do rio Amazonas.
+
+Para Jeff Bezos, que na época tinha 31 anos, vender livros online era uma oportunidade promissora, pois poderia ser feito por meio de uma _loja virtual_ praticamente sem a necessidade de manter estoque. A estratégia consistia em encomendar aos distribuidores apenas as unidades efetivamente compradas pelos clientes. Além disso, Bezos acreditava que os livros eram produtos fáceis de vender e transportar, e que poderiam ser adquiridos por impulso, o que tornava o modelo de negócios ainda mais atraente.
+
+Com o passar do tempo, a empresa começou a enfrentar desafios significativos relacionados à sua infraestrutura de TI. Com o rápido aumento no número de clientes e pedidos, tornou-se cada vez mais difícil melhorar o desempenho do seu site e a eficiência de suas operações.
+
+O aumento da demanda na livraria online, especialmente durante períodos de pico como as festas de fim de ano, frequentemente resultava em lentidão e falhas no sistema, resultando em perdas significativas de vendas.
+
+Além da Amazon, por volta do ano 2000, diversas startups de diferentes setores estavam rapidamente surgindo, crescendo e se proliferando. No entanto, nenhum data center da época estava preparado para atender a essa demanda crescente.
+
+De fato, o mundo de infraestrutura de TI não estava preparado para acompanhar esse crescimento acelerado. Os recursos de TI precisavam ser criados e disponibilizados para uso de forma rápida, com custos acessíveis e sem a burocracia imposta pelos processos _[ITIL](https://en.wikipedia.org/wiki/ITIL)_ da época.
+
+Na Amazon e no ecossistema de startups da época, cada novo projeto demandava muito tempo apenas para configurar a infraestrutura, a rede, as máquinas e os bancos de dados. Sempre que era necessário utilizar esse conjunto de recursos para um novo projeto, era preciso reconstruir e reconfigurar tudo do zero.
+
+Para enfrentar esses desafios, a Amazon investiu em servidores, data centers e tecnologias de software para aprimorar a escalabilidade e a confiabilidade de suas operações. A empresa começou a desenvolver soluções internas que permitiam a criação de toda a infraestrutura por meio de _[APIs REST](https://en.wikipedia.org/wiki/REST)_, possibilitando que seus desenvolvedores provisionassem e gerenciassem recursos de forma programática.
+
+Isso foi um marco na época, pois significava que qualquer usuário poderia criar, modificar e excluir recursos de TI, como servidores, armazenamento e bancos de dados, por meio de chamadas de API, em vez de depender de processos manuais.
+
+![alt_text](./img/api-it-resources-1.png "API REST #1")
+
+Com base nessa experiência adquirida, a Amazon identificou a oportunidade de criar e oferecer um serviço que automatizasse e gerenciasse todos os recursos de TI, eliminando a necessidade de reconstruir tudo do zero repetidamente. Isso possibilitou que empresas de todos os tamanhos criassem e acessassem recursos de computação de forma escalável e econômica. Assim, as empresas passaram a se preocupar menos com a compra de hardware e mais com a contratação de serviços.
+
+Foi nesse contexto que, em 2006, a Amazon lançou a AWS (Amazon Web Services) ao público, oferecendo serviços que permitiam a criação de infraestrutura por meio da web.
+
+As tecnologias introduzidas pela AWS tornaram possível algo que antes era extremamente desafiador: destruir e recriar máquinas em questão de segundos. 
+
+Esse modelo permitiu que desenvolvedores, mesmo sem experiência em criação de infraestrutura, provisionassem máquinas rapidamente e disponibilizassem suas aplicações para o mundo. Assim, surgiu a Infraestrutura como Serviço (IaaS - Infrastructure as a Service), que passou a tratar a infraestrutura de TI como software.
+
+Além de oferecer Infraestrutura como Serviço (IaaS), a AWS trouxe um diferencial significativo em relação aos VPS (Servidores Virtuais Privados) da época: a implementação de um modelo inovador de _cobrança e controle_. Em vez de pagar uma mensalidade fixa, os usuários passaram a adotar um sistema de pagamento baseado em _horas de uso_.
+
+Pare e reflita por um instante: _"Qual é o custo para uma empresa adquirir e manter o hardware, além de contar com um profissional responsável por criar, configurar e gerenciar a infraestrutura de TI durante toda a vida útil de sua aplicação?"_
+
+Pagar apenas pelas horas de uso trouxe uma flexibilidade significativa. Se você precisasse de uma máquina maior por um determinado período, bastava fazer a alteração e, em seguida, retornar para uma máquina menor, pagando apenas pelas horas utilizadas de acordo com o tamanho da máquina. 
+
+Ficou fácil criar e recriar ambientes de teste separados dos ambientes de produção, permitindo que uma máquina fosse mantida ligada apenas durante o horário de expediente e desligada, se necessário, nos finais de semana. Essa abordagem não apenas proporcionou agilidade, mas também resultou em uma redução significativa nos custos associados à infraestrutura de TI.
+
+Por fim, esse novo modelo de provisionamento de infraestrutura foi aprimorado e replicado em várias regiões geográficas ao redor do mundo, em diferentes data centers. Isso possibilitou que grandes empresas escalassem rapidamente suas operações e oferecessem serviços mais próximos de seus usuários finais.
+
+Assim, surgiu o que passou a ser conhecido como _Computação em Nuvem_, uma inovação que beneficiaria o mundo.
+
+Em 2010, a Computação em Nuvem se expandiu rapidamente, com a introdução de novos modelos de serviço, como _Plataforma como Serviço (Platform as a Service - PaaS)_ e _Software como Serviço (Sofware as a Service - SaaS)_. Outras empresas, como Oracle, Google, Microsoft e IBM, também ingressaram no mercado, oferecendo suas próprias soluções em nuvem.
+
+Hoje, a Computação em Nuvem é uma parte fundamental da infraestrutura de TI, permitindo que empresas de todos os tamanhos acessem recursos computacionais de forma rápida, escalável e flexível, pagamento somente pelo uso que é feito.
+
 ## 1.3 Definições do NIST
 
 Computação em Nuvem ou Cloud Computing não é um conceito novo e é difícil definir seu significado em poucas palavras. É necessário compreender um conjunto de definições para entender de fato o que é a Computação em Nuvem.
 
-Um documento que detalha os conceitos relacionados à definição de Computação em Nuvem é o ["The NIST Definition of Cloud Computing"](https://csrc.nist.gov/pubs/sp/800/145/final), publicado em setembro de 2011. Esse documento é amplamente reconhecido como uma referência essencial na área de Computação em Nuvem.
+Um documento que detalha os conceitos relacionados à definição de Computação em Nuvem é o _["The NIST Definition of Cloud Computing"](https://csrc.nist.gov/pubs/sp/800/145/final)_, publicado em setembro de 2011. Esse documento é amplamente reconhecido como uma referência essencial na área de Computação em Nuvem.
 
 De acordo com o NIST, a Computação em Nuvem é um modelo que possibilita o acesso, por meio da Internet, a um conjunto de recursos computacionais (como rede, armazenamento, servidores e serviços) que podem ser rapidamente criados e liberados de maneira simples, sem a necessidade de intervenção humana, como, por exemplo, ligar para um helpdesk para solicitar a criação de um servidor.
 

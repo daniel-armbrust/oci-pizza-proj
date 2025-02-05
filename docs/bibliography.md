@@ -21,3 +21,7 @@
 - [Google Cloud. O que é computação na nuvem?](https://cloud.google.com/learn/what-is-cloud-computing)
 
 - [Redação Oracle (2021). Por que a nuvem é uma opção de tecnologia sustentável?](https://blogs.oracle.com/oracle-brasil/post/nuvem-cloud-tecnologia-sustentavel)
+
+- [Akita, Fábio (2019). Entendendo "Devops" para Iniciantes em Programação (Parte 2) | Série "Começando aos 40"](https://youtu.be/mcwnQVAn0pw?si=2wslNnqxcSqg9GdD)
+
+- [Vieira, Eduardo (2003). Os bastidores da internet no Brasil. Editora Manole.](https://amzn.to/4aLTfuO)

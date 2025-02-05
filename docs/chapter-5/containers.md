@@ -2,6 +2,10 @@
 
 Definir contêineres de maneira concisa pode ser um desafio, pois abrange uma série de conceitos interconectados. Para tornar essa compreensão mais acessível, apresentarei alguns princípios fundamentais que esclarecerão o que são contêineres e como funcionam.
 
+Em 2006, foi quando o Google desenvolveu um projeto chamado Process Container que foi uma evolução em cima dos Jails de BSD ou Zonas do Solaris. Esse projeto foi depois renomeado para Control Groups ou CGROUPS. A ideia é fazer a Kernel do sistema operacional mentir para os processos (dois processos podem rodar no mesmo sistema operacional porém um sem saber da existência um do outro). Isso é mais leve do ponto de vista de consumo de recursos computacionais pois, você está executando somente uma Kernel em vez de múltiplas Kernels virtualizadas.
+
+Em 2013 surge o tal Docker que inicialmente usou o Linux Containers ou LXC. Docker não é full virtualization, não é paravirtualization e não é um hypervisor. Virtualização é literalmente falsificar o hardware físico. Nesse hardware virtual, você pode executar mutiplos e diferentes sistemas operacionais cada um contendo o seu próprio Kernel. A ideia toda, dos containers, é executar todos os programas dentro do mesmo sistema operacional.
+
 ## Processos
 
 Programa é uma entidade passiva onde as suas instruções são armazenadas em disco. Pode-se dizer também que, um programa é um _arquivo executável_. 

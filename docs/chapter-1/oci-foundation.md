@@ -30,7 +30,7 @@
 - Cloud Adoption Framework
 
 suporte... 
-devido ao modelo computacional da cloud, quando vc suspeita de que ha um problema, a sua funcao é coletar o maior numero de evidências possíveis como.tambem, explicar de forma clara qual é o problema que esta sendo enfrentado.
+devido ao modelo computacional da cloud, quando vc suspeita de que ha um problema, a sua funcao é coletar o maior numero de evidências possíveis como. tambem, explicar de forma clara qual é o problema que esta sendo enfrentado.
 
 ## Compartments, Dynamic Group e Policies
 
