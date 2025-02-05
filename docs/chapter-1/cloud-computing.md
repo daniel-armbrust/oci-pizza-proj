@@ -329,4 +329,4 @@ Lembre-se de que um problema relacionado ao design e à criação de uma arquite
 
 ### 1.7 Conclusão
 
-Neste capítulo, exploramos de forma abrangente o conceito de Computação em Nuvem. Discutimos diversas definições formais relacionadas ao tema e concluímos com uma análise das vantagens e desvantagens associadas à sua utilização.
+Neste capítulo, exploramos de maneira abrangente o conceito de Computação em Nuvem. Apresentamos a história por trás de sua criação, diversas definições formais relacionadas ao tema e, por fim, realizamos uma análise das vantagens e desvantagens associadas à sua utilização.
