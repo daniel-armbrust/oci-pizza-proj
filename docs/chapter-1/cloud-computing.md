@@ -68,6 +68,8 @@ Como você viu na seção anterior, a Computação em Nuvem, ou Cloud Computing,
 
 Um documento que detalha os conceitos relacionados à definição de Computação em Nuvem é o _["The NIST Definition of Cloud Computing"](https://csrc.nist.gov/pubs/sp/800/145/final)_, publicado em setembro de 2011. Esse documento é amplamente reconhecido como uma referência essencial na área de Computação em Nuvem.
 
+![alt_text](./img/nist-logo-1.png "NIST - National Institute of Standards and Technology")
+
 De acordo com o NIST, a Computação em Nuvem é um modelo que possibilita o acesso, por meio da Internet, a um conjunto de recursos computacionais (como rede, armazenamento, servidores e serviços) que podem ser rapidamente criados e liberados de maneira simples, sem a necessidade de intervenção humana, como, por exemplo, ligar para um helpdesk para solicitar a criação de um servidor.
 
 O NIST também especifica que um provedor de Computação em Nuvem deve apresentar _cinco características essenciais_. Além disso, o usuário que consome os serviços deve ser capaz de implantar sua aplicação ou provisionar sua infraestrutura, utilizando um dos _três modelos de serviço_ disponíveis (IaaS, PaaS ou SaaS), escolhendo entre um dos _modelos de implementação_ (nuvem pública, privada, híbrida ou comunitária).
