@@ -36,11 +36,15 @@ Foi nesse contexto que, em 2006, a Amazon lançou a _[AWS (Amazon Web Services)]
 
 ![alt_text](./img/aws-logo-1.png "AWS - Amazon Web Services")
 
-As tecnologias introduzidas pela AWS tornaram possível algo que antes era extremamente desafiador: destruir e recriar máquinas em questão de segundos. 
+As tecnologias introduzidas pela _AWS_ tornaram possível algo que antes era extremamente desafiador: destruir e recriar máquinas em questão de segundos. 
 
-Esse modelo permitiu que desenvolvedores, mesmo sem experiência em criação de infraestrutura, provisionassem máquinas rapidamente e disponibilizassem suas aplicações para o mundo. Assim, surgiu a Infraestrutura como Serviço (IaaS - Infrastructure as a Service), que passou a tratar a infraestrutura de TI como software.
+Esse modelo permitiu que desenvolvedores, mesmo sem experiência em criação de infraestrutura, provisionassem máquinas rapidamente e disponibilizassem suas aplicações para o mundo. Assim, surgiu a _Infraestrutura como Serviço (IaaS - Infrastructure as a Service)_, que passou a tratar a infraestrutura de TI como software.
 
-Além de oferecer Infraestrutura como Serviço (IaaS), a AWS trouxe um diferencial significativo em relação aos VPS (Servidores Virtuais Privados) da época: a implementação de um modelo inovador de _cobrança e controle_. Em vez de pagar uma mensalidade fixa, os usuários passaram a adotar um sistema de pagamento baseado em _horas de uso_.
+Além de oferecer _Infraestrutura como Serviço (IaaS)_, a AWS trouxe um diferencial significativo em relação aos _[VPS (Servidores Virtuais Privados)](https://en.wikipedia.org/wiki/Virtual_private_server)_ da época: a implementação de um modelo inovador de _cobrança e controle_. 
+
+Em vez de pagar uma mensalidade fixa, os usuários passaram a adotar um sistema de pagamento baseado em _horas de uso_, que ficou conhecido depois como _[Pay-As-You-Go (PAGY)](https://www.oracle.com/industries/payg-services-price-list/)_.
+
+![alt_text](./img/pay-as-you-go-1.png "Pay-As-You-Go (PAGY)")
 
 Pare e reflita por um instante: _"Qual é o custo para uma empresa adquirir e manter o hardware, além de contar com um profissional responsável por criar, configurar e gerenciar a infraestrutura de TI durante toda a vida útil de sua aplicação?"_
 
