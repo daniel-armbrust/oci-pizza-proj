@@ -32,7 +32,9 @@ Isso foi um marco na época, pois significava que qualquer usuário poderia cria
 
 Com base nessa experiência adquirida, a Amazon identificou a oportunidade de criar e oferecer um serviço que automatizasse e gerenciasse todos os recursos de TI, eliminando a necessidade de reconstruir tudo do zero repetidamente. Isso possibilitou que empresas de todos os tamanhos criassem e acessassem recursos de computação de forma escalável e econômica. Assim, as empresas passaram a se preocupar menos com a compra de hardware e mais com a contratação de serviços.
 
-Foi nesse contexto que, em 2006, a Amazon lançou a AWS (Amazon Web Services) ao público, oferecendo serviços que permitiam a criação de infraestrutura por meio da web.
+Foi nesse contexto que, em 2006, a Amazon lançou a _[AWS (Amazon Web Services)](https://en.wikipedia.org/wiki/Amazon_Web_Services)_ ao público, oferecendo serviços que permitiam a criação de infraestrutura por meio da web.
+
+![alt_text](./img/aws-logo-1.png "AWS - Amazon Web Services")
 
 As tecnologias introduzidas pela AWS tornaram possível algo que antes era extremamente desafiador: destruir e recriar máquinas em questão de segundos. 
 
