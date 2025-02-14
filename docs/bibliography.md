@@ -25,3 +25,7 @@
 - [Akita, Fábio (2019). Entendendo "Devops" para Iniciantes em Programação (Parte 2) | Série "Começando aos 40"](https://youtu.be/mcwnQVAn0pw?si=2wslNnqxcSqg9GdD)
 
 - [Vieira, Eduardo (2003). Os bastidores da internet no Brasil. Editora Manole.](https://amzn.to/4aLTfuO)
+
+- [Tulio Valente, Marco (2022). Engenharia de Software Moderna.](https://amzn.to/40SMfYu)
+
+- [Veronez, Fabricio (2024). O que é DevOps em 15 minutos](https://youtu.be/03aGcqlfP6s?si=Q_qOT7vKwQYKm60q)

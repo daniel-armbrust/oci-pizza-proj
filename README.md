@@ -24,10 +24,11 @@ Bora entender...
 
 - [Capítulo 1: Introdução a Computação em Nuvem](./docs/chapter-1.md)
 	- [1.1 O que é Computação em Nuvem?](./docs/cloud-computing.md#1.1 O que é Computação em Nuvem?)
-	- [1.2 Cinco Características Essenciais](./docs/cloud-computing.md#1.2 Cinco Características Essenciais)
-	- [1.3 Modelos de Serviços (Service Models)](./docs/cloud-computing.md#1.3 Modelos de Serviços (Service Models))
-	- [1.4 Modelos de Implantação (Deployment Models)](./docs/cloud-computing.md#1.4 Modelos de Implantação (Deployment Models))
-	- [1.5 Outras definições sobre Computação em Nuvem](./docs/cloud-computing.md#1.5 Outras definições sobre Computação em Nuvem)
+	- [1.2 Um pouco de História](./docs/chapter-1/cloud-computing.md#1.2 Um pouco de História)
+	- [1.3 Definições do NIST](./docs/cloud-computing.md#1.3 Definições do NIST)
+	- [1.4 Outras definições sobre Computação em Nuvem](./docs/cloud-computing.md#1.4 Outras definições sobre Computação em Nuvem)
+	- [1.5 Terminologias da Computação em Nuvem](./docs/cloud-computing.md#1.5 Terminologias da Computação em Nuvem)
+	- [1.6 Vantagens e Desvantagens da Computação em Nuvem](./docs/cloud-computing.md#1.6 Vantagens e Desvantagens da Computação em Nuvem)
 	- [1.6 Terminologias da Computação em Nuvem](./docs/cloud-computing.md#1.6 Terminologias da Computação em Nuvem)
 	
 - [1.1 - OCI Foundation](./docs/oci-foundation.md)

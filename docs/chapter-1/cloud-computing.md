@@ -4,9 +4,11 @@ _"A verdadeira disrupção não acontece em seu data center, mas sim na nuvem." 
 
 ## 1.2 Um pouco de História
 
-Explicar o que é _Computação em Nuvem_ torna-se mais claro quando se compreende os motivos que levaram à sua criação. A forma moderna da Computação em Nuvem surgiu na _[Amazon](https://en.wikipedia.org/wiki/Amazon_(company))_, quando empresa percebeu a necessidade de criar recursos de TI de maneira ágil, para atender à crescente demanda de seu e-commerce. 
+Explicar o que é _Computação em Nuvem_ torna-se mais claro quando se compreende os motivos que levaram à sua criação. A forma moderna da Computação em Nuvem surgiu na _[Amazon](https://en.wikipedia.org/wiki/Amazon_(company))_, quando empresa percebeu a necessidade de criar recursos de TI de maneira ágil, para atender à crescente demanda de seu e-commerce.
 
 Essa necessidade impulsionou a empresa a buscar soluções que permitissem escalar rapidamente sua infraestrutura, resultando na inovação que conhecemos hoje como Computação em Nuvem.
+
+>_**__NOTA:__** Outras empresas também desempenharam papéis pioneiros e significativos no desenvolvimento e na popularização da computação em nuvem. O texto destaca a Amazon, pois ela foi uma das primeiras plataformas a oferecer serviços de Computação em Nuvem de maneira abrangente e acessível._
 
 A Amazon foi fundada por _[Jeff Bezos](https://en.wikipedia.org/wiki/Jeff_Bezos)_ em 1994, começando sua trajetória como uma _livraria online_. Bezos teve a ideia de colocar a venda na Internet, uma quantidade enorme de livros num volume comparável, na sua cabeça, à quantidade de água do rio Amazonas.
 
@@ -24,6 +26,10 @@ De fato, o mundo de infraestrutura de TI não estava preparado para acompanhar e
 
 Na Amazon e no ecossistema de startups da época, cada novo projeto demandava muito tempo apenas para configurar a infraestrutura, a rede, as máquinas e os bancos de dados. Sempre que era necessário utilizar esse conjunto de recursos para um novo projeto, era preciso reconstruir e reconfigurar tudo do zero.
 
+Startups são frequentemente fundadas em cenários de incerteza, representando negócios que podem ter sucesso ou fracassar. Elas lançam softwares e crescem rapidamente, testando suas ideias no mercado na esperança de obter lucro. Agora, imagine se esse tipo de empresa tivesse que adquirir todo o hardware de TI antecipadamente, apenas para descobrir posteriormente que o negócio não deu certo. 
+
+Pare e reflita por um momento, considerando apenas a infraestrutura: **_"Qual é o custo para uma empresa adquirir e manter o hardware, além de contar com um profissional responsável por criar, configurar e gerenciar a infraestrutura de TI durante toda a vida útil de sua aplicação?"_**
+
 Para enfrentar esses desafios, a Amazon investiu em servidores, data centers e tecnologias de software para aprimorar a escalabilidade e a confiabilidade de suas operações. A empresa começou a desenvolver soluções internas que permitiam a criação de toda a infraestrutura por meio de _[APIs REST](https://en.wikipedia.org/wiki/REST)_, possibilitando que seus desenvolvedores provisionassem e gerenciassem recursos de forma programática.
 
 ![alt_text](./img/api-it-resources-1.png "API REST #1")
@@ -36,7 +42,7 @@ Foi nesse contexto que, em 2006, a Amazon lançou a _[AWS (Amazon Web Services)]
 
 ![alt_text](./img/aws-logo-1.png "AWS - Amazon Web Services")
 
-As tecnologias introduzidas pela _AWS_ tornaram possível algo que antes era extremamente desafiador: destruir e recriar máquinas em questão de segundos. 
+As tecnologias introduzidas pela _AWS_ tornaram possível algo que antes era extremamente desafiador: **_destruir e recriar máquinas em questão de segundos_**. 
 
 Esse modelo permitiu que desenvolvedores, mesmo sem experiência em criação de infraestrutura, provisionassem máquinas rapidamente e disponibilizassem suas aplicações para o mundo. Assim, surgiu a _Infraestrutura como Serviço (IaaS - Infrastructure as a Service)_, que passou a tratar a infraestrutura de TI como software.
 
@@ -45,8 +51,6 @@ Além de oferecer _Infraestrutura como Serviço (IaaS)_, a AWS trouxe um diferen
 Em vez de pagar uma mensalidade fixa, os usuários passaram a adotar um sistema de pagamento baseado em **_horas de uso_**, que ficou conhecido depois como _[Pay-As-You-Go (PAGY)](https://www.oracle.com/industries/payg-services-price-list/)_.
 
 ![alt_text](./img/pay-as-you-go-1.png "Pay-As-You-Go (PAGY)")
-
-Pare e reflita por um instante: **_"Qual é o custo para uma empresa adquirir e manter o hardware, além de contar com um profissional responsável por criar, configurar e gerenciar a infraestrutura de TI durante toda a vida útil de sua aplicação?"_**
 
 Pagar apenas pelas horas de uso trouxe uma flexibilidade significativa. Se você precisasse de uma máquina maior por um determinado período, bastava fazer a alteração e, em seguida, retornar para uma máquina menor, pagando apenas pelas horas utilizadas de acordo com o tamanho da máquina. 
 
@@ -196,7 +200,6 @@ Algumas definições adicionais que ajudam a esclarecer o conceito de Computaç�
 
     - _"Computação em Nuvem é um modelo computacional que permite escalar o seu negócio, pagando apenas pelos recursos utilizados."_
 
-
 ## 1.5 Terminologias da Computação em Nuvem
 
 A seguir, são apresentados alguns termos comuns relacionados aos benefícios e funcionalidades da Computação em Nuvem:
@@ -327,6 +330,146 @@ Quando há suspeitas de problemas na infraestrutura na nuvem, os administradores
 
 Lembre-se de que um problema relacionado ao design e à criação de uma arquitetura na nuvem, resultante da falta de conhecimento técnico, não deve ser considerado uma questão que exija a intervenção do suporte. Essa abordagem é um problema comum que observo e que frequentemente gera insatisfação entre os usuários da nuvem. A Oracle conta com diversas equipes especializadas que podem ajudar com essas questões arquiteturais, as quais abordaremos mais adiante.
 
-### 1.7 Conclusão
+## 1.7 DevOps
+
+### 1.7.1 O que é DevOps?
+
+Historicamente, antes do surgimento da Computação em Nuvem, a área de _Tecnologia da Informação (TI)_ era praticamente dividida em dois departamentos:
+
+- **Departamento de Sistemas (ou Desenvolvimento)**
+    - Formado pelos programadores, analistas de sistemas e arquitetos de software.
+
+- **Departamento de Suporte (ou Operações)**
+    - Formado pelos administradores de redes, sistemas operacionais, segurança e suporte técnico.
+
+Diante dessa divisão, as equipes de TI trabalhavam de forma isolada, o que era prejudicial para os negócios. A falta de comunicação e colaboração resultava, principalmente, em atrasos na implantação de sistemas (deploy).
+
+Um _desenvolvedor de software_ está focado em cumprir os prazos de entrega. Ou seja, ele precisa _"codar"_ rapidamente, seja para implementar uma nova funcionalidade dentro do prazo ou para corrigir um bug que pode afetar a produção. Essa abordagem, muitas vezes, compromete a qualidade do código produzido.
+
+Por sua vez, a _equipe de operações (sysadmins)_ se concentra em assegurar o funcionamento eficiente e seguro da infraestrutura de TI. Suas atividades incluem o monitoramento da infraestrutura, gerenciamento da capacidade, execução de backups, fornecimento de suporte técnico, gerenciamento de serviços de rede como servidores DNS, HTTP, e-mail, entre outros.
+
+Quando surgia qualquer tipo de problema, seja no software ou na infraestrutura de TI, as equipes frequentemente se culpavam mutuamente, em vez de colaborarem para encontrar soluções e ainda, se concentravam em atividades reativas, como a resolução de incidentes e problemas, em vez de direcionar seus esforços para melhorias proativas e inovações.
+
+Tanto o software quanto a infraestrutura de TI são _"entidades vivas"_ que exigem cuidados constantes. Isso inclui a correção de funcionalidades, a resolução de bugs, a mitigação de problemas de segurança, a redução de custos e o aprimoramento do desempenho. Não se trata de algo que você controí ou programa uma única vez e abandona.
+
+Diante dessas dificuldades enfrentadas pelas equipes de TI frustrados com os atritos constantes das áreas, surge o conceito de _[DevOps](https://engsoftmoderna.info/cap10.html)_, que visa proporcionar um fluxo de trabalho mais integrado e eficiente entre as equipes de desenvolvimento e operações.
+
+O termo DevOps combina as palavras _"Desenvolvimento"_ e _"Operações"_ e representa uma disrupção na cultura tradicional de implantação de sistemas onde o objetivo é aprimorar a comunicação e a colaboração entre _desenvolvedores (devs)_ e _profissionais de operações (sysadmins)_.
+
+O símbolo do infinito, representado pelo oito deitado, que simboliza o DevOps, demonstra que cada etapa do fluxo de desenvolvimento, implantação, testes e monitoramento deve ser executada sequencialmente, por meio de pequenas entregas constantes, em um ciclo contínuo.
+
+![alt_text](./img/devops-logo-1.png "DevOps")
+
+DevOps não é uma tecnologia nem sugere a criação de um novo profissional responsável _"fim a fim"_ por toda a TI. Em vez disso, ele promove a integração entre as equipes de desenvolvimento e operações, evitando a formação de silos independentes e buscando tornar a implantação de sistemas mais ágil e menos traumática.  
+
+![alt_text](./img/devops-text-1.png "Gene Kim, Jez Humble, Patrick Debois e John Willes")
+
+**_Você deve estar se perguntando: qual é a relação entre DevOps e Computação em Nuvem?_**
+
+A resposta é simples: tudo! A Computação em Nuvem possibilitou tratar a TI como um software, permitindo a criação de recursos de TI por meio de código. Isso significa que praticamente tudo pode ser automatizado desdes a criação da infraestrutura, testes até a implantação do software.
+
+DevOps advoga a automatização de todos os passos necessários para colocar um sistema em produção e monitorar o seu correto funcionamento. A ideia é adotar princípios ágeis não apenas na fase de desenvolvimento, mas também na fase de implantação. 
+
+### 1.7.2 As Etapas do DevOps
+
+princípios para entrega de software
+a entrega de software não pode ser um evento traumático
+os passos para entrega de um software devem ser automáticos, incluindo seu build, a execução dos testes, a configuração e ativação dos servidores e da rede, a carga do banco de dados, etc.
+Todos são responsáveis pela entrega do software
+não admite-se mais que os times de desenvolvimento e de operações trabalham em silos independentes e troquem informações apenas na véspera de uma implantação.
+
+#### Planejar
+
+Nesta etapa, ocorre todo o planejamento, bem como a definição dos requisitos e objetivos do projeto. Em outras palavras, é o momento em que as equipes se alinham sobre o que precisa ser feito e quem será responsável por cada tarefa.
+
+Ferramentas de gerenciamento de projetos, como _[Jira](https://en.wikipedia.org/wiki/Integrated_development_environment)_ e _[Trello](https://trello.com/)_, são amplamente utilizadas nesta etapa.
+
+![alt_text](./img/jira-trello-logo-1.png "Jira e Trello")
+
+#### Codificar
+
+A fase de _"Codificar"_ no contexto do DevOps refere-se ao processo de desenvolvimento de software, no qual os desenvolvedores escrevem o código-fonte com base nos requisitos e especificações estabelecidos durante a fase de planejamento.
+
+Ferramentas de desenvolvimento, como _[IDEs (Ambientes de Desenvolvimento Integrados)](https://en.wikipedia.org/wiki/Integrated_development_environment)_ como _[VSCode](https://code.visualstudio.com/)_ e _[Eclipse](https://eclipseide.org/)_, são amplamente utilizadas nesta etapa.
+
+![alt_text](./img/vscode-eclipse-logo-1.png "VSCode e Eclipse")
+
+#### Build + Integrar
+
+Aqui duas ações principais entram em cena: a _Build (ou compilação do código-fonte)_ e a _Integração_.
+
+A ação de _Build_ tem como objetivo gerar os chamados  _[artefatos](https://en.wikipedia.org/wiki/Artifact_(software_development))_, que consistem em versões executáveis do sistema, prontas para serem implantadas (deploy) nos ambientes de desenvolvimento, homologação e produção.
+
+A ação de Integrar está diretamente ligada à _[Integração Contínua (Continuous Integration ou CI)](https://en.wikipedia.org/wiki/Continuous_integration)_. Essa prática de desenvolvimento sugere que o código em desenvolvimento seja integrado ao código existente por meio de pequenos _[commits](https://en.wikipedia.org/wiki/Commit_(version_control))_, realizados de forma frequente e em intervalos curtos. Essa abordagem minimiza a acumulação de alterações e novas funcionalidades, evitando que se tornem difíceis de mesclar posteriormente.
+
+Podemos destacar algumas ferramentas de build, como o _[docker build](https://docs.docker.com/get-started/docker-concepts/building-images/build-tag-and-publish-an-image/)_, que é utilizado para construir imagens de contêineres, _[Maven](https://maven.apache.org/what-is-maven.html)_ projetos Java e o _[Make](https://www.gnu.org/software/make/)_, que é comum em projetos de código aberto em C/C++.
+
+Como ferramentas de _Integração Contínua_, podemos destacar o _[OCI DevOps](https://www.oracle.com/cloud/cloud-native/devops-service/)_, além de _[Jenkins](https://www.jenkins.io/)_ e _[Travis CI](https://www.travis-ci.com/)_.
+
+![alt_text](./img/jenkins-travisci-logo-1.png "Jenkins e Travis CI")
+
+#### Testar
+
+Além de assegurar que o sistema compila sem erros após cada novo commit, é fundamental verificar se ele mantém o comportamento esperado, ou seja, se continua funcionando corretamente.
+
+Os responsáveis por garantir o funcionamento adequado do sistema são os _[Testes Automatizados](https://en.wikipedia.org/wiki/Test_automation)_, que são implementados nesta etapa do processo.
+
+Ferramentas como _[PyTest](https://docs.pytest.org/en/stable/)_, _[Gattling](https://gatling.io/)_, _[Selenium](https://www.selenium.dev/)_ ou _[JUnit](https://junit.org)_, são alguns exemplos que podem ser utilizadas nessa etapa.
+
+![alt_text](./img/pytest-gattling-selenium-logo-1.png "PyTest, Gattling e Selenium")
+
+#### Liberar (Release)
+
+A fase de liberação, ou _[Release](https://en.wikipedia.org/wiki/Software_release_life_cycle)_, refere-se à versão do software que foi aprovada e está pronta para implantação. O objetivo dessa etapa é que, após a compilação do software e a conclusão dos testes, tenhamos uma nova versão pronta para o deploy.
+
+A versão do software passa por diferentes estágios, incluindo _pre-alpha, alpha, beta e release candidate_, até que a _versão final_ (gold) seja liberada ao público.
+
+Além desses estágios, existe uma prática recomendada para o versionamento de software conhecida como _"[Versionamento Semântico](https://semver.org/lang/pt-BR/)"_ que utiliza números no formato MAJOR.MINOR.PATCH:
+
+![alt_text](./img/semver-major-minor-patch-1.png "Versionamento Semântico")
+
+- **Versão Maior (MAJOR)**
+    - Indica que ocorreram mudanças incompatíveis com a versão anterior. Por exemplo, a versão 2.0.0 não é compatível com a versão 1.0.0.
+
+- **Versão Menor (MINOR)**
+    -  Indica que novas funcionalidades foram adicionadas ao software, mantendo a compatibilidade com versões anteriores. Por exemplo, a versão 2.1.0 é compatível com a versão 2.2.0.
+
+- **Versão de Correção (PATCH)**
+    - Indica que houveram pequenas correções no software e que também, não afeta a compatibilidade.
+
+Rótulos adicionais podem ser utilizados para fornecer informações mais específicas sobre a versão do software. Exemplos de rótulos incluem:
+
+- **Alpha**
+    - Geralmente utilizado para indicar uma versão inicial que ainda está em  desenvolvimento e é considerada instável. Exemplo: 1.0.0-alpha
+
+- **Beta** 
+    - Indica uma versão que está mais avançada no desenvolvimento, mas que ainda pode conter bugs e requer feedback dos usuários. Exemplo: 1.0.0-beta
+
+- **RC (release candidate)**
+    - Refere-se a uma versão quase final, que está pronta para testes finais antes do lançamento oficial. Exemplo: 1.0.0-rc.1
+
+Esses rótulos ajudam a comunicar o estado e a estabilidade da versão do software.
+
+#### Implantar (deploy)
+
+Na etapa de _Implantação_, existem duas práticas principais: _[Deployment Contínuo (Continuous Deployment ou CD)](https://en.wikipedia.org/wiki/Continuous_deployment)_ e _[Entrega Contínua (Continuous Delivery ou CD)](https://en.wikipedia.org/wiki/Continuous_delivery)_.
+
+A Entrega Contínua é uma prática que garante que o software esteja sempre em um estado que pode ser implantado em produção a qualquer momento. 
+
+Por outro lado, o Deployment Contínuo avança um passo além, permitindo que cada alteração que passa nos testes automatizados seja automaticamente implantada em produção, sem a necessidade de intervenção manual.
+
+Ambas as práticas visam minimizar o tempo entre a conclusão do desenvolvimento e a disponibilização do software para os usuários, de forma automatizada e sem intervenção manual a qualquer hora. O processo deve ser simples como apertar um botão.
+
+Ferramentas de Deployment Contínuo como _[OCI DevOps](https://www.oracle.com/cloud/cloud-native/devops-service/)_, _[Argo CD](https://argo-cd.readthedocs.io/en/stable/)_ ou _[CircleCI](https://circleci.com/)_ são alguns exemplos que podem ser utilizadas nessa etapa.
+
+![alt_text](./img/argocd-circleci-logo-1.png "Argo CD e CircleCI")
+
+#### Operar
+
+#### Monitoramento
+
+## 1.8 Cloud Native
+
+## 1.9 Conclusão
 
 Neste capítulo, exploramos de maneira abrangente o conceito de Computação em Nuvem. Apresentamos a história por trás de sua criação, diversas definições formais relacionadas ao tema e, por fim, realizamos uma análise das vantagens e desvantagens associadas à sua utilização.
