@@ -29,3 +29,5 @@
 - [Tulio Valente, Marco (2022). Engenharia de Software Moderna.](https://amzn.to/40SMfYu)
 
 - [Veronez, Fabricio (2024). O que é DevOps em 15 minutos](https://youtu.be/03aGcqlfP6s?si=Q_qOT7vKwQYKm60q)
+
+- [Agarwal, Gaurav (2024). Modern DevOps Practices - Second Edition: Implement, secure, and manage applications on the public cloud by leveraging cutting-edge tools. Packt Publishing.](https://amzn.to/4hUYoTy)

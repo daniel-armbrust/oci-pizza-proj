@@ -372,11 +372,11 @@ DevOps advoga a automatização de todos os passos necessários para colocar um 
 
 ### 1.7.2 As Etapas do DevOps
 
-princípios para entrega de software
-a entrega de software não pode ser um evento traumático
-os passos para entrega de um software devem ser automáticos, incluindo seu build, a execução dos testes, a configuração e ativação dos servidores e da rede, a carga do banco de dados, etc.
-Todos são responsáveis pela entrega do software
-não admite-se mais que os times de desenvolvimento e de operações trabalham em silos independentes e troquem informações apenas na véspera de uma implantação.
+As etapas do DevOps formam um ciclo contínuo. Após completar todas as fases, o processo retorna à primeira etapa, iniciando um novo ciclo de melhoria e entrega de novas funcionalidades.
+
+É importante ressaltar que todos os membros da equipe são responsáveis pela entrega do software. Além disso, as etapas de entrega devem ser automatizadas, abrangendo desde a construção do código (build) e a execução de testes até a configuração e ativação dos servidores, a configuração da rede e o carregamento do banco de dados, etc.
+
+A seguir, apresentamos uma breve descrição das etapas do DevOps, acompanhada de algumas das ferramentas mais utilizadas atualmente em cada fase:
 
 #### Planejar
 
@@ -466,9 +466,37 @@ Ferramentas de Deployment Contínuo como _[OCI DevOps](https://www.oracle.com/cl
 
 #### Operar
 
+A etapa de Operar no contexto de DevOps refere-se à fase em que o software é colocado em produção e monitorado para garantir seu desempenho, disponibilidade e segurança.
+
 #### Monitoramento
 
+Por fim, a etapa final, Monitoramento, envolve a coleta, análise e interpretação de dados relacionados ao desempenho do software, à infraestrutura e à experiência do usuário.
+
+Uma monitoração eficaz inclui a utilização de métricas de desempenho, logs e traces, que são essenciais para identificar problemas, otimizar o funcionamento do sistema e garantir uma experiência satisfatória para os usuários.
+
+Ferramentas de observabilidade, como _[Oracle Application Performance Monitoring (APM)](https://www.oracle.com/manageability/application-performance-monitoring/)_, _[Prometheus](https://prometheus.io/)_ e _[Grafana](https://grafana.com/)_, são exemplos.
+
+![alt_text](./img/prometheus-grafana-logo-1.png "Prometheus e Grafana")
+
 ## 1.8 Cloud Native
+
+Cloud Native é um termo que se refere a aplicações projetadas e executadas de forma nativa na nuvem. Essas aplicações são desenvolvidas para tirar pleno proveito das características e benefícios da Computação em Nuvem, como escalabilidade, resiliência e agilidade.
+
+É importante dizer que aplicações Cloud Native, não são aplicações executadas usando-se somente serviços básicos do modelo IaaS (Rede, Virtual Machine ou Bare Metal). 
+
+Aplicações Cloud Native são aquelas que aproveitam os serviços oferecidos pelos provedores de computação em nuvem. Costumo dizer que essas aplicações são "acopladas" à nuvem, pois, em vez de o desenvolvedor ter que criar, manter e disponibilizar um servidor de e-mail, por exemplo, ele pode simplesmente utilizar um serviço de e-mail já disponível na nuvem.
+
+Além das vantagens, essa abordagem também ajuda a reduzir custos, uma vez que manter uma CPU "ligada" continuamente pode ser mais caro do que utilizar um serviço pronto e escalável. 
+
+Algumas das características a seguir são comumente encontradas em aplicações Cloud Native:
+
+#### Contêineres
+
+#### Microserviços
+
+#### DevOps e Automação
+
+## 1.8.1 Cloud Native Computing Foundation (CNCF)
 
 ## 1.9 Conclusão
 
