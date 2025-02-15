@@ -480,13 +480,19 @@ Ferramentas de observabilidade, como _[Oracle Application Performance Monitoring
 
 ## 1.8 Cloud Native
 
-Cloud Native é um termo que se refere a aplicações projetadas e executadas de forma nativa na nuvem. Essas aplicações são desenvolvidas para tirar pleno proveito das características e benefícios da Computação em Nuvem, como escalabilidade, resiliência e agilidade.
+_[Cloud Native](https://en.wikipedia.org/wiki/Cloud-native_computing)_ é um termo que se refere a uma abordagem de desenvolvimento voltada para aplicações projetadas e executadas nativamente na nuvem. Essas aplicações são projetadas para serem distribuídas e desenvolvidas com o objetivo de aproveitar ao máximo as características e benefícios da Computação em Nuvem, como escalabilidade, resiliência e agilidade.
 
-É importante dizer que aplicações Cloud Native, não são aplicações executadas usando-se somente serviços básicos do modelo IaaS (Rede, Virtual Machine ou Bare Metal). 
+Uma aplicação que se beneficia dos recursos da nuvem possui a capacidade de se antecipar a falhas e manter sua estabilidade, mesmo diante de indisponibilidades na infraestrutura, sejam elas planejadas ou não _[(zero downtime)](https://en.wikipedia.org/wiki/Downtime)_. Nesse contexto, a _"indisponibilidade"_ pode se referir tanto a problemas técnicos quanto também a qualquer alteração que exija a implementação de um novo código.
 
-Aplicações Cloud Native são aquelas que aproveitam os serviços oferecidos pelos provedores de computação em nuvem. Costumo dizer que essas aplicações são "acopladas" à nuvem, pois, em vez de o desenvolvedor ter que criar, manter e disponibilizar um servidor de e-mail, por exemplo, ele pode simplesmente utilizar um serviço de e-mail já disponível na nuvem.
+É importante dizer que aplicações Cloud Native não se limitam a serem executadas apenas em serviços básicos do modelo _IaaS_, como rede, máquinas virtuais ou bare metal. Em vez disso, elas são projetadas para tiraram o máximo de proveito dos diversos serviços e recursos oferecidos pela nuvem. Uma abordagem que se restringe apenas ao _"move to cloud"_, não torna sua aplicação Cloud Native.
 
-Além das vantagens, essa abordagem também ajuda a reduzir custos, uma vez que manter uma CPU "ligada" continuamente pode ser mais caro do que utilizar um serviço pronto e escalável. 
+Como discutido na seção sobre DevOps, a responsabilidade de manter o _[Uptime](https://en.wikipedia.org/wiki/Uptime)_ das aplicações não recai apenas sobre a equipe de operações, mas também sobre os desenvolvedores. Eles devem projetar sistemas que utilizem _[componentes desacoplados](https://en.wikipedia.org/wiki/Loose_coupling)_, permitindo implantações separadas por meio de _[microserviços](https://en.wikipedia.org/wiki/Microservices)_, o que ajuda a evitar os chamados _[pontos únicos de falha](https://en.wikipedia.org/wiki/Single_point_of_failure)_.
+
+Nesse contexto, Computação em Nuvem refere-se ao ambiente onde o software é executado, enquanto Cloud Native diz respeito à forma como esse software é projetado e executado.
+
+Além de tudo o que já foi dito, desenvolver software de acordo com os padrões Cloud Native frequentemente contribui para a redução de custos, pois elimina o _[overprovisioning](https://en.wikipedia.org/wiki/Overprovisioning)_ ao permitir que os recursos sejam escalados conforme a demanda de utilização.
+
+>_**__NOTA:__** Overprovisioning é um termo utilizado em ambientes de computação e infraestrutura de TI que se refere à prática de alocar mais recursos do que o necessário para atender à demanda de uma aplicação ou serviço. Na nuvem, manter uma CPU dedicada ligada continuamente, é mais caro do que utilizar um serviço pronto, por exemplo._
 
 Algumas das características a seguir são comumente encontradas em aplicações Cloud Native:
 

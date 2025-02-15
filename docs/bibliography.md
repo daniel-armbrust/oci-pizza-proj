@@ -31,3 +31,5 @@
 - [Veronez, Fabricio (2024). O que é DevOps em 15 minutos](https://youtu.be/03aGcqlfP6s?si=Q_qOT7vKwQYKm60q)
 
 - [Agarwal, Gaurav (2024). Modern DevOps Practices - Second Edition: Implement, secure, and manage applications on the public cloud by leveraging cutting-edge tools. Packt Publishing.](https://amzn.to/4hUYoTy)
+
+- [Davis, Cornelia (2019). Cloud Native Patterns: Designing change-tolerant software. Manning.](https://amzn.to/3EEK5nS)
