@@ -2,6 +2,8 @@
 
 _"A verdadeira disrupção não acontece em seu data center, mas sim na nuvem." - Autor: Anônimo_
 
+Neste capítulo, apresentaremos o que é Computação em Nuvem, sua história e as necessidades que motivaram sua criação. Além disso, discutiremos como a Computação em Nuvem transformou a maneira como o software é desenvolvido e operado, dando origem a novos conceitos e paradigmas, como DevOps e Cloud Native.
+
 ## 1.2 Um pouco de História
 
 Explicar o que é _Computação em Nuvem_ torna-se mais claro quando se compreende os motivos que levaram à sua criação. A forma moderna da Computação em Nuvem surgiu na _[Amazon](https://en.wikipedia.org/wiki/Amazon_(company))_, quando empresa percebeu a necessidade de criar recursos de TI de maneira ágil, para atender à crescente demanda de seu e-commerce.
@@ -344,7 +346,7 @@ Historicamente, antes do surgimento da Computação em Nuvem, a área de _Tecnol
 
 Diante dessa divisão, as equipes de TI trabalhavam de forma isolada, o que era prejudicial para os negócios. A falta de comunicação e colaboração resultava, principalmente, em atrasos na implantação de sistemas (deploy).
 
-Um _desenvolvedor de software_ está focado em cumprir os prazos de entrega. Ou seja, ele precisa _"codar"_ rapidamente, seja para implementar uma nova funcionalidade dentro do prazo ou para corrigir um bug que pode afetar a produção. Essa abordagem, muitas vezes, compromete a qualidade do código produzido.
+Um desenvolvedor de software está focado em _"codar"_ rapidamente para realizar suas entregas, seja implementando uma nova funcionalidade ou corrigindo um bug que impacta a produção.
 
 Por sua vez, a _equipe de operações (sysadmins)_ se concentra em assegurar o funcionamento eficiente e seguro da infraestrutura de TI. Suas atividades incluem o monitoramento da infraestrutura, gerenciamento da capacidade, execução de backups, fornecimento de suporte técnico, gerenciamento de serviços de rede como servidores DNS, HTTP, e-mail, entre outros.
 
@@ -486,13 +488,15 @@ Uma aplicação que se beneficia dos recursos da nuvem possui a capacidade de se
 
 É importante dizer que aplicações Cloud Native não se limitam a serem executadas apenas em serviços básicos do modelo _IaaS_, como rede, máquinas virtuais ou bare metal. Em vez disso, elas são projetadas para tiraram o máximo de proveito dos diversos serviços e recursos oferecidos pela nuvem. Uma abordagem que se restringe apenas ao _"move to cloud"_, não torna sua aplicação Cloud Native.
 
-Como discutido na seção sobre DevOps, a responsabilidade de manter o _[Uptime](https://en.wikipedia.org/wiki/Uptime)_ das aplicações não recai apenas sobre a equipe de operações, mas também sobre os desenvolvedores. Eles devem projetar sistemas que utilizem _[componentes desacoplados](https://en.wikipedia.org/wiki/Loose_coupling)_, permitindo implantações separadas por meio de _[microserviços](https://en.wikipedia.org/wiki/Microservices)_, o que ajuda a evitar os chamados _[pontos únicos de falha](https://en.wikipedia.org/wiki/Single_point_of_failure)_.
+Como discutido na seção sobre DevOps, a responsabilidade de manter o _[Uptime](https://en.wikipedia.org/wiki/Uptime)_ das aplicações não recai apenas sobre a equipe de operações, mas também sobre os desenvolvedores. Ambas as equipes têm a responsabilidade de projetar sistemas com _[baixo acoplamento](https://en.wikipedia.org/wiki/Loose_coupling)_ que sejam resilientes, gerenciáveis e observáveis.
 
-Nesse contexto, Computação em Nuvem refere-se ao ambiente onde o software é executado, enquanto Cloud Native diz respeito à forma como esse software é projetado e executado.
+Arquiteturas de _[microserviços](https://en.wikipedia.org/wiki/Microservices)_ são especialmente adequadas nesse contexto, pois promovem a decomposição de uma _[aplicação monolítica](https://en.wikipedia.org/wiki/Monolithic_application)_ em serviços menores, autônomos e distribuídos, evitando assim os chamados _[pontos únicos de falha](https://en.wikipedia.org/wiki/Single_point_of_failure)_. Cada serviço possui uma única responsabilidade, e a proposta é que esses serviços colaborem entre si para formar a aplicação como um todo.
 
-Além de tudo o que já foi dito, desenvolver software de acordo com os padrões Cloud Native frequentemente contribui para a redução de custos, pois elimina o _[overprovisioning](https://en.wikipedia.org/wiki/Overprovisioning)_ ao permitir que os recursos sejam escalados conforme a demanda de utilização.
+Nesse contexto, _Computação em Nuvem_ refere-se ao ambiente onde o software é executado, enquanto _Cloud Native_ diz respeito à forma como esse software é projetado e executado.
 
->_**__NOTA:__** Overprovisioning é um termo utilizado em ambientes de computação e infraestrutura de TI que se refere à prática de alocar mais recursos do que o necessário para atender à demanda de uma aplicação ou serviço. Na nuvem, manter uma CPU dedicada ligada continuamente, é mais caro do que utilizar um serviço pronto, por exemplo._
+Além de tudo o que já foi dito, desenvolver software de acordo com os padrões Cloud Native frequentemente contribui para a redução de custos, pois elimina o _[overprovisioning](https://en.wikipedia.org/wiki/Overprovisioning)_ ao permitir que os recursos sejam escalados conforme a demanda de utilização. 
+
+>_**__NOTA:__** Overprovisioning é um termo utilizado em ambientes de computação e infraestrutura de TI que se refere à prática de alocar mais recursos do que o necessário para atender à demanda de uma aplicação ou serviço._
 
 Algumas das características a seguir são comumente encontradas em aplicações Cloud Native:
 
@@ -504,6 +508,24 @@ Algumas das características a seguir são comumente encontradas em aplicações
 
 ### 1.8.1 Cloud Native Computing Foundation (CNCF)
 
+A _[CNCF](https://www.cncf.io/)_, ou _[Cloud Native Computing Foundation](https://www.cncf.io/)_, fundada em 2015, é uma organização sem fins lucrativos associada à _[Linux Foundation](https://www.linuxfoundation.org/)_, dedicada a promover e facilitar o desenvolvimento e a adoção de tecnologias nativas da nuvem.
+
+![alt_text](./img/cncf-logo-1.png "Cloud Native Computing Foundation")
+
+_[CNCF](https://www.cncf.io/)_ promove, por meio de um ecossistema de projetos de código aberto e independentes de fornecedores, a adoção de paradigmas que possibilitam o desenvolvimento de aplicações _escaláveis, resilientes, gerenciáveis e observáveis_. Isso permite a implementação de mudanças de alto impacto de forma frequente e previsível, com o mínimo de esforço.
+
+Conforme mencionado em seu _[FAQ](https://www.cncf.io/about/faq/#why-is-cncf-needed)_, as tecnologias da CNCF não estão sujeitas ao chamado _[vendor lock-in](https://en.wikipedia.org/wiki/Vendor_lock-in)_ e são portáveis entre diferentes provedores de nuvem.
+
+>_**__NOTA:__** Consulte a definição de [Cloud Native da CNCF na versão 1.1](https://github.com/cncf/toc/blob/main/DEFINITION.md#portugu%C3%AAs-brasileiro), que descreve os princípios e características fundamentais desse conceito._
+
+A CNCF hospeda diversos projetos que possibilitam o desenvolvimento de aplicações Cloud Native sem o risco de _[vendor lock-in](https://en.wikipedia.org/wiki/Vendor_lock-in)_, garantindo a portabilidade entre diferentes provedores de nuvem.
+
+![alt_text](./img/cncf-projects-logo-1.png "Projetos desenvolvidos pela CNFC")
+
+>_**__NOTA:__** Consulte ["Graduated and Incubating Projects"](https://www.cncf.io/projects/) para acessar a lista dos projetos mantidos pela CNCF._
+
 ## 1.9 Conclusão
 
 Neste capítulo, exploramos de maneira abrangente o conceito de Computação em Nuvem. Apresentamos a história por trás de sua criação, diversas definições formais relacionadas ao tema e, por fim, realizamos uma análise das vantagens e desvantagens associadas à sua utilização.
+
+Foi apresentado também o que é DevOps e ecossistema de projetos da CNFC que possibilitam a criação de aplicações Cloud Native.
