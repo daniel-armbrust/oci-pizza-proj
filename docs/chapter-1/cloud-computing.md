@@ -1,4 +1,4 @@
-# 1.1 O que e Computacao em Nuvem?
+# O que e Computacao em Nuvem?
 
 _"A verdadeira disrupção não acontece em seu data center, mas sim na nuvem." - Autor: Anônimo_
 
