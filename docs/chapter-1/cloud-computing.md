@@ -498,7 +498,7 @@ Além de tudo o que já foi dito, desenvolver software de acordo com os padrões
 
 >_**__NOTA:__** Overprovisioning é um termo utilizado em ambientes de computação e infraestrutura de TI que se refere à prática de alocar mais recursos do que o necessário para atender à demanda de uma aplicação ou serviço._
 
-Algumas das características a seguir são comumente encontradas em aplicações Cloud Native:
+Aplicações Cloud Native possuem as seguintes características:
 
 #### Contêineres
 
