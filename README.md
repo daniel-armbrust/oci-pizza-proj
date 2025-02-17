@@ -36,7 +36,7 @@ Bora entender...
 - [Capítulo 2: OCI Foundations](./docs/chapter-2/index.md)
 
 - [Capítulo 3: Aplicação OCI Pizza](./docs/chapter-3/index.md)
-	- [3.1 Visão geral](./docs/chapter-3/ocipizza-overview.md)
+	- [3.1 Visão geral](./docs/chapter-3/ocipizza-overview.md)	
 	- [3.2 Microsserviços](./docs/chapter-3/microservices.md)
 
 - [Capítulo 4: Conectividade e Redes](./docs/chapter-4/index.md)
@@ -51,20 +51,20 @@ Bora entender...
 - [Capítulo 5: Oracle NoSQL Database Cloud Service](./docs/chapter-5/index.md)
 	- [5.1 Persistência dos dados com o Oracle NoSQL](./docs/chapter-5/nosql.md)
 
-- [Capítulo 6: Oracle NoSQL Database Cloud Service](./docs/chapter-5/index.md)
+- [Capítulo 6: Desenvolvimento Moderno](./docs/chapter-6/index.md)
+	- [6.1 Entendendo os Contêineres](./docs/chapter-6/containers.md)
+	- [6.2 Introdução ao GraalVM](./docs/chapter-6/graalvm.md)	
+	- [6.3 Container Instances](./docs/chapter-6/container-instances.md)	
+	- [6.4 Functions](./docs/chapter-6/functions.md)	
 
-- [Capítulo 7: Desenvolvimento Moderno](./docs/chapter-7/index.md)
-	- [7.1 Entendendo os Contêineres](./docs/chapter-7/containers.md)
-	- [7.2 Introdução ao GraalVM](./docs/chapter-7/graalvm.md)	
-	- [7.3 Container Instances](./docs/chapter-7/container-instances.md)	
-	- [7.4 Functions](./docs/chapter-5/functions.md)	
-
-- [Capítulo 8: OKE - Oracle Kubernetes Engine](./docs/chapter-8/index.md)
+- [Capítulo 7: Oracle Kubernetes Engine (OKE)](./docs/chapter-7/index.md)
 	
-- [Capítulo 9: Serviço DevOps](./docs/chapter-9/index.md)
-	- [9.1 Do GitHub para o OCI DevOps](./docs/chapter-9/github-ocidevops.md)
+- [Capítulo 8: Serviço DevOps](./docs/chapter-8/index.md)
+	- [9.1 Do GitHub para o OCI DevOps](./docs/chapter-8/github-ocidevops.md)
 
-- [Capítulo 10: Monitoração e Observabilidade](./docs/chapter-10/index.md)
+- [Capítulo 9: Monitoração e Observabilidade](./docs/chapter-9/index.md)
+
+- [Capítulo 10: Serviços de Computação](./docs/chapter-10/index.md)
 
 - [Capítulo 11: Ferramental de IA](./docs/chapter-11/index.md)
 
