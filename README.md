@@ -23,11 +23,11 @@ Bora entender...
 - [Introdução](./docs/intro.md)
 
 - [Capítulo 1: Introdução a Computação em Nuvem](./docs/chapter-1/index.md)
-	- [1.1 O que é Computação em Nuvem?](./docs/cloud-computing.md#o-que-e-computacao-em-nuvem?)
-	- [1.2 Um pouco de História](./docs/chapter-1/cloud-computing.md#1.2 Um pouco de História)
-	- [1.3 Definições do NIST](./docs/cloud-computing.md#1.3 Definições do NIST)
-	- [1.4 Outras definições sobre Computação em Nuvem](./docs/cloud-computing.md#1.4 Outras definições sobre Computação em Nuvem)
-	- [1.5 Terminologias da Computação em Nuvem](./docs/cloud-computing.md#1.5 Terminologias da Computação em Nuvem)
+	- [1.1 O que é Computação em Nuvem?](./docs/chapter-1/o-que-e-computacao-em-nuvem.md#11-o-que-é-computação-em-nuvem)
+	- 1.2 Um pouco de História
+	- 1.3 Definições do NIST
+	- 1.4 Outras definições sobre Computação em Nuvem
+	- 1.5 Terminologias da Computação em Nuvem
 	- [1.6 Vantagens e Desvantagens da Computação em Nuvem](./docs/cloud-computing.md#1.6 Vantagens e Desvantagens da Computação em Nuvem)
 	- [1.7 DevOps](./docs/cloud-computing.md#1.7 DevOps)
 	- [1.8 Cloud Native](./docs/cloud-computing.md#1.8 Cloud Native)
